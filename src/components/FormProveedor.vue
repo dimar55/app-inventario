@@ -1,15 +1,15 @@
 <template>
      <div class="container-registro">
-        <form class="ctn-registrar">
+        <form class="ctn-registrar" v-on:submit.prevent="registrarProveedor">
             <h1>REGISTRAR PROVEEDOR</h1>
             <div class="campos_registrar">
                 <img src="../assets/mensajero.png" alt="">
                 <p>Nombre</p>
-                <input type="text">
+                <input type="text" v-model="Proveedor.nombre_pro">
             </div>
             <div class="campos_registrar">
                 <p>Tipo de Documento</p>
-                <select name="" id="">
+                <select  v-model="Proveedor.tipo_documento_pro">
                     <option>CC Cedula de Ciudadania</option>
                     <option>TT Tarjeta de Identidad</option>
                     <option>CE Cedula de Extranjeria</option>
@@ -17,20 +17,16 @@
             </div>
             <div class="campos_registrar">
                 <p>Numero de Documento:</p>
-                <input type="number">
+                <input type="number"  v-model="Proveedor.cedula_pro">
             </div>
             <div class="campos_registrar">
                 <p>Telefono:</p>
-                <input type="number">
+                <input type="number"  v-model="Proveedor.telefono_pro">
             </div>
             <div class="campos_registrar">
                 <p>Correo:</p>
-                <input type="email">
+                <input type="email"  v-model="Proveedor.correo_pro">
             </div>
-            <div class="campos_registrar">
-                <p>Empresa:</p>
-                <input type="text">
-            </div>  
             <div class="boton">
                 <button type="submit" class="btn">REGISTRAR</button>
             </div>
@@ -39,6 +35,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import Swal from "sweetalert2";
+import config from '../utils/utils';
     export default{
         name: 'FormProveedores',
         data(){
@@ -52,5 +51,36 @@
             }
         }
     },
+    methods:{
+        registrarProveedor(){
+            axios.post(config.server+"/proveedor", this.Proveedor)
+            .then((result) => {
+                    if (result.data.success) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Cliente creado exitosamente",
+                            showConfirmButton: false,
+                            timer: 1000,
+                        });
+                        this.$router.push({ path: '/Menu' });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "No se ha podido crear el cliente",
+                            showConfirmButton: false,
+                            timer: 1200,
+                        });
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                    Swal.fire({
+                        icon: "error",
+                        title: "No se ha podido crear el cliente",
+                        showConfirmButton: false,
+                        timer: 1200,
+                    });
+                })
+        }
+    }
     }
 </script>
