@@ -25,6 +25,7 @@
 <script>
 import axios from "axios";
 import Swal from "sweetalert2";
+import config from '../utils/utils';
 export default{
     name: 'FormLogin',
     data(){
@@ -34,6 +35,9 @@ export default{
                 Contraseña_usu: "",
             }
         }
+    },
+    mounted(){
+        console.log(config.server);
     }
 }
 </script>

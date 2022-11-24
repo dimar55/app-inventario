@@ -1,15 +1,15 @@
 <template>
     <div class="container-registro">
-        <div class="ctn-registrar">
+        <form class="ctn-registrar"  v-on:submit.prevent="registrarCliente">
             <h1>REGISTRAR CLIENTE</h1>
             <div class="campos_registrar">
                 <img src="../assets/cliente.png" alt="">
                 <p>Nombre</p>
-                <input type="text">
+                <input type="text" v-model="Cliente.nombre_cli">
             </div>
             <div class="campos_registrar">
                 <p>Tipo de Documento</p>
-                <select name="" id="">
+                <select v-model="Cliente.tipo_documento_cli">
                     <option>CC Cedula de Ciudadania</option>
                     <option>TT Tarjeta de Identidad</option>
                     <option>CE Cedula de Extranjeria</option>
@@ -17,30 +17,70 @@
             </div>
             <div class="campos_registrar">
                 <p>Numero de Documento:</p>
-                <input type="number">
+                <input type="number" v-model="Cliente.cedula_cli">
             </div>
             <div class="campos_registrar">
                 <p>Telefono:</p>
-                <input type="number">
-            </div>
-            <div class="campos_registrar">
-                <p>Correo:</p>
-                <input type="email">
+                <input type="number" v-model="Cliente.telefono_cli">
             </div>
             <div class="campos_registrar">
                 <p>Dirección:</p>
-                <input type="text">
+                <input type="text" v-model="Cliente.direccion_cli">
             </div>  
             <div class="boton">
-                <button class="btn">REGISTRAR</button>
+                <button type="submit" class="btn">REGISTRAR</button>
             </div>
-        </div>
+        </form>
     </div>
 </template>
 
 <script>
+import axios from "axios";
+import Swal from "sweetalert2";
+import config from '../utils/utils';
 export default{
-    name: 'FormCliente'
+    name: 'FormCliente',
+    data(){
+        return {
+            Cliente: {
+               cedula_cli: "",
+               nombre_cli: "",
+               tipo_documento_cli: "",
+               telefono_cli: "",
+               direccion_cli: ""
+            }
+        }
+    },
+    methods:{
+        registrarCliente(){
+            axios.post(config.server+"/cliente", this.Cliente)
+            .then((result) => {
+                    if (result.data.success) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Cliente creado exitosamente",
+                            showConfirmButton: false,
+                            timer: 1000,
+                        });
+                        this.$router.push({ path: '/Menu' });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "No se ha podido crear el cliente",
+                            showConfirmButton: false,
+                            timer: 1200,
+                        });
+                    }
+                }).catch((err) => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "No se ha podido crear el cliente",
+                        showConfirmButton: false,
+                        timer: 1200,
+                    });
+                })
+        }
+    }
 }
 </script>
 

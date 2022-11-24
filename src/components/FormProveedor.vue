@@ -1,6 +1,6 @@
 <template>
      <div class="container-registro">
-        <div class="ctn-registrar">
+        <form class="ctn-registrar">
             <h1>REGISTRAR PROVEEDOR</h1>
             <div class="campos_registrar">
                 <img src="../assets/mensajero.png" alt="">
@@ -32,14 +32,25 @@
                 <input type="text">
             </div>  
             <div class="boton">
-                <button class="btn">REGISTRAR</button>
+                <button type="submit" class="btn">REGISTRAR</button>
             </div>
-        </div>
+        </form>
     </div>
 </template>
 
 <script>
     export default{
-        name: 'FormProveedores'
+        name: 'FormProveedores',
+        data(){
+        return {
+            Proveedor: {
+                cedula_pro: "",
+                nombre_pro: "",
+                tipo_documento_pro: "",
+                telefono_pro: "",
+                correo_pro: ""
+            }
+        }
+    },
     }
 </script>
