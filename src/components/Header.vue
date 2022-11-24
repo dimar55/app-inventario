@@ -8,7 +8,7 @@
             <p>YALMECRIS</p>
         </div>
        <div>
-        <img src="../assets/Logout.png" alt="">
+        <img src="../assets/Logout.png" alt="" @click="logout">
        </div>
     </div>
 
@@ -43,6 +43,11 @@ export default{
         return{
             show_barra: false
         }
+}, methods: {
+    logout(){
+        sessionStorage.clear();
+        this.$router.push({ path: '/' });
+    }
 }
 }
 </script>
