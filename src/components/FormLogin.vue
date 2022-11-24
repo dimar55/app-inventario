@@ -8,11 +8,11 @@
                 <h1>INICIAR SESIÓN</h1>
                 <div class="campos">
                     <p>USUARIO:</p>
-                    <input type="text" v-model="user.Usuario_usu">
+                    <input type="text" v-model="user.nick_usu">
                 </div>
                 <div class="campos">
                     <p>CONTRASEÑA:</p>
-                    <input type="password" v-model="user.Contraseña_usu">
+                    <input type="password" v-model="user.contra_usu">
                 </div>
                 <div class="boton">
                     <button class="btn" type="submit">INICIAR SESIÓN</button>
@@ -31,13 +31,53 @@ export default{
     data(){
         return{
             user: {
-                Usuario_usu: "",
-                Contraseña_usu: "",
+                nick_usu: "",
+                contra_usu: "",
             }
         }
     },
-    mounted(){
-        console.log(config.server);
+    methods: {
+        login(){
+            axios.post(config.server+"/usuario/auth", this.user)
+                .then((result) => {
+                    if (result.data.success) {
+                        sessionStorage.setItem("jwt", result.data.body.token);
+                        Swal.fire({
+                            icon: "success",
+                            title: "Sesion iniciada",
+                            showConfirmButton: false,
+                            timer: 1000,
+                        });
+                        let token = result.data.body.token;
+                        axios.post(config.server+"/usuario/verifyToken", { token })
+                            .then((result) => {
+                                if(result.data.body.decoded.user.rol_usu == "Administrador"){
+                                    this.$router.push({ path: '/Menu' });
+                                }else{
+                                    this.$router.push({ path: '/Menu' });
+                                }
+                            }).catch((err) => {
+                                console.log("Error al verificar token: " + err)
+                            });
+                        this.$router.push({ path: '/Menu' });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Usuario y/o contraseña incorrecta",
+                            showConfirmButton: false,
+                            timer: 1200,
+                        });
+                    }
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Usuario y/o contraseña incorrecta",
+                        showConfirmButton: false,
+                        timer: 1200,
+                    });
+                });
+        }
     }
 }
 </script>
