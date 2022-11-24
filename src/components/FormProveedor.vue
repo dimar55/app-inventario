@@ -58,7 +58,7 @@ import config from '../utils/utils';
                     if (result.data.success) {
                         Swal.fire({
                             icon: "success",
-                            title: "Cliente creado exitosamente",
+                            title: "Proveedor creado exitosamente",
                             showConfirmButton: false,
                             timer: 1000,
                         });
@@ -66,7 +66,7 @@ import config from '../utils/utils';
                     } else {
                         Swal.fire({
                             icon: "error",
-                            title: "No se ha podido crear el cliente",
+                            title: "No se ha podido crear el proveedor",
                             showConfirmButton: false,
                             timer: 1200,
                         });
@@ -75,7 +75,7 @@ import config from '../utils/utils';
                     console.log(err);
                     Swal.fire({
                         icon: "error",
-                        title: "No se ha podido crear el cliente",
+                        title: "No se ha podido crear el proveedor",
                         showConfirmButton: false,
                         timer: 1200,
                     });
