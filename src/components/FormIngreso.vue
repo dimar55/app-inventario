@@ -29,11 +29,10 @@
                 <p>Fecha de Vencimiento:</p>
                 <input type="date">
             </div>
-            <h1>ASOCIAR PROVEEDOR</h1>
-            <div class="buscar-proveedor">
-                    <p>Codigo</p>
+
+            <div class="campos_registrar">
+                    <p>Codigo proveedor:</p>
                     <input type="text">
-                        <button class="btn">BUSCAR</button>
             </div>
             <div class="boton">
                 <button class="btn">REGISTRAR</button>

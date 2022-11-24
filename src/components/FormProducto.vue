@@ -1,6 +1,6 @@
 <template>
         <div class="container-registro">
-        <div class="ctn-registrar">
+        <form class="ctn-registrar">
             <h1>REGISTRAR PRODUCTO</h1>
             <div class="campos_registrar">
                 <img src="../assets/carrito-de-supermercado.png" alt="">
@@ -34,7 +34,7 @@
             <div class="boton">
                 <button class="btn">REGISTRAR</button>
             </div>
-        </div>
+        </form>
     </div>
 </template>
 
