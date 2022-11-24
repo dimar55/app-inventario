@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-
+import axios from "axios";
 import config from '../utils/utils';
 import Login from '../views/Login.vue';
 import Menu from '../views/Menu.vue';
