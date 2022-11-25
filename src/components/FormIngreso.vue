@@ -65,7 +65,7 @@ export default{
         buscarProducto(){
             axios.get(config.server+"/producto/id/"+this.producto)
             .then((result)=>{
-                if(result.data.success){
+                if(result.data.success && result.data.body.length > 0){
                     this.prod_no_existe = false;
                 }else{
                     this.prod_no_existe = true;
