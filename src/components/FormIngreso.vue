@@ -1,12 +1,13 @@
 <template>
     <div class="container-registro">
-        <form class="ctn-registrar" v-on:submit.prevent="registrarIngreso">
+        
             <h1>REGISTRAR INGRESO</h1>
             <form class="campos_registrar" v-on:submit.prevent="buscarProducto">
                 <img src="../assets/carrito-de-supermercado.png" alt="">
                 <p>Codigo:</p>
                 <input type="number" v-model="producto">  
             </form>
+            <form class="ctn-registrar" v-on:submit.prevent="registrarIngreso">
             <div class="ctn-pro" v-show="prod_no_existe">
                 <p>Producto no registrado</p>
                 <button class="btn">REGISTRAR</button>
