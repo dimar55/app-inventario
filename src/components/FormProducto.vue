@@ -47,7 +47,7 @@ export default{
     data(){
         return {
             Producto: {
-                id_product: this.$route.query.id || "",
+                id_product: Number(this.$route.query.id) || "",
                 nombre_product: "",
                 marca_product: "",
                 categoria_product: "",
