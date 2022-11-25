@@ -5,7 +5,7 @@
             <div class="campos_registrar" >
                 <img src="../assets/carrito-de-supermercado.png" alt="">
                 <p>Codigo</p>
-                <input type="text" v-model="Producto.id_product">
+                <input type="number" v-model="Producto.id_product">
             </div>
             <div class="campos_registrar">
                 <p>Categoria</p>
