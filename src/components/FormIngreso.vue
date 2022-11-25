@@ -6,7 +6,6 @@
                 <img src="../assets/carrito-de-supermercado.png" alt="">
                 <p>Codigo:</p>
                 <input type="number" v-model="producto">  
-                <button type="submit" class="btn">Buscar</button>            
             </form>
             <div class="ctn-pro" v-show="prod_no_existe">
                 <p>Producto no registrado</p>
@@ -34,7 +33,7 @@
                     <input type="number" v-model="ingreso.cedula_pro">
             </div>
             <div class="boton">
-                <button class="btn">REGISTRAR</button>
+                <button class="btn" type="submit">REGISTRAR</button>
             </div>
         </form>
     </div>
@@ -71,6 +70,47 @@ export default{
                     this.prod_no_existe = true;
                 }
             })
+        },
+        async registrarIngreso(){
+            let res = await axios.post(config.server+"/lote", this.ingreso)
+            .then((result)=>{
+                if(result.data.success){
+                    return result.data.body.producto.id_lote;
+                }else{
+                    return 0;
+                }
+            }).catch(err=>{
+                console.log(err);
+                return 0;
+            })
+            if(res!=0){
+                axios.post(config.server+"/loteP", {id_lote: res , id_product: this.producto})
+                .then((result)=>{
+                    if (result.data.success) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Ingreso creado exitosamente",
+                            showConfirmButton: false,
+                            timer: 1000,
+                        });
+                        this.$router.push({ path: '/Menu' });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "No se ha podido crear el ingreso",
+                            showConfirmButton: false,
+                            timer: 1200,
+                        });
+                    }
+                }).catch((err) => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "No se ha podido crear el ingreso",
+                        showConfirmButton: false,
+                        timer: 1200,
+                    });
+                })
+            }
         }
     }
 }
