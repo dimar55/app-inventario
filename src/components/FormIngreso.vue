@@ -5,7 +5,8 @@
             <form class="campos_registrar" v-on:submit.prevent="buscarProducto">
                 <img src="../assets/carrito-de-supermercado.png" alt="">
                 <p>Codigo:</p>
-                <input type="number" v-model="producto">              
+                <input type="number" v-model="producto">  
+                <button type="submit" hidden></button>            
             </form>
             <div class="ctn-pro" v-show="prod_no_existe">
                 <p>Producto no registrado</p>
