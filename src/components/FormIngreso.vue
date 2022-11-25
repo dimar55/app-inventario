@@ -10,7 +10,7 @@
             <form class="ctn-registrar" v-on:submit.prevent="registrarIngreso">
             <div class="ctn-pro" v-show="prod_no_existe">
                 <p>Producto no registrado</p>
-                <button class="btn">REGISTRAR</button>
+                <button class="btn" @click="goProducto">REGISTRAR</button>
             </div>
             <div class="campos_registrar">
                 <p>Precio Entrada:</p>
@@ -62,6 +62,9 @@ export default{
         }
     },
     methods: {
+        goProducto(){
+            this.$router.push({ path: '/RegistrarProducto', query: {id: this.producto}});
+        },
         buscarProducto(){
             axios.get(config.server+"/producto/id/"+this.producto)
             .then((result)=>{
