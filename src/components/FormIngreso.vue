@@ -6,7 +6,7 @@
                 <img src="../assets/carrito-de-supermercado.png" alt="">
                 <p>Codigo:</p>
                 <input type="number" v-model="producto">  
-                <button type="submit" hidden></button>            
+                <button type="submit" class="btn">Buscar</button>            
             </form>
             <div class="ctn-pro" v-show="prod_no_existe">
                 <p>Producto no registrado</p>
