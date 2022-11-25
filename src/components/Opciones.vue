@@ -11,6 +11,11 @@
                 <button class="boton-opciones" >REGISTRAR</button>
             </div>
             <div class="ctn_opciones">
+                <h1>REGISTRAR OPERADOR</h1>
+                <img src="../assets/operador.png" alt="">
+                <button class="boton-opciones" >REGISTRAR</button>
+            </div>
+            <div class="ctn_opciones">
                 <h1>REGISTRAR PRODUCTO</h1>
                 <img src="../assets/carrito-de-supermercado.png" alt="">
                 <button class="boton-opciones" >REGISTRAR</button>
@@ -18,32 +23,41 @@
 
             <div class="ctn_opciones">
                 <h1>REGISTRAR ENTRADA</h1>
-                <img src="../assets/carrito-de-supermercado.png" alt="">
-                <button class="boton-opciones" >VER</button>
+                <img src="../assets/entrada.png" alt="">
+                <button class="boton-opciones" >REGISTRAR</button>
             </div>
 
             <div class="ctn_opciones">
                 <h1>VER INVENTARIO</h1>
                 <img src="../assets/inventario.png" alt="">
-                <button class="boton-opciones" >AJUSTAR</button>
+                <button class="boton-opciones" >VER</button>
             </div>
-
+            <div class="ctn_opciones">
+                <h1>VER CLIENTES</h1>
+                <img src="../assets/clientes.png" alt="">
+                <button class="boton-opciones" >VER</button>
+            </div>
+            <div class="ctn_opciones">
+                <h1>VER PROVEEDORES</h1>
+                <img src="../assets/buscar.png" alt="">
+                <button class="boton-opciones" >VER</button>
+            </div> 
             <div class="ctn_opciones">
                 <h1>REGISTRAR VENTA</h1>
-                <img src="../assets/compras.png" alt="">
-                <button class="boton-opciones" >CREAR</button>
+                <img src="../assets/venta.png" alt="">
+                <button class="boton-opciones" >REGISTRAR</button>
             </div>
 
             <div class="ctn_opciones">
                 <h1>HISTORIAL DE VENTAS</h1>
                 <img src="../assets/compras.png" alt="">
-                <button class="boton-opciones" >CREAR</button>
+                <button class="boton-opciones" >VER</button>
             </div>
 
             <div class="ctn_opciones">
                 <h1>HISTORIAL DE SALDOS</h1>
                 <img src="../assets/moneda.png" alt="">
-                <button class="boton-opciones" >CREAR</button>
+                <button class="boton-opciones" >VER</button>
             </div>
 
         </div>

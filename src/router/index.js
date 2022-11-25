@@ -4,6 +4,7 @@ import config from '../utils/utils';
 import Login from '../views/Login.vue';
 import Menu from '../views/Menu.vue';
 import RegistrarCliente from '../views/RegistrarCliente.vue';
+import RegistrarOperador from '../views/RegistrarOperador.vue';
 import RegistrarProveedor from '../views/RegistrarProveedor.vue';
 import RegistrarProducto from '../views/RegistrarProducto.vue';
 import RegistrarIngreso from '../views/RegistrarIngreso.vue';
@@ -24,6 +25,12 @@ const routes = [
     path: '/Menu',
     name: 'Menu',
     component: Menu
+  },
+
+  {
+    path: '/RegistrarOperador',
+    name: 'RegistrarOperador',
+    component: RegistrarOperador
   },
 
   {
