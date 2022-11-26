@@ -5,73 +5,46 @@
         </div>
     <div class="contenedores">
         <div class="ctn-buscar">
-            <div class="filtro">
-                <input type="text" placeholder="Buscar Producto">
-                <div class="ctn-select">
-                    <select name="" id="">
-                    <option value="">ASEO</option>
-                    <option value="">ASEO PERSONAL</option>
-                    <option value="">ALIMENTOS</option>
-                    <option value="">ETC</option>
-                </select>
-                </div>
-                <button class="btn-b">BUSCAR</button>
-            </div>
+            <form class="filtro"  v-on:submit.prevent="buscarProducto">
+                <input type="text" placeholder="Buscar Producto" v-model="id_producto">
+            </form>
             <div class="products-venta">
-                <div class="product">
-                    <p>Harina arepasan 1 KG</p>
-                    <p>$10.000</p>
+                <div class="product" v-if="filtrado">
+                    <p>{{prod_filtro.nombre_product}} {{prod_filtro.marca_product}} {{prod_filtro.cantidad_product}}{{prod_filtro.unidad_poduct}}</p>
+                    <p>${{prod_filtro.precio_venta}}</p>
                     <div class="ctn-text">
-                        <p style="color:#555555"> Disponilbles: 12</p>
-                        <button class="btn"> Añadir</button>
-                    </div>
-                </div>
-                <div class="product">
-                    <p>Harina arepasan 1 KG</p>
-                    <p>$10.000</p>
-                    <div class="ctn-text">
-                        <p style="color:#555555"> Disponilbles: 12</p>
-                        <button class="btn"> Añadir</button>
+                        <p style="color:#555555"> Disponilbles: {{prod_filtro.cantidad_lote}}</p>
+                        <button class="btn" @click="agregarProd()"> Añadir</button>
                     </div>
                 </div>
             </div>
         </div>
         <div class="lista-venta">
-            <div class="producto-select">
+            <div class="producto-select" v-for="(prod, index) in prods_venta">
                 <div class="ctn-text">
-                    <p>Harina arepasan 1kg</p>
-                    <img src="../assets/icon_delete.png" alt="">
+                    <p>{{prod.nombre_product}} {{prod.marca_product}} {{prod.cantidad_product}}{{prod.unidad_poduct}}</p>
+                    <img src="../assets/icon_delete.png" alt="" @click="eliminarProd(index)">
                 </div>
                 <div>
-                    <p>$10.000</p>
+                    <p>${{prod.precio_venta}}</p>
                 </div>
                 <div>
                     <div class="ctn-text">
-                        <p>Disponibles: 4</p>
-                        <img src="../assets/icon_plus.png" alt="">
-                        <p style="color: #55B77E">2</p>
-                        <img src="../assets/icon_minus.png" alt="">
-                        <p>2*10.000 = 20.000</p>
+                        <p>Disponibles: {{prod.cantidad_lote}}</p>
+                        <img src="../assets/icon_plus.png" alt="" @click="sumCantidad(prod.id_product)">
+                        <p style="color: #55B77E">{{prod.cant_venta}}</p>
+                        <img src="../assets/icon_minus.png" alt="" @click="resCantidad(prod.id_product)">
+                        <p>{{prod.cant_venta}}*{{prod.precio_venta}} = {{prod.cant_venta*prod.precio_venta}}</p>
                     </div>
                 </div>  
             </div>
-            <div class="producto-select">
-                <div class="ctn-text">
-                    <p>Harina arepasan 1kg</p>
-                    <img src="../assets/icon_delete.png" alt="">
-                </div>
-                <div>
-                    <p>$10.000</p>
-                </div>
-                <div>
-                    <div class="ctn-text">
-                        <p>Disponibles: 4</p>
-                        <img src="../assets/icon_plus.png" alt="">
-                        <p style="color: #55B77E">2</p>
-                        <img src="../assets/icon_minus.png" alt="">
-                        <p>2*10.000 = 20.000</p>
-                    </div>
-                </div>  
+            <div class="ctn-text">
+                <button class="btn" @click="registrarVenta()">Registrar venta</button>
+                <button class="btn" @click="registrarVenta()">Abrir saldo</button>
+            </div>
+            <div class="totales">
+                <p> Total: $45.000</p>
+                <p> Total: $30.000</p>
             </div>
         </div>
     </div>
@@ -79,8 +52,99 @@
 </template>
 
 <script>
+import axios from "axios";
+import Swal from "sweetalert2";
+import config from '../utils/utils';
 export default{
-    name: 'Venta'
+    name: 'Venta',
+    data(){
+        return {
+            filtrado: false,
+            id_producto: "",
+            prod_filtro: "",
+            prods_venta: []
+
+        }
+    },
+    methods: {
+        buscarProducto(){
+            axios.get(config.server+"/loteP/id/"+this.id_producto)
+            .then((result)=>{
+                if(result.data.success && result.data.body.length>0){
+                    this.prod_filtro = result.data.body[0]
+                    this.filtrado = true;
+                }else{
+                    this.filtrado = false;
+                }
+            }).catch((err)=>{
+                this.filtrado = false;
+                console.log(err);
+            })
+        },
+        agregarProd(){
+            const pd = this.prods_venta.find(ele => ele.id_product == this.prod_filtro.id_product);
+            if(pd){
+                if(pd.cant_venta<pd.cantidad_lote){
+                    pd.cant_venta++;
+                }
+            }else{
+                let prod = Object.assign({cant_venta: 1}, this.prod_filtro)
+                this.prods_venta.push(prod);
+            }
+        },
+        sumCantidad(id){
+            const pd = this.prods_venta.find(ele => ele.id_product == id);
+            if(pd.cant_venta<pd.cantidad_lote){
+                    pd.cant_venta++;
+            }
+        },
+        resCantidad(id){
+            const pd = this.prods_venta.find(ele => ele.id_product == id);
+            if(pd.cant_venta>1){
+                pd.cant_venta--;
+            }
+        },
+        eliminarProd(id){
+            this.prods_venta.splice(id, 1);
+        },
+        registrarVenta(){
+            if(this.prods_venta.length>0){
+                let productos = [];
+                for (let index = 0; index < this.prods_venta.length; index++) {
+                    const element = this.prods_venta[index];
+                    productos.push([element.id_product, element.cant_venta, element.precio_venta]);
+                }
+                axios.post(config.server+"/venta", {productos})
+                .then((result)=>{
+                    if (result.data.success) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Venta realizada exitosamente",
+                            showConfirmButton: false,
+                            timer: 1000,
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "No se ha podido realizar la venta",
+                            showConfirmButton: false,
+                            timer: 1200,
+                        });
+                    }
+                }).catch((err) => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "No se ha podido realizar la venta",
+                        showConfirmButton: false,
+                        timer: 1200,
+                    });
+                })
+                this.prods_venta = [];
+                this.filtrado = false;
+                this.id_producto = "" 
+            }
+        }
+    },
 }
 </script>
 

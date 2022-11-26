@@ -1,18 +1,18 @@
 <template>
     <Header></Header>
-    <AnadirProveedor></AnadirProveedor>
+    <AnadirSaldo></AnadirSaldo>
 </template>
 
 <script>
 
 import Header from '@/components/Header';
-import AnadirProveedor from '@/components/AnadirProveedor';
+import AnadirSaldo from '@/components/AnadirSaldo';
 
 export default{
     name: 'Añadir',
     components: {
        Header,
-       AnadirProveedor
+       AnadirSaldo
     }
 }
 </script>
