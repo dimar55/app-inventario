@@ -3,6 +3,7 @@ import axios from "axios";
 import config from '../utils/utils';
 import Login from '../views/Login.vue';
 import Menu from '../views/Menu.vue';
+import MenuOp from '../views/MenuOp.vue';
 import RegistrarCliente from '../views/RegistrarCliente.vue';
 import RegistrarOperador from '../views/RegistrarOperador.vue';
 import RegistrarProveedor from '../views/RegistrarProveedor.vue';
@@ -25,6 +26,12 @@ const routes = [
     path: '/Menu',
     name: 'Menu',
     component: Menu
+  },
+
+  {
+    path: '/MenuOp',
+    name: 'MenuOp',
+    component: MenuOp
   },
 
   {

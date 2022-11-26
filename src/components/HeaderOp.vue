@@ -23,7 +23,6 @@
                     <a @click="go_Menu">Menu</a>
                     <a @click="go_RegistrarProveedores">Registrar Proveedor</a>
                     <a @click="go_RegistrarCliente">Registrar Cliente</a>
-                    <a @click="go_RegistrarOperador">Registrar Operador</a>
                     <a @click="go_RegistrarProducto">Registrar Producto</a>
                     <a @click="go_RegistrarEntrada">Registrar Entrada</a>
                     <a @click="go_RegistrarVenta">Registrar Venta</a>
@@ -42,7 +41,7 @@
 
 <script>
 export default{
-    name: 'Header',
+    name: 'HeaderOp',
     data(){
         return{
             show_barra: false
@@ -101,77 +100,14 @@ export default{
             this.show_barra=false;
             this.$router.push({ path: '/Saldos' });
         },
+
+        cerrarSesion(){
+            sessionStorage.clear();
+            this.$router.push({ path: '/' });
+        }
     } 
 }
 
 </script>
 
 
-<style>
-
-.ctn-header{
-    background-color:  #55B77E;
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
-    color: #FFEAD1;
-    font-weight: 400;
-    font-size: 80px;
-}
-
-.ctn-header img{
-    cursor: pointer;
-}
-
-.container-menu{
-        position: fixed;
-        text-align: center;
-        font-size: 22px;
-        background:  rgba(0, 0, 0, 0.5);
-        width: 100%;
-        height: 100vh;
-        top: 0; left: 0;
-        transition: all 500ms ease;
-    }
-
-.logo_user{
-   padding-top: 30px;
-   color: #ffffff;
-}
-
-    .cont-menu{
-        width: 100%;
-        max-width: 250px;
-        background: #1c1c1c;
-        height: 100vh;
-        position: relative;
-        transition: all 500ms ease;
-    }
-
-    .cont-menu nav{
-        transform: translateY(8%);
-    }
-    .cont-menu nav a{
-        display: block;
-        text-decoration: none;
-        text-align: center;
-        padding-top: 20px;
-        color: #c7c7c7;
-        border-left: 5px solid transparent;
-        transition: all 400ms ease;
-    }
-
-    .cont-menu nav a:hover{
-        border-left: 5px solid #c7c7c7;
-        background: #1f1f1f;
-
-    }
-
-    .cont-menu label{
-        position: absolute;
-        right: 5px;
-        top: 5px;
-        cursor: pointer;
-    }
-
-</style>

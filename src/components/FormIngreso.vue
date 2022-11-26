@@ -1,5 +1,6 @@
 <template>
     <div class="container-registro">    
+        <div class="ctn-registrar">
             <h1>REGISTRAR INGRESO</h1>
             <form class="campos_registrar" v-on:submit.prevent="buscarProducto">
                 <img src="../assets/carrito-de-supermercado.png" alt="">
@@ -10,7 +11,7 @@
                 <p>Producto no registrado</p>
                 <button class="btn" @click="goProducto">REGISTRAR</button>
             </div>
-            <form class="ctn-registrar" v-on:submit.prevent="registrarIngreso">
+            <form  v-on:submit.prevent="registrarIngreso">
             <div class="campos_registrar">
                 <p>Precio Entrada:</p>
                 <input type="text" v-model="ingreso.precio_entrada">
@@ -36,6 +37,7 @@
                 <button class="btn" type="submit">REGISTRAR</button>
             </div>
         </form>
+    </div>
     </div>
 </template>
 
