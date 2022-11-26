@@ -43,8 +43,7 @@
                 <button class="btn" @click="registrarVenta()">Abrir saldo</button>
             </div>
             <div class="totales">
-                <p> Total: $45.000</p>
-                <p> Total: $30.000</p>
+                <p> Total: ${{this.total}}</p>
             </div>
         </div>
     </div>
@@ -61,6 +60,7 @@ export default{
         return {
             filtrado: false,
             id_producto: "",
+            total:  0,
             prod_filtro: "",
             prods_venta: []
 
@@ -91,21 +91,35 @@ export default{
                 let prod = Object.assign({cant_venta: 1}, this.prod_filtro)
                 this.prods_venta.push(prod);
             }
+            this.calcularTotal();
+            this.id_producto = "";
+            this.filtrado = false;
         },
         sumCantidad(id){
             const pd = this.prods_venta.find(ele => ele.id_product == id);
             if(pd.cant_venta<pd.cantidad_lote){
                     pd.cant_venta++;
+                    this.calcularTotal()
             }
         },
         resCantidad(id){
             const pd = this.prods_venta.find(ele => ele.id_product == id);
             if(pd.cant_venta>1){
                 pd.cant_venta--;
+                this.calcularTotal()
             }
         },
         eliminarProd(id){
             this.prods_venta.splice(id, 1);
+            this.calcularTotal()
+        },
+        calcularTotal(){
+            let total = 0;
+            for (let index = 0; index < this.prods_venta.length; index++) {
+                const element = this.prods_venta[index];
+                total+=element.precio_venta*element.cant_venta
+            }
+            this.total = total;
         },
         registrarVenta(){
             if(this.prods_venta.length>0){
