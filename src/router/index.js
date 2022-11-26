@@ -78,7 +78,7 @@ const routes = [
   {
     path: '/Anadir',
     name: 'Anadir',
-    component: Anadir
+    component: Aña
   },
 ]
 
