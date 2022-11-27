@@ -13,7 +13,7 @@ import Ventas from '../views/Ventas.vue';
 import Saldos from '../views/Saldos.vue';
 import Inventario from '../views/Inventario.vue';
 import RealizarVenta from '../views/RealizarVenta.vue';
-import Anadir from '../views/Anadir.vue';
+import RegistrarSaldo from '../views/RegistrarSaldo.vue';
 
 const routes = [
   {
@@ -83,9 +83,9 @@ const routes = [
     component: RealizarVenta
   },
   {
-    path: '/Anadir',
-    name: 'Anadir',
-    component: Anadir
+    path: '/RegistrarSaldo',
+    name: 'RegistrarSaldo',
+    component: RegistrarSaldo
   },
 ]
 

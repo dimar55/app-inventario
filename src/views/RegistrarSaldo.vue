@@ -9,7 +9,7 @@ import Header from '@/components/Header';
 import AnadirSaldo from '@/components/AnadirSaldo';
 
 export default{
-    name: 'Añadir',
+    name: 'RegistrarSaldo',
     components: {
        Header,
        AnadirSaldo

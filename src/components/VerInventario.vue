@@ -62,15 +62,13 @@ export default{
         buscarProductos() {
             let url = "";
             if (this.filtro == "") url = config.server+"/loteP";
-            else if (this.filtro == "NOMBRE") url =config.server+"/loteP/nombre/"
-            else if (this.filtro == "CODIGO") url = config.server+"/loteP/id/"
-            else if (this.filtro == "CANTIDAD") url = config.server+"/loteP/cantidad/"
-            axios.get(url + this.valor)
+            else if (this.filtro == "NOMBRE") url =config.server+"/loteP/nombre/"+this.valor
+            else if (this.filtro == "CODIGO") url = config.server+"/loteP/id/"+this.valor
+            else if (this.filtro == "CANTIDAD") url = config.server+"/loteP/cantidad/"+this.valor
+            axios.get(url)
                 .then((result) => {
-                    if (result.data.success) {
-
+                    if (result.data.success && result.data.body.length>0) {
                         this.productos = result.data.body
-
                     } else {
                         Swal.fire({
                             icon: "error",

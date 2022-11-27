@@ -98,7 +98,11 @@ export default{
                             showConfirmButton: false,
                             timer: 1000,
                         });
-                        this.$router.push({ path: '/Menu' });
+                        if(sessionStorage.getItem("Rol") == "Operador"){
+                            this.$router.push({ path: '/MenuOp' });
+                        }else{
+                            this.$router.push({ path: '/Menu' });
+                        }
                     } else {
                         Swal.fire({
                             icon: "error",

@@ -54,12 +54,11 @@ export default{
                                 if(result.data.body.decoded.user.rol_usu == "Administrador"){
                                     this.$router.push({ path: '/Menu' });
                                 }else{
-                                    this.$router.push({ path: '/Menu' });
+                                    this.$router.push({ path: '/MenuOp' });
                                 }
                             }).catch((err) => {
                                 console.log("Error al verificar token: " + err)
                             });
-                        this.$router.push({ path: '/Menu' });
                     } else {
                         Swal.fire({
                             icon: "error",

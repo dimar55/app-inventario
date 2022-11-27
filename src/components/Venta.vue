@@ -39,8 +39,8 @@
                 </div>  
             </div>
             <div class="ctn-text">
-                <button class="btn" @click="registrarVenta()">Registrar venta</button>
-                <button class="btn" @click="registrarVenta()">Abrir saldo</button>
+                <button class="btn" @click="registrarVenta(false)">Registrar venta</button>
+                <button class="btn" @click="registrarVenta(true)">Abrir saldo</button>
             </div>
             <div class="totales">
                 <p> Total: ${{this.total}}</p>
@@ -121,7 +121,7 @@ export default{
             }
             this.total = total;
         },
-        registrarVenta(){
+        registrarVenta(saldo){
             if(this.prods_venta.length>0){
                 let productos = [];
                 for (let index = 0; index < this.prods_venta.length; index++) {
@@ -131,12 +131,16 @@ export default{
                 axios.post(config.server+"/venta", {productos})
                 .then((result)=>{
                     if (result.data.success) {
-                        Swal.fire({
+                        if(saldo){
+                            this.$router.push({ path: '/RegistrarSaldo', query: {id_venta: result.data.body.id_venta, total_venta: result.data.body.total_venta}});
+                        }else{
+                            Swal.fire({
                             icon: "success",
                             title: "Venta realizada exitosamente",
                             showConfirmButton: false,
                             timer: 1000,
                         });
+                        }
                     } else {
                         Swal.fire({
                             icon: "error",
@@ -155,7 +159,8 @@ export default{
                 })
                 this.prods_venta = [];
                 this.filtrado = false;
-                this.id_producto = "" 
+                this.id_producto = ""; 
+                this.calcularTotal();
             }
         }
     },

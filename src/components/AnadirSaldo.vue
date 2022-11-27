@@ -2,16 +2,14 @@
     <div class="ctn-saldo">
         <h1>Añadir Saldo</h1>
         <div class="ctn-registrar-saldo">
-            <div class="filtro">
-                <div class="ctn-select">
-                    <select name="" id="">
-                        <option value="">NOMBRE</option>
-                        <option value="">CODIGO</option>
-                    </select>
-                </div>
-                <input type="text" placeholder="Buscar Cliente">
-
-                <button class="btn">BUSCAR</button>
+            <form class="filtro" v-on:submit.prevent="buscarCliente">
+                <input type="number" placeholder="Cedula cliente" v-model="saldo.cedula_cli">
+                <button class="btn" type="submit">BUSCAR</button>
+            </form>
+            <br>
+            <div class="ctn-pro" v-show="clienteExiste2">
+                <p>Cliente no registrado</p>
+                <button class="btn" @click="goCliente()">REGISTRAR</button>
             </div>
             <div class="ctn-tablita">
                 <table class="tablita">
@@ -19,47 +17,120 @@
                         <tr>
                             <th>NOMBRE</th>
                             <th>CODIGO</th>
+                            <th>TELEFONO</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>cell1_1</td>
-                            <td>cell2_1</td>
-                        </tr>
-                        <tr>
-                            <td>cell1_2</td>
-                            <td>cell2_2</td>
-                        </tr>
-                        <tr>
-                            <td>cell1_3</td>
-                            <td>cell2_3</td>
-                        </tr>
-                        <tr>
-                            <td>cell1_4</td>
-                            <td>cell2_4</td>
+                        <tr v-if="clienteExiste">
+                            <td>{{this.cliente.nombre_cli}}</td>
+                            <td>{{this.cliente.cedula_cli}}</td>
+                            <td>{{this.cliente.telefono_cli}}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="abono">
                 <p>Abono:</p>
-                <input type="number">
+                <input type="number" v-model="abono" @keyup="changeAbono" placeholder="0">
             </div>
             <div class="totales">
-                <p> Total: $45.000</p>
-                <p> Abono: $15.000</p>
-                <p> Total: $30.000</p>
+                <p> Total: ${{this.total_venta}}</p>
+                <p> Abono: ${{this.abono}}</p>
+                <p> Total: ${{this.total_venta - this.abono}}</p>
             </div>
             <div class="btn-registrar"> 
-                <button class="btn">Registrar Saldo</button>
+                <button class="btn" @click="registrarSaldo">Registrar Saldo</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import axios from "axios";
+import Swal from "sweetalert2";
+import config from '../utils/utils';
 export default{
-    name: 'AnadirSaldo'
+    name: 'AnadirSaldo',
+    data(){
+        return {
+            clienteExiste: false,
+            clienteExiste2: false,
+            cliente: {
+                cedula_cli: "",
+                nombre_cli: "",
+                telefono_cli: ""
+            },
+            total_venta: Number(this.$route.query.total_venta) || 0,
+            abono: "",
+            saldo: {
+                estado_saldo: "Pendiente",
+                id_venta: Number(this.$route.query.id_venta) || "",
+                cedula_cli: "",
+                saldo: 0
+            },
+            
+        }
+    },
+    methods: {
+        changeAbono(event){
+            if(this.abono>this.total_venta){
+                this.abono = this.total_venta
+            }
+        },
+        buscarCliente(){
+            axios.get(config.server+"/cliente/cedula/"+this.saldo.cedula_cli)
+            .then((result)=>{
+                if(result.data.success && result.data.body.length > 0){
+                    this.cliente = result.data.body[0];
+                    this.clienteExiste = true;
+                    this.clienteExiste2 = false;
+                }else{
+                    this.clienteExiste2 = true;
+                    this.clienteExiste = false;
+                }
+            }).catch((err)=>{
+                console.log(err);
+                this.clienteExiste2 = true;
+                this.clienteExiste = false;
+            })
+        },
+        goCliente(){
+
+        },
+        registrarSaldo(){
+            if(this.clienteExiste){
+                this.saldo.cedula_cli = this.cliente.cedula_cli;
+                this.saldo.saldo = this.total_venta - (this.abono=="" ? 0 : this.abono)
+                axios.post(config.server+"/saldo", this.saldo)
+                .then((result)=>{
+                    if (result.data.success) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Saldo creado exitosamente",
+                            showConfirmButton: false,
+                            timer: 1000,
+                        });
+                        this.$router.push({ path: '/RealizarVenta' });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "No se ha podido crear el saldo",
+                            showConfirmButton: false,
+                            timer: 1200,
+                        });
+                    }
+                }).catch((err) => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "No se ha podido crear el saldo",
+                        showConfirmButton: false,
+                        timer: 1200,
+                    });
+                })
+            }
+            
+        }
+    }
 }
 </script>
 
