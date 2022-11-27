@@ -2,153 +2,100 @@
     <div class="container-historial">
         <h1>HISTORIAL DE SALDOS</h1>
         <div class="ctn-ventas">
-            <div class="filtro">
+            <form class="filtro" v-on:submit.prevent="buscarSaldos">
                 <div class="ctn-select">
-                    <select name="" id="">
-                        <option value="">NOMBRE</option>
-                        <option value="">CODIGO</option>
-                    </select>
-                </div>
-                <div class="ctn-select">
-                        <select name="" id="">
-                            <option >PAGADO</option>
-                            <option >PENDIENTE</option>
+                        <select v-model="filtro.estado_saldo">
+                            <option >Pagado</option>
+                            <option >Pendiente</option>
                         </select>
                     </div>
-                <input type="text" placeholder="Buscar Saldos">
-                <div>
-                    <input type="date">
-                </div>
-                
-                <button class="btn">BUSCAR</button>
-            </div>
+                <input type="text" placeholder="Buscar Saldos"  v-model="filtro.cedula_cli">
+                <button class="btn" type="submit">BUSCAR</button>
+            </form>
             <div class="text">
                 <h1 style="color:#194F5D">Lista de Saldos</h1>
             </div>
             <div class="ctn-resultados">
-                <div class="resultado">
+                <div class="resultado" v-for="saldo in saldos">
                     <div class="ctn-re">
-                        <p >14/11/2022 10:00 am</p>
-                        <p style="color: #55B77E">PAGADO</p>
-                    </div>
-                 
-                    <p style="color:#555555">Leche, Arroz, Aceite</p>
-                    <div  class="ctn-re">
-                        <p>total de la venta $18.500</p>
-                        <div class="botonI">
-                            <button class="btnI">VER DETALLES</button>
+                        <p > {{saldo.cedula_cli}}</p>
+                        <div v-if="saldo.estado_saldo == 'Pagado'">
+                            <p style="color: #55B77E">{{saldo.estado_saldo}}</p>
+                        </div>
+                        <div v-if="saldo.estado_saldo == 'Pendiente'">
+                            <p style="color: #F58649">{{saldo.estado_saldo}}</p>
                         </div>
                     </div>
-                </div>
-                <div class="resultado">
-                    <div class="ctn-re">
-                        <p >14/11/2022 10:00 am</p>
-                        <p style="color: #55B77E">PAGADO</p>
-                    </div>
-                 
-                    <p style="color:#555555">Leche, Arroz, Aceite</p>
                     <div  class="ctn-re">
-                        <p>total de la venta $18.500</p>
-                        <div class="botonI">
-                            <button class="btnI">VER DETALLES</button>
-                        </div>
+                        <p>total del saldo: ${{saldo.saldo}}</p>
                     </div>
-                </div>
-                <div class="resultado">
-                    <div class="ctn-re">
-                        <p >14/11/2022 10:00 am</p>
-                        <p style="color: #55B77E">PAGADO</p>
-                    </div>
-                 
-                    <p style="color:#555555">Leche, Arroz, Aceite</p>
-                    <div  class="ctn-re">
-                        <p>total de la venta $18.500</p>
-                        <div class="botonI">
-                            <button class="btnI">VER DETALLES</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="resultado">
-                    <div class="ctn-re">
-                        <p >14/11/2022 10:00 am</p>
-                        <p style="color: #55B77E">PAGADO</p>
-                    </div>
-                 
-                    <p style="color:#555555">Leche, Arroz, Aceite</p>
-                    <div  class="ctn-re">
-                        <p>total de la venta $18.500</p>
-                        <div class="botonI">
-                            <button class="btnI">VER DETALLES</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="resultado">
-                    <div class="ctn-re">
-                        <p >14/11/2022 10:00 am</p>
-                        <p style="color: #55B77E">PAGADO</p>
-                    </div>
-                 
-                    <p style="color:#555555">Leche, Arroz, Aceite</p>
-                    <div  class="ctn-re">
-                        <p>total de la venta $18.500</p>
-                        <div class="botonI">
-                            <button class="btnI">VER DETALLES</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="resultado">
-                    <div class="ctn-re">
-                        <p >14/11/2022 10:00 am</p>
-                        <p style="color: #55B77E">PAGADO</p>
-                    </div>
-                 
-                    <p style="color:#555555">Leche, Arroz, Aceite</p>
-                    <div  class="ctn-re">
-                        <p>total de la venta $18.500</p>
-                        <div class="botonI">
-                            <button class="btnI">VER DETALLES</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="resultado">
-                    <div class="ctn-re">
-                        <p >14/11/2022 10:00 am</p>
-                        <p style="color: #55B77E">PAGADO</p>
-                    </div>
-                 
-                    <p style="color:#555555">Leche, Arroz, Aceite</p>
-                    <div  class="ctn-re">
-                        <p>total de la venta $18.500</p>
-                        <div class="botonI">
-                            <button class="btnI">VER DETALLES</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="resultado">
-                    <div class="ctn-re">
-                        <p >14/11/2022 10:00 am</p>
-                        <p style="color: #55B77E">PAGADO</p>
-                    </div>
-                 
-                    <p style="color:#555555">Leche, Arroz, Aceite</p>
-                    <div  class="ctn-re">
-                        <p>total de la venta $18.500</p>
-                        <div class="botonI">
-                            <button class="btnI">VER DETALLES</button>
-                        </div>
-                    </div>
-                </div>
+                </div> 
             </div>
         </div>
-        <p >Ventas del Dia $450.000</p>
-        <p>Ventas de la Seman $890.000</p>
-        <p>Ventas del Mes 1'450.000</p>
     </div>
 </template>
 
 <script>
+import axios from "axios";
+import Swal from "sweetalert2";
+import config from '../utils/utils';
 export default{
-    name: 'HistorialSaldos'
+    name: 'HistorialSaldos',
+    data(){
+        return{
+            filtro:{
+                cedula_cli: "",
+                estado_saldo: ""
+            },
+            saldos: []
+        }
+    },
+    methods:{
+        cargarSaldos(){
+            axios.get(config.server+"/saldo")
+                .then((result) => {
+                    if (result.data.success) this.saldos = result.data.body;
+                }).catch((err) => {
+                    console.log(err)
+                })
+        },
+        buscarSaldos() {
+            if (this.filtro.cedula_cli == "" && this.filtro.estado_saldo ==""){
+                axios.get(config.server+"/saldo")
+                .then((result) => {
+                    if (result.data.success) this.saldos = result.data.body;
+                }).catch((err) => {
+                    console.log(err)
+                })
+            }else {
+                axios.post(config.server+"/saldo/filter", this.filtro)
+            .then((result)=>{
+                if(result.data.success && result.data.body.length>0){
+                    this.saldos = result.data.body;
+                }else{
+                    Swal.fire({
+                        icon: "error",
+                        title: "No se encontraron resultados",
+                        showConfirmButton: false,
+                        timer: 1200,
+                    });
+                }
+            }).catch((err)=>{
+                console.log(err);
+                    Swal.fire({
+                        icon: "error",
+                        title: "No se encontraron resultados",
+                        showConfirmButton: false,
+                        timer: 1200,
+                    });
+            })
+            }
+        },
+    },
+    mounted(){
+        this.cargarSaldos();
+
+  } 
 }
 </script>
 
