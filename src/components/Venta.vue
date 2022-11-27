@@ -9,12 +9,12 @@
                 <input type="text" placeholder="Buscar Producto" v-model="id_producto">
             </form>
             <div class="products-venta">
-                <div class="product" v-if="filtrado">
-                    <p>{{prod_filtro.nombre_product}} {{prod_filtro.marca_product}} {{prod_filtro.cantidad_product}}{{prod_filtro.unidad_poduct}}</p>
-                    <p>${{prod_filtro.precio_venta}}</p>
+                <div class="product" v-if="filtrado" v-for="(prod, index) in prods_filtro">
+                    <p>{{prod.nombre_product}} {{prod.marca_product}} {{prod.cantidad_product}}{{prod.unidad_poduct}}</p>
+                    <p>${{prod.precio_venta}}</p>
                     <div class="ctn-text">
-                        <p style="color:#555555"> Disponilbles: {{prod_filtro.cantidad_lote}}</p>
-                        <button class="btn" @click="agregarProd()"> Añadir</button>
+                        <p style="color:#555555"> Disponilbles: {{prod.cantidad_lote}}</p>
+                        <button class="btn" @click="agregarProd(index)"> Añadir</button>
                     </div>
                 </div>
             </div>
@@ -61,7 +61,7 @@ export default{
             filtrado: false,
             id_producto: "",
             total:  0,
-            prod_filtro: "",
+            prods_filtro: [],
             prods_venta: []
 
         }
@@ -71,7 +71,7 @@ export default{
             axios.get(config.server+"/loteP/id/"+this.id_producto)
             .then((result)=>{
                 if(result.data.success && result.data.body.length>0){
-                    this.prod_filtro = result.data.body
+                    this.prods_filtro = result.data.body
                     this.filtrado = true;
                 }else{
                     this.filtrado = false;
@@ -81,14 +81,14 @@ export default{
                 console.log(err);
             })
         },
-        agregarProd(){
+        agregarProd(i){
             const pd = this.prods_venta.find(ele => ele.id_product == this.prod_filtro.id_product);
             if(pd){
                 if(pd.cant_venta<pd.cantidad_lote){
                     pd.cant_venta++;
                 }
             }else{
-                let prod = Object.assign({cant_venta: 1}, this.prod_filtro)
+                let prod = Object.assign({cant_venta: 1}, this.prods_filtro[i])
                 this.prods_venta.push(prod);
             }
             this.calcularTotal();
