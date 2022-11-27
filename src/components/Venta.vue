@@ -75,10 +75,22 @@ export default{
                     this.filtrado = true;
                 }else{
                     this.filtrado = false;
+                    Swal.fire({
+                            icon: "error",
+                            title: "No se encontraron resultados",
+                            showConfirmButton: false,
+                            timer: 1200,
+                        });
                 }
             }).catch((err)=>{
                 this.filtrado = false;
                 console.log(err);
+                Swal.fire({
+                            icon: "error",
+                            title: "No se encontraron resultados",
+                            showConfirmButton: false,
+                            timer: 1200,
+                        });
             })
         },
         agregarProd(i){
