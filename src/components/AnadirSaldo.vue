@@ -1,4 +1,48 @@
 <template>
+
+    <transition name="fade">
+        <div class="modal-overlay" v-if="showModal"></div>
+    </transition>
+    <transition name="fade">
+        <div class="container-registro modal" v-if="showModal">
+            
+            <form class="ctn-registrar"  v-on:submit.prevent="registrarCliente">
+                <div class="container-flex">
+                    <h1>Registrar cliente</h1>
+                    <img src="../assets/icon_X.png" alt="" @click="showModal = false">
+            </div>
+                <div class="campos_registrar">
+                    <img src="../assets/cliente.png" alt="">
+                    <p>Nombre</p>
+                    <input type="text" v-model="ClienteForm.nombre_cli">
+                </div>
+                <div class="campos_registrar">
+                    <p>Tipo de Documento</p>
+                    <select v-model="ClienteForm.tipo_documento_cli">
+                        <option>CC Cedula de Ciudadania</option>
+                        <option>TT Tarjeta de Identidad</option>
+                        <option>CE Cedula de Extranjeria</option>
+                    </select>
+                </div>
+                <div class="campos_registrar">
+                    <p>Numero de Documento:</p>
+                    <input type="number" v-model="ClienteForm.cedula_cli" disabled>
+                </div>
+                <div class="campos_registrar">
+                    <p>Telefono:</p>
+                    <input type="number" v-model="ClienteForm.telefono_cli">
+                </div>
+                <div class="campos_registrar">
+                    <p>Dirección:</p>
+                    <input type="text" v-model="ClienteForm.direccion_cli">
+                </div>  
+                <div class="boton">
+                    <button type="submit" class="btn">REGISTRAR</button>
+                </div>
+            </form>
+        </div>
+    </transition>
+
     <div class="ctn-saldo">
         <h1>Añadir Saldo</h1>
         <div class="ctn-registrar-saldo">
@@ -46,6 +90,7 @@
 </template>
 
 <script>
+import { tsThisType } from "@babel/types";
 import axios from "axios";
 import Swal from "sweetalert2";
 import config from '../utils/utils';
@@ -53,6 +98,7 @@ export default{
     name: 'AnadirSaldo',
     data(){
         return {
+            showModal: false,
             clienteExiste: false,
             clienteExiste2: false,
             cliente: {
@@ -68,6 +114,13 @@ export default{
                 cedula_cli: "",
                 saldo: 0
             },
+            ClienteForm: {
+               cedula_cli: "",
+               nombre_cli: "",
+               tipo_documento_cli: "",
+               telefono_cli: "",
+               direccion_cli: ""
+            }
             
         }
     },
@@ -95,12 +148,16 @@ export default{
             })
         },
         goCliente(){
-
+            this.ClienteForm.cedula_cli = this.saldo.cedula_cli;
+            this.showModal = true;
         },
         registrarSaldo(){
             if(this.clienteExiste){
                 this.saldo.cedula_cli = this.cliente.cedula_cli;
                 this.saldo.saldo = this.total_venta - (this.abono=="" ? 0 : this.abono)
+                if(this.saldo.saldo == 0){
+                    this.saldo.estado_saldo = "Pagado";
+                }
                 axios.post(config.server+"/saldo", this.saldo)
                 .then((result)=>{
                     if (result.data.success) {
@@ -128,13 +185,78 @@ export default{
                     });
                 })
             }
-            
+        },
+        registrarCliente(){
+            axios.post(config.server+"/cliente", this.ClienteForm)
+            .then((result) => {
+                    if (result.data.success) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Cliente creado exitosamente",
+                            showConfirmButton: false,
+                            timer: 1000,
+                        });
+                        this.showModal = false;
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "No se ha podido crear el cliente",
+                            showConfirmButton: false,
+                            timer: 1200,
+                        });
+                    }
+                }).catch((err) => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "No se ha podido crear el cliente",
+                        showConfirmButton: false,
+                        timer: 1200,
+                    });
+                })
         }
     }
 }
 </script>
 
 <style>
+.modal-overlay {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.4);
+    
+}
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 101;
+}
+.modal-container {
+    background: #A6E8FA;
+    padding: 2rem;
+    border-radius: 25px;
+}
+.modal-container p{
+    font-size: 30px;
+    padding-right: 10px;
+}
+
+.container-flex {
+    display: flex;
+    justify-content: space-between;
+}
+.container-flex h1{
+    margin-left: 30px;
+    font-size: 30px;
+    font-weight: bolder;
+}
+
+
 .ctn-saldo h1{
     text-align: center;
     color: #FFEAD1;
