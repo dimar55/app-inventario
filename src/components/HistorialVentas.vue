@@ -2,7 +2,7 @@
     <div class="container-historial">
         <h1>HISTORIAL DE VENTAS</h1>
         <div class="ctn-ventas">
-            <div class="filtro">
+            <form class="filtro" v-on:submit.prevent>
                 <div class="ctn-select">
                     <select name="" id="">
                         <option value="">NOMBRE</option>
@@ -14,88 +14,94 @@
                     <input type="date">
                 </div>
                 <button class="btn">BUSCAR</button>
-            </div>
+            </form>
             <div class="text">
                 <h1 style="color:#194F5D">Lista de Ventas</h1>
             </div>
             
             <div class="ctn-resultados">
-                <div class="resultado">
-                    <p style="color:#55B77E">14/11/2022 10:00 am</p>
-                    <p style="color:#555555">Leche, Arroz, Aceite</p>
-                    <p>total de la venta $18.500</p>
+                <div class="resultado" v-for="venta in ventas">
+                    <p style="color:#55B77E">{{venta.fecha_venta}}</p>
+                    <p style="color:#555555"> {{venta.productos}}</p>
+                    <p>total de la venta: {{venta.total_venta}}</p>
                    
                     <div class="botonI">
                         <button class="btnI">VER DETALLES</button>
                     </div>
                 </div>
-                <div class="resultado">
-                    <p style="color:#55B77E">14/11/2022 10:00 am</p>
-                    <p style="color:#555555">Leche, Arroz, Aceite</p>
-                    <p>total de la venta $18.500</p>
-                    <div class="botonI">
-                        <button class="btnI">VER DETALLES</button>
-                    </div>
-                </div>
-                <div class="resultado">
-                    <p style="color:#55B77E">14/11/2022 10:00 am</p>
-                    <p style="color:#555555">Leche, Arroz, Aceite</p>
-                    <p>total de la venta $18.500</p>
-                    <div class="botonI">
-                        <button class="btnI">VER DETALLES</button>
-                    </div>
-                </div>
-                <div class="resultado">
-                    <p style="color:#55B77E">14/11/2022 10:00 am</p>
-                    <p style="color:#555555">Leche, Arroz, Aceite</p>
-                    <p>total de la venta $18.500</p>
-                    <div class="botonI">
-                        <button class="btnI">VER DETALLES</button>
-                    </div>
-                </div>
-                <div class="resultado">
-                    <p style="color:#55B77E">14/11/2022 10:00 am</p>
-                    <p style="color:#555555">Leche, Arroz, Aceite</p>
-                    <p>total de la venta $18.500</p>
-                    <div class="botonI">
-                        <button class="btnI">VER DETALLES</button>
-                    </div>
-                </div>
-                <div class="resultado">
-                    <p style="color:#55B77E">14/11/2022 10:00 am</p>
-                    <p style="color:#555555">Leche, Arroz, Aceite</p>
-                    <p>total de la venta $18.500</p>
-                    <div class="botonI">
-                        <button class="btnI">VER DETALLES</button>
-                    </div>
-                </div>
-                <div class="resultado">
-                    <p style="color:#55B77E">14/11/2022 10:00 am</p>
-                    <p style="color:#555555">Leche, Arroz, Aceite</p>
-                    <p>total de la venta $18.500</p>
-                    <div class="botonI">
-                        <button class="btnI">VER DETALLES</button>
-                    </div>
-                </div>
-                <div class="resultado">
-                    <p style="color:#55B77E">14/11/2022 10:00 am</p>
-                    <p style="color:#555555">Leche, Arroz, Aceite</p>
-                    <p>total de la venta $18.500</p>
-                    <div class="botonI">
-                        <button class="btnI">VER DETALLES</button>
-                    </div>
-                </div>
             </div>
+            <p >Ventas del Dia $450.000</p>
+            <p>Ventas de la Seman $890.000</p>
+            <p>Ventas del Mes 1'450.000</p>
         </div>
-        <p >Ventas del Dia $450.000</p>
-        <p>Ventas de la Seman $890.000</p>
-        <p>Ventas del Mes 1'450.000</p>
     </div>
 </template>
 
 <script>
+import axios from "axios";
+import Swal from "sweetalert2";
+import config from '../utils/utils';
 export default{
-    name: 'HistorialVentas'
+    name: 'HistorialVentas',
+    data(){
+        return {
+            filtro: "",
+            valor: "",
+            ventas: []
+
+        }
+    },
+    methods:{
+        cargarVentas(){
+            axios.get(config.server+"/venta")
+                .then((result) => {
+                    if (result.data.success) {
+                        this.ventas = result.data.body
+                        this.ventas.productos = "";
+                        for (let index = 0; index < this.ventas.length; index++) {
+                            this.ventas[index].productos = []; 
+                            for (let i = 0; i< this.ventas[index].prods.length; i++) {
+                                this.ventas[index].productos  = this.ventas[index].productos + " " + this.ventas[index].prods[i]; 
+                            }   
+                        } 
+                    }
+                }).catch((err) => {
+                    console.log(err)
+                })
+        },
+        buscarProductos() {
+            let url = "";
+            if (this.filtro == "") url = config.server+"/loteP";
+            else if (this.filtro == "NOMBRE") url =config.server+"/loteP/nombre/"+this.valor
+            else if (this.filtro == "CODIGO") url = config.server+"/loteP/id/"+this.valor
+            else if (this.filtro == "CANTIDAD") url = config.server+"/loteP/cantidad/"+this.valor
+            axios.get(url)
+                .then((result) => {
+                    if (result.data.success && result.data.body.length>0) {
+                        this.productos = result.data.body
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "No se encontraron resultados",
+                            showConfirmButton: false,
+                            timer: 1200,
+                        });
+                    };
+
+                }).catch((err) => {
+                    console.log(err);
+                    Swal.fire({
+                        icon: "error",
+                        title: "No se encontraron resultados",
+                        showConfirmButton: false,
+                        timer: 1200,
+                    });
+                })
+        },
+    },
+    mounted(){
+        this.cargarVentas();
+    }
 }
 </script>
 

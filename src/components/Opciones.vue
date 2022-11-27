@@ -89,10 +89,10 @@
             this.$router.push({ path: '/Inventario' });
         },
         go_Proveedores(){
-            this.$router.push({ path: '/RegistrarIngreso' });
+            this.$router.push({ path: '/Proveedores' });
         },
         go_Clientes(){
-            this.$router.push({ path: '/RegistrarIngreso' });
+            this.$router.push({ path: '/Clientes' });
         },
         go_Ventas(){
             this.$router.push({ path: '/Ventas' });
