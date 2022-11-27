@@ -87,11 +87,11 @@ export default{
         },
         go_Proveedores(){
             this.show_barra=false;
-            this.$router.push({ path: '/RegistrarIngreso' });
+            this.$router.push({ path: '/Proveedores' });
         },
         go_Clientes(){
             this.show_barra=false;
-            this.$router.push({ path: '/RegistrarIngreso' });
+            this.$router.push({ path: '/Clientes' });
         },
         go_Ventas(){
             this.show_barra=false;

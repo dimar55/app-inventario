@@ -10,6 +10,8 @@ import RegistrarProveedor from '../views/RegistrarProveedor.vue';
 import RegistrarProducto from '../views/RegistrarProducto.vue';
 import RegistrarIngreso from '../views/RegistrarIngreso.vue';
 import Ventas from '../views/Ventas.vue';
+import Clientes from '../views/Clientes.vue';
+import Proveedores from '../views/Proveedores.vue';
 import Saldos from '../views/Saldos.vue';
 import Inventario from '../views/Inventario.vue';
 import RealizarVenta from '../views/RealizarVenta.vue';
@@ -62,6 +64,17 @@ const routes = [
     name: 'RegistrarIngreso',
     component: RegistrarIngreso
   },  
+  {
+    path: '/Clientes',
+    name: 'Clientes',
+    component: Clientes
+  },
+
+  {
+    path: '/Proveedores',
+    name: 'Proveedores',
+    component: Proveedores
+  },
   {
     path: '/Ventas',
     name: 'Ventas',
