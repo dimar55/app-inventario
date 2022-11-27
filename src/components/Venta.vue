@@ -71,7 +71,7 @@ export default{
             axios.get(config.server+"/loteP/id/"+this.id_producto)
             .then((result)=>{
                 if(result.data.success && result.data.body.length>0){
-                    this.prod_filtro = result.data.body[0]
+                    this.prod_filtro = result.data.body
                     this.filtrado = true;
                 }else{
                     this.filtrado = false;
