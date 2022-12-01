@@ -13,7 +13,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="proveedor in proveedores">
+                    <tr v-for="proveedor in proveedores" :key="proveedor.nombre_pro">
                         <td>{{proveedor.nombre_pro}}</td>
                         <td>{{proveedor.cedula_pro}}</td>
                         <td>{{proveedor.telefono_pro}}</td>
