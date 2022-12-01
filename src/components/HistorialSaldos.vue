@@ -16,18 +16,21 @@
                 <h1 style="color:#194F5D">Lista de Saldos</h1>
             </div>
             <div class="ctn-resultados">
-                <div class="resultado" v-for="saldo in saldos">
+                <div class="resultado" v-for="saldo in saldos" :key="saldo.cedula_cli">
                     <div class="ctn-re">
                         <p > {{saldo.cedula_cli}}</p>
                         <div v-if="saldo.estado_saldo == 'Pagado'">
                             <p style="color: #55B77E">{{saldo.estado_saldo}}</p>
                         </div>
                         <div v-if="saldo.estado_saldo == 'Pendiente'">
-                            <p style="color: #F58649">{{saldo.estado_saldo}}</p>
+                            <p style="color: #F58649">{{saldo.estado_saldo}}</p>  
                         </div>
                     </div>
                     <div  class="ctn-re">
                         <p>total del saldo: ${{saldo.saldo}}</p>
+                        <div  v-if="saldo.estado_saldo == 'Pendiente'">
+                            <button class="btnI">Abonar</button>
+                        </div>
                     </div>
                 </div> 
             </div>

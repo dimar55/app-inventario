@@ -9,7 +9,7 @@
                 <input type="text" placeholder="Buscar Producto" v-model="id_producto">
             </form>
             <div class="products-venta">
-                <div class="product" v-if="filtrado" v-for="(prod, index) in prods_filtro">
+                <div class="product" v-if="filtrado" v-for="(prod, index) in prods_filtro" :key="prod.nombre_product">
                     <p>{{prod.nombre_product}} {{prod.marca_product}} {{prod.cantidad_product}}{{prod.unidad_poduct}}</p>
                     <p>${{prod.precio_venta}}</p>
                     <div class="ctn-text">
@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="lista-venta">
-            <div class="producto-select" v-for="(prod, index) in prods_venta">
+            <div class="producto-select" v-for="(prod, index) in prods_venta" :key="prod.nombre_product">
                 <div class="ctn-text">
                     <p>{{prod.nombre_product}} {{prod.marca_product}} {{prod.cantidad_product}}{{prod.unidad_poduct}}</p>
                     <img src="../assets/icon_delete.png" alt="" @click="eliminarProd(index)">
@@ -94,13 +94,13 @@ export default{
             })
         },
         agregarProd(i){
-            const pd = this.prods_venta.find(ele => ele.id_product == this.prod_filtro.id_product);
+            const pd = this.prods_venta.find(ele => ele.id_product == this.prods_filtro[i].id_product);
             if(pd){
                 if(pd.cant_venta<pd.cantidad_lote){
                     pd.cant_venta++;
                 }
             }else{
-                let prod = Object.assign({cant_venta: 1}, this.prods_filtro[i])
+                let prod = Object.assign({cant_venta: 1}, this.prods_filtro[i]);
                 this.prods_venta.push(prod);
             }
             this.calcularTotal();

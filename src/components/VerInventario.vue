@@ -20,21 +20,19 @@
             </div>
             
             <div class="ctn-resultados" >
-                <div class="resultado" v-for="producto in productos">
+                <div class="resultado" v-for="producto in productos" :key="producto.nombre_product">
                     <div class="ctn-re">
                         <p >{{producto.nombre_product}} {{producto.marca_product}} {{producto.cantidad_product}} {{producto.unidad_poduct}}</p>
                         <p style="color: #55B77E">{{producto.id_product}} </p>
                     </div>
-                 
-                    <p>Disponibles {{producto.cantidad_lote}}</p>
-                    <div  class="ctn-re">
-                        <p>Precio $ {{producto.precio_venta}}</p>
-                            <button class="btnI">VER DETALLES</button>
-                    </div>
+                    <p>Disponibles: {{producto.cantidad_lote}}</p>
+                    <p>Precio Venta: $ {{producto.precio_venta}}</p>
+                    <p>Precio de entrada: $ {{producto.precio_entrada}}</p>
+                    <p > Fecha de vencimiento: {{producto.fecha_vencimiento}}</p>
                 </div>
             </div>
         </div>
-    </div>
+</div>
 </template>
 
 <script>
@@ -94,3 +92,4 @@ export default{
     }
 }
 </script>
+

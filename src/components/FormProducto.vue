@@ -1,12 +1,13 @@
 <template>
         <div class="container-registro">
-        <form class="ctn-registrar"  v-on:submit.prevent="registrarProducto">
-            <h1>REGISTRAR PRODUCTO</h1>
-            <div class="campos_registrar" >
-                <img src="../assets/carrito-de-supermercado.png" alt="">
-                <p>Codigo</p>
-                <input type="number" v-model="Producto.id_product">
-            </div>
+            <div class="ctn-registrar">
+                <h1>REGISTRAR PRODUCTO</h1>
+                <div class="campos_registrar" >
+                    <img src="../assets/carrito-de-supermercado.png" alt="">
+                    <p>Codigo</p>
+                    <input type="number" v-model="Producto.id_product">
+                </div> 
+                <form v-on:submit.prevent="registrarProducto">
             <div class="campos_registrar">
                 <p>Categoria</p>
                 <select  v-model="Producto.categoria_product">
@@ -17,7 +18,7 @@
             </div>
             <div class="campos_registrar">
                 <p>Nombre:</p>
-                <input type="text"  v-model="Producto.nombre_product">
+                <input type="text"  v-model="Producto.nombre_product" required>
             </div>
             <div class="campos_registrar">
                 <p>Marca:</p>
@@ -35,6 +36,8 @@
                 <button class="btn" type="submit">REGISTRAR</button>
             </div>
         </form>
+            </div>
+        
     </div>
 </template>
 

@@ -3,7 +3,7 @@
         <div class="ctn-registrar">
             <h1>REGISTRAR INGRESO</h1>
             <form class="campos_registrar" v-on:submit.prevent="buscarProducto">
-                <img src="../assets/carrito-de-supermercado.png" alt="">
+                <img src="../assets/entrada.png" alt="">
                 <p>Codigo:</p>
                 <input type="number" v-model="producto">  
             </form>

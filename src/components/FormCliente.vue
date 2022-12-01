@@ -91,7 +91,7 @@ export default{
     font-weight: 400;
     text-align: center;
     display: flex;
-    padding-bottom: 30px;
+    height: calc(100vh - 136.25px);
 }
 
 .campos_registrar{

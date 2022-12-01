@@ -151,7 +151,7 @@ router.beforeEach(async (to, from) => {
       if(sessionStorage.getItem("Rol")=="Administrador"){
         return { name: 'Menu' }
       }else{
-        return { name: 'Menu' }
+        return { name: 'MenuOp' }
       }
       
     }

@@ -20,19 +20,13 @@
             </div>
             
             <div class="ctn-resultados">
-                <div class="resultado" v-for="venta in ventas">
+                <div class="resultado" v-for="venta in ventas" :key="venta.fecha_venta">
                     <p style="color:#55B77E">{{venta.fecha_venta}}</p>
                     <p style="color:#555555"> {{venta.productos}}</p>
                     <p>total de la venta: {{venta.total_venta}}</p>
                    
-                    <div class="botonI">
-                        <button class="btnI">VER DETALLES</button>
-                    </div>
                 </div>
             </div>
-            <p >Ventas del Dia $450.000</p>
-            <p>Ventas de la Seman $890.000</p>
-            <p>Ventas del Mes 1'450.000</p>
         </div>
     </div>
 </template>
@@ -106,6 +100,10 @@ export default{
 </script>
 
 <style>
+
+.container-historial{
+    height: calc(100vh - 136.25px);
+}
 .container-historial h1{
     text-align: center;
     color: #FFEAD1;

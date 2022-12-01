@@ -12,7 +12,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="cliente in clientes">
+                    <tr v-for="cliente in clientes" :key="cliente.cedula_cli">
                         <td>{{cliente.nombre_cli}}</td>
                         <td>{{cliente.cedula_cli}}</td>
                         <td>{{cliente.telefono_cli}}</td>

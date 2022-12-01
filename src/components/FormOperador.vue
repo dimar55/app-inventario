@@ -17,7 +17,7 @@
             </div>
             <div class="campos_registrar">
                 <p>Contraseña:</p>
-                <input type="password" v-model="user.contra_cli">
+                <input type="password" v-model="user.contra_usu">
             </div>
             <div class="boton">
                 <button type="submit" class="btn">REGISTRAR</button>

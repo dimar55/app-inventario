@@ -11,11 +11,6 @@
                 <button class="boton-opciones" @click="go_RegistrarCliente" >REGISTRAR</button>
             </div>
             <div class="ctn_opciones">
-                <h1>REGISTRAR OPERADOR</h1>
-                <img src="../assets/operador.png" alt="">
-                <button class="boton-opciones" @click="go_RegistrarOperador">REGISTRAR</button>
-            </div>
-            <div class="ctn_opciones">
                 <h1>REGISTRAR PRODUCTO</h1>
                 <img src="../assets/carrito-de-supermercado.png" alt="">
                 <button class="boton-opciones" @click="go_RegistrarProducto">REGISTRAR</button>
