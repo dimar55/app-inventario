@@ -1,24 +1,27 @@
 <template>
-
+<div>
     <transition name="fade">
         <div class="modal-overlay" v-if="showModal"></div>
     </transition>
     <transition name="fade">
         <div class="container-registro modal" v-if="showModal">
-            
             <form class="ctn-registrar"  v-on:submit.prevent="registrarCliente">
                 <div class="container-flex">
-                    <h1>Registrar cliente</h1>
-                    <img src="../assets/icon_X.png" alt="" @click="showModal = false">
+                    <div>
+                    </div>  
+                    <div>
+                        <img src="../assets/icon_X.png" alt="" @click="showModal = false">
+                    </div>    
             </div>
+            <h1>Registrar cliente</h1>
                 <div class="campos_registrar">
                     <img src="../assets/cliente.png" alt="">
                     <p>Nombre</p>
-                    <input type="text" v-model="ClienteForm.nombre_cli">
+                    <input type="text" v-model="ClienteForm.nombre_cli" required>
                 </div>
                 <div class="campos_registrar">
                     <p>Tipo de Documento</p>
-                    <select v-model="ClienteForm.tipo_documento_cli">
+                    <select v-model="ClienteForm.tipo_documento_cli" required>
                         <option>CC Cedula de Ciudadania</option>
                         <option>TT Tarjeta de Identidad</option>
                         <option>CE Cedula de Extranjeria</option>
@@ -26,15 +29,15 @@
                 </div>
                 <div class="campos_registrar">
                     <p>Numero de Documento:</p>
-                    <input type="number" v-model="ClienteForm.cedula_cli" disabled>
+                    <input type="number" v-model="ClienteForm.cedula_cli" required>
                 </div>
                 <div class="campos_registrar">
                     <p>Telefono:</p>
-                    <input type="number" v-model="ClienteForm.telefono_cli">
+                    <input type="number" v-model="ClienteForm.telefono_cli" required>
                 </div>
                 <div class="campos_registrar">
                     <p>Dirección:</p>
-                    <input type="text" v-model="ClienteForm.direccion_cli">
+                    <input type="text" v-model="ClienteForm.direccion_cli" required>
                 </div>  
                 <div class="boton">
                     <button type="submit" class="btn">REGISTRAR</button>
@@ -47,7 +50,7 @@
         <h1>Añadir Saldo</h1>
         <div class="ctn-registrar-saldo">
             <form class="filtro" v-on:submit.prevent="buscarCliente">
-                <input type="number" placeholder="Cedula cliente" v-model="saldo.cedula_cli">
+                <input type="number" placeholder="Cedula cliente" v-model="saldo.cedula_cli" required>
                 <button class="btn" type="submit">BUSCAR</button>
             </form>
             <br>
@@ -87,6 +90,7 @@
             </div>
         </div>
     </div>
+</div>
 </template>
 
 <script>
@@ -94,6 +98,8 @@ import { tsThisType } from "@babel/types";
 import axios from "axios";
 import Swal from "sweetalert2";
 import config from '../utils/utils';
+import saldo from '../models/model_saldo';
+import cliente from '../models/model_verCliente';
 export default{
     name: 'AnadirSaldo',
     data(){
@@ -101,19 +107,10 @@ export default{
             showModal: false,
             clienteExiste: false,
             clienteExiste2: false,
-            cliente: {
-                cedula_cli: "",
-                nombre_cli: "",
-                telefono_cli: ""
-            },
+            cliente,
             total_venta: Number(this.$route.query.total_venta) || 0,
             abono: "",
-            saldo: {
-                estado_saldo: "Pendiente",
-                id_venta: Number(this.$route.query.id_venta) || "",
-                cedula_cli: "",
-                saldo: 0
-            },
+            saldo,
             ClienteForm: {
                cedula_cli: "",
                nombre_cli: "",
@@ -214,6 +211,9 @@ export default{
                     });
                 })
         }
+    },
+    mounted(){
+        this.saldo.id_venta = Number(this.$route.query.id_venta) || "";
     }
 }
 </script>
@@ -256,6 +256,9 @@ export default{
     font-weight: bolder;
 }
 
+.ctn-saldo{
+    height: 100vh;
+}
 
 .ctn-saldo h1{
     text-align: center;

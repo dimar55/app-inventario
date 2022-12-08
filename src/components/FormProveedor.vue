@@ -5,11 +5,11 @@
             <div class="campos_registrar">
                 <img src="../assets/mensajero.png" alt="">
                 <p>Nombre</p>
-                <input type="text" v-model="Proveedor.nombre_pro">
+                <input type="text" v-model="Proveedor.nombre_pro" required>
             </div>
             <div class="campos_registrar">
                 <p>Tipo de Documento</p>
-                <select  v-model="Proveedor.tipo_documento_pro">
+                <select  v-model="Proveedor.tipo_documento_pro" required>
                     <option>CC Cedula de Ciudadania</option>
                     <option>TT Tarjeta de Identidad</option>
                     <option>CE Cedula de Extranjeria</option>
@@ -17,15 +17,15 @@
             </div>
             <div class="campos_registrar">
                 <p>Numero de Documento:</p>
-                <input type="number"  v-model="Proveedor.cedula_pro">
+                <input type="number"  v-model="Proveedor.cedula_pro" required>
             </div>
             <div class="campos_registrar">
                 <p>Telefono:</p>
-                <input type="number"  v-model="Proveedor.telefono_pro">
+                <input type="number"  v-model="Proveedor.telefono_pro" required >
             </div>
             <div class="campos_registrar">
                 <p>Correo:</p>
-                <input type="email"  v-model="Proveedor.correo_pro">
+                <input type="email"  v-model="Proveedor.correo_pro" required>
             </div>
             <div class="boton">
                 <button type="submit" class="btn">REGISTRAR</button>
@@ -38,17 +38,12 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import config from '../utils/utils';
+import Proveedor from '../models/model_proveedor';
     export default{
         name: 'FormProveedores',
         data(){
         return {
-            Proveedor: {
-                cedula_pro: "",
-                nombre_pro: "",
-                tipo_documento_pro: "",
-                telefono_pro: "",
-                correo_pro: ""
-            }
+            Proveedor,
         }
     },
     methods:{

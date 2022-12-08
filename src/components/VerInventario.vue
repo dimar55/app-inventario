@@ -28,7 +28,9 @@
                     <p>Disponibles: {{producto.cantidad_lote}}</p>
                     <p>Precio Venta: $ {{producto.precio_venta}}</p>
                     <p>Precio de entrada: $ {{producto.precio_entrada}}</p>
-                    <p > Fecha de vencimiento: {{producto.fecha_vencimiento}}</p>
+                    <div v-if="(producto.fecha_vencimiento !=null)">
+                        <p > Fecha de vencimiento: {{producto.fecha_vencimiento}}</p>
+                    </div>
                 </div>
             </div>
         </div>

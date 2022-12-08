@@ -14,6 +14,8 @@
                     <option>ASEO</option>
                     <option>ENLATADOS</option>
                     <option>CANASTA BASICA</option>
+                    <option>BEBIDAS</option>
+                    <option>CONFITERIA</option>
                 </select>
             </div>
             <div class="campos_registrar">
@@ -22,11 +24,11 @@
             </div>
             <div class="campos_registrar">
                 <p>Marca:</p>
-                <input type="text"  v-model="Producto.marca_product">
+                <input type="text"  v-model="Producto.marca_product" required>
             </div>
             <div class="campos_registrar">
                 <p>Unidad:</p>
-                <input type="text"  v-model="Producto.unidad_poduct">
+                <input type="text"  v-model="Producto.unidad_poduct" >
             </div>
             <div class="campos_registrar">
                 <p>Cantidad:</p>
@@ -45,19 +47,13 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import config from '../utils/utils';
+import Producto from '../models/model_producto';
 export default{
     name: 'FormProducto',
     data(){
         return {
-            Producto: {
-                id_product: Number(this.$route.query.id) || "",
-                nombre_product: "",
-                marca_product: "",
-                categoria_product: "",
-                unidad_poduct: "",
-                cantidad_product: ""
-            }
-        }
+            Producto
+    }
     },
     methods:{
         registrarProducto(){
@@ -93,6 +89,11 @@ export default{
                     });
                 })
         }
+    },
+    mounted() {
+        this.Producto.id_product = Number(this.$route.query.id) || "";
     }
+    
 }
 </script>
+

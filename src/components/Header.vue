@@ -16,14 +16,14 @@
             <div class="cont-menu">
                 <div class="logo_user">
                     <img src="../assets/Hombre.png" alt="">
-                    <p>DIMAR</p>
+                    <p>{{this.nombre}}</p>
                 </div>
                 
                 <nav>
                     <a @click="go_Menu">Menu</a>
                     <a @click="go_RegistrarProveedores">Registrar Proveedor</a>
                     <a @click="go_RegistrarCliente">Registrar Cliente</a>
-                    <a @click="go_RegistrarOperador">Registrar Operador</a>
+                    <a @click="go_RegistrarOperador" v-if="this.rol =='Administrador'">Registrar Operador</a>
                     <a @click="go_RegistrarProducto">Registrar Producto</a>
                     <a @click="go_RegistrarEntrada">Registrar Entrada</a>
                     <a @click="go_RegistrarVenta">Registrar Venta</a>
@@ -45,7 +45,9 @@ export default{
     name: 'Header',
     data(){
         return{
-            show_barra: false
+            show_barra: false,
+            nombre: sessionStorage.getItem('Nombre'),
+            rol: sessionStorage.getItem('Rol')
         }
 }, methods: {
     logout(){
@@ -149,16 +151,25 @@ export default{
     }
 
     .cont-menu nav{
-        transform: translateY(8%);
+        transform: translateY(2%);
+        overflow-y: scroll;
+        height: 400px;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .cont-menu nav::-webkit-scrollbar{
+        display: none;
     }
     .cont-menu nav a{
         display: block;
         text-decoration: none;
         text-align: center;
-        padding-top: 20px;
+        padding-top: 15px;
         color: #c7c7c7;
         border-left: 5px solid transparent;
         transition: all 400ms ease;
+        font-weight: 12px;
     }
 
     .cont-menu nav a:hover{

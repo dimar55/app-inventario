@@ -9,9 +9,9 @@
                 <input type="text" placeholder="Buscar Producto" v-model="id_producto">
             </form>
             <div class="products-venta">
-                <div class="product" v-if="filtrado" v-for="(prod, index) in prods_filtro" :key="prod.nombre_product">
+                <div class="product" v-show="filtrado" v-for="(prod, index) in prods_filtro" :key="prod.nombre_product">
                     <p>{{prod.nombre_product}} {{prod.marca_product}} {{prod.cantidad_product}}{{prod.unidad_poduct}}</p>
-                    <p>${{prod.precio_venta}}</p>
+                    <p>${{this.formatoMoneda(prod.precio_venta)}}</p>
                     <div class="ctn-text">
                         <p style="color:#555555"> Disponilbles: {{prod.cantidad_lote}}</p>
                         <button class="btn" @click="agregarProd(index)"> Añadir</button>
@@ -26,7 +26,7 @@
                     <img src="../assets/icon_delete.png" alt="" @click="eliminarProd(index)">
                 </div>
                 <div>
-                    <p>${{prod.precio_venta}}</p>
+                    <p>${{this.formatoMoneda(prod.precio_venta)}}</p>
                 </div>
                 <div>
                     <div class="ctn-text">
@@ -43,7 +43,7 @@
                 <button class="btn" @click="registrarVenta(true)">Abrir saldo</button>
             </div>
             <div class="totales">
-                <p> Total: ${{this.total}}</p>
+                <p> Total: ${{this.formatoMoneda(this.total)}}</p>
             </div>
         </div>
     </div>
@@ -138,7 +138,7 @@ export default{
                 let productos = [];
                 for (let index = 0; index < this.prods_venta.length; index++) {
                     const element = this.prods_venta[index];
-                    productos.push([element.id_product, element.cant_venta, element.precio_venta]);
+                    productos.push([element.id_lote, element.cant_venta, element.precio_venta]);
                 }
                 axios.post(config.server+"/venta", {productos})
                 .then((result)=>{
@@ -174,6 +174,14 @@ export default{
                 this.id_producto = ""; 
                 this.calcularTotal();
             }
+        },
+        formatoMoneda(valor) {
+        const formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            minimumFractionDigits: 2,
+            currency: 'COP'
+        }) 
+        return formatter.format(valor)
         }
     },
 }

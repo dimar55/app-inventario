@@ -28,15 +28,12 @@
 <script>
 import axios from "axios";
 import config from '../utils/utils';
+import cliente from '../models/model_verCliente';
 export default{
     name: 'VerClientes',
     data(){
         return {
-            cliente: {
-                cedula_cli: "",
-                nombre_cli: "",
-                telefono_cli: ""
-            },  
+            cliente, 
             clientes:[]
         }
     },

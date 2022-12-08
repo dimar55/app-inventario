@@ -16,6 +16,7 @@ import Saldos from '../views/Saldos.vue';
 import Inventario from '../views/Inventario.vue';
 import RealizarVenta from '../views/RealizarVenta.vue';
 import RegistrarSaldo from '../views/RegistrarSaldo.vue';
+import Abonar from '../views/Abonar.vue';
 
 const routes = [
   {
@@ -100,6 +101,12 @@ const routes = [
     name: 'RegistrarSaldo',
     component: RegistrarSaldo
   },
+
+  {
+    path: '/Abonar',
+    name: 'Abonar',
+    component: Abonar
+  }
 ]
 
 const router = createRouter({

@@ -8,11 +8,11 @@
                 <h1>INICIAR SESIÓN</h1>
                 <div class="campos">
                     <p>USUARIO:</p>
-                    <input type="text" v-model="user.nick_usu">
+                    <input type="text" v-model="user.nick_usu" required>
                 </div>
                 <div class="campos">
                     <p>CONTRASEÑA:</p>
-                    <input type="password" v-model="user.contra_usu">
+                    <input type="password" v-model="user.contra_usu" required>
                 </div>
                 <div class="boton">
                     <button class="btn" type="submit">INICIAR SESIÓN</button>
@@ -26,14 +26,12 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import config from '../utils/utils';
+import user from "../models/model_usuario";
 export default{
     name: 'FormLogin',
     data(){
         return{
-            user: {
-                nick_usu: "",
-                contra_usu: "",
-            }
+            user,
         }
     },
     methods: {

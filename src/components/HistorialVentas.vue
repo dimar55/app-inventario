@@ -2,18 +2,14 @@
     <div class="container-historial">
         <h1>HISTORIAL DE VENTAS</h1>
         <div class="ctn-ventas">
-            <form class="filtro" v-on:submit.prevent>
-                <div class="ctn-select">
-                    <select name="" id="">
-                        <option value="">NOMBRE</option>
-                        <option value="">CODIGO</option>
-                    </select>
-                </div>
-                <input type="text" placeholder="Buscar Venta">
+            <form class="filtro" v-on:submit.prevent="buscarVentas">
                 <div>
-                    <input type="date">
+                    <input type="date" required v-model="filtro.fecha_ini" :max ="today" >
                 </div>
-                <button class="btn">BUSCAR</button>
+                <div>
+                    <input type="date" required :max ="today" :min="filtro.fecha_ini" v-model="filtro.fecha_fin">
+                </div>
+                <button class="btn" type="submit">BUSCAR</button>
             </form>
             <div class="text">
                 <h1 style="color:#194F5D">Lista de Ventas</h1>
@@ -39,7 +35,11 @@ export default{
     name: 'HistorialVentas',
     data(){
         return {
-            filtro: "",
+            today: new Date().toISOString().split('T')[0],
+            filtro: {
+                fecha_ini: "",
+                fecha_fin: ""
+            },
             valor: "",
             ventas: []
 
@@ -63,16 +63,18 @@ export default{
                     console.log(err)
                 })
         },
-        buscarProductos() {
-            let url = "";
-            if (this.filtro == "") url = config.server+"/loteP";
-            else if (this.filtro == "NOMBRE") url =config.server+"/loteP/nombre/"+this.valor
-            else if (this.filtro == "CODIGO") url = config.server+"/loteP/id/"+this.valor
-            else if (this.filtro == "CANTIDAD") url = config.server+"/loteP/cantidad/"+this.valor
-            axios.get(url)
+        buscarVentas() {
+            axios.post(config.server +"/venta/filtro", this.filtro)
                 .then((result) => {
                     if (result.data.success && result.data.body.length>0) {
-                        this.productos = result.data.body
+                        this.ventas = result.data.body
+                        this.ventas.productos = "";
+                        for (let index = 0; index < this.ventas.length; index++) {
+                            this.ventas[index].productos = []; 
+                            for (let i = 0; i< this.ventas[index].prods.length; i++) {
+                                this.ventas[index].productos  = this.ventas[index].productos + " " + this.ventas[index].prods[i]; 
+                            }   
+                        }
                     } else {
                         Swal.fire({
                             icon: "error",
@@ -85,13 +87,13 @@ export default{
                 }).catch((err) => {
                     console.log(err);
                     Swal.fire({
-                        icon: "error",
+                        icon: "info",
                         title: "No se encontraron resultados",
-                        showConfirmButton: false,
-                        timer: 1200,
+                        showConfirmButton: true,
                     });
                 })
         },
+        
     },
     mounted(){
         this.cargarVentas();
@@ -101,9 +103,7 @@ export default{
 
 <style>
 
-.container-historial{
-    height: calc(100vh - 136.25px);
-}
+
 .container-historial h1{
     text-align: center;
     color: #FFEAD1;

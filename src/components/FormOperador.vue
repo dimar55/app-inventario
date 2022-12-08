@@ -5,19 +5,19 @@
             <div class="campos_registrar">
                 <img src="../assets/operador.png" alt="">
                 <p>Nombre</p>
-                <input type="text" v-model="user.nombre_usu">
+                <input type="text" v-model="user.nombre_usu" required>
             </div>
             <div class="campos_registrar">
                 <p>Cedula:</p>
-                <input type="number" v-model="user.cedula_usu">
+                <input type="number" v-model="user.cedula_usu" required>
             </div>
             <div class="campos_registrar">
                 <p>Nick:</p>
-                <input type="text" v-model="user.nick_usu">
+                <input type="text" v-model="user.nick_usu" required>
             </div>
             <div class="campos_registrar">
                 <p>Contraseña:</p>
-                <input type="password" v-model="user.contra_usu">
+                <input type="password" v-model="user.contra_usu" required>
             </div>
             <div class="boton">
                 <button type="submit" class="btn">REGISTRAR</button>
@@ -30,16 +30,12 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import config from '../utils/utils';
+import user from '../models/model_operador';
 export default{
     name: 'FormOperador',
     data(){
         return {
-            user: {
-               cedula_usu: "",
-               nombre_usu: "",
-               contra_usu: "",
-               rol_usu: "Operador"
-            }
+            user,
         }
     },
     methods:{

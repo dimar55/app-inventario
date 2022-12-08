@@ -5,7 +5,7 @@
             <form class="campos_registrar" v-on:submit.prevent="buscarProducto">
                 <img src="../assets/entrada.png" alt="">
                 <p>Codigo:</p>
-                <input type="number" v-model="producto">  
+                <input type="number" v-model="producto" required>  
             </form>
             <div class="ctn-pro" v-show="prod_no_existe">
                 <p>Producto no registrado</p>
@@ -14,15 +14,15 @@
             <form  v-on:submit.prevent="registrarIngreso">
             <div class="campos_registrar">
                 <p>Precio Entrada:</p>
-                <input type="text" v-model="ingreso.precio_entrada">
+                <input type="text" v-model="ingreso.precio_entrada" required>
             </div>
             <div class="campos_registrar">
                 <p>Precio de Venta:</p>
-                <input type="text" v-model="ingreso.precio_venta">
+                <input type="text" v-model="ingreso.precio_venta" required>
             </div>
             <div class="campos_registrar">
                 <p>Cantidad:</p>
-                <input type="text" v-model="ingreso.cantidad_lote">
+                <input type="text" v-model="ingreso.cantidad_lote" required>
             </div>
             <div class="campos_registrar">
                 <p>Fecha de Vencimiento:</p>
@@ -31,7 +31,7 @@
 
             <div class="campos_registrar">
                     <p>Codigo proveedor:</p>
-                    <input type="number" v-model="ingreso.cedula_pro">
+                    <input type="number" v-model="ingreso.cedula_pro" required>
             </div>
             <div class="boton">
                 <button class="btn" type="submit">REGISTRAR</button>
@@ -46,20 +46,14 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import config from '../utils/utils';
+import ingreso from '../models/model_ingreso';
 export default{
     name: 'FormIngreso',
     data(){
         return {
             prod_no_existe: false,
             producto: "",
-            ingreso: {
-                precio_entrada: "", 
-                precio_venta: "",
-                cantidad_lote: "", 
-                fecha_vencimiento: "", 
-                cedula_pro: "", 
-                cedula_usu: Number(sessionStorage.getItem("Cedula"))
-            }
+            ingreso,
         }
     },
     methods: {
@@ -81,10 +75,17 @@ export default{
             .then((result)=>{
                 if(result.data.success){
                     return result.data.body.producto.id_lote;
+                   
                 }else{
                     return 0;
                 }
             }).catch(err=>{
+                Swal.fire({
+                            icon: "error",
+                            title: "No se ha registrar el ingreso",
+                            showConfirmButton: false,
+                            timer: 1200,
+                        });
                 console.log(err);
                 return 0;
             })
