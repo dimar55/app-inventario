@@ -32,7 +32,7 @@
                 <p> Total: ${{this.formatoMoneda(this.saldo - this.abono)}}</p>
             </div>
             <div class="btn-registrar"> 
-                <button class="btn" @click="registrarSaldo">Registrar Saldo</button>
+                <button class="btn" @click="update_abono">Registrar Saldo</button>
             </div>
         </div>
     </div>
@@ -43,18 +43,14 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import config from '../utils/utils';
-//import cliente from '../models/model_verCliente';
 import controlers from '../controllers/abonar_saldoCtlr';
+import cliente from '../models/model_verCliente';
 
 export default{
     name: 'AbonarSaldo',
     data() {
         return {
-            cliente:{
-                cedula_cli: "",
-                nombre_cli: "",
-                telefono_cli: "" 
-            },
+            cliente,
 
             updateAbono: {
                 id_saldo: "",
@@ -73,30 +69,48 @@ export default{
     }, 
     methods:{
         update_abono(){
-            this.estado_saldo = (this.saldo - this.abono == 0 ) ? 'Pagado' : 'Pendiente';
-            this.id_saldo = this.saldo;
-            axios.put(config.server+"/saldo"+this.updateAbono)
-            
+            this.updateAbono.estado_saldo = (this.saldo - this.abono == 0 ) ? 'Pagado' : 'Pendiente';
+            this.updateAbono.saldo = Number (this.saldo - this.abono);
+            this.updateAbono.id_saldo = this.id;
+            axios.put(config.server+"/saldo", this.updateAbono) 
+            .then((result)=>{
+                if(result.data.success){
+                    Swal.fire({
+                            icon: "success",
+                            title: "Abono realizado exitosamente",
+                            showConfirmButton: false,
+                            timer: 1000,
+                        });
+                        this.$router.push({ path: '/Saldos' });
+                }else{
+                    console.log(result);
+                    Swal.fire({
+                            icon: "error",
+                            title: "No se ha realizado el abono",
+                            showConfirmButton: false,
+                            timer: 1200,
+                        });
+                }
+            }).catch((err)=>{
+                console.log(err);
+            })
         },
+
         formatoMoneda(valor) {
-        const formatter = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            minimumFractionDigits: 2,
-            currency: 'COP'
-        }) 
-        return formatter.format(valor)
-        }
+            const formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                minimumFractionDigits: 2,
+                currency: 'COP'
+            }) 
+                return formatter.format(valor)
+            }  
     },
    async mounted(){
-       
-        console.log(this.$route.query);
         this.saldo = Number(this.$route.query.saldo);
         this.cedula =  Number(this.$route.query.cedula);
         this.id =  Number(this.$route.query.id);
-        this.cliente =   await controlers.cargarcliente(this.cedula);
-      
-        //console.log(controlers.cargarcliente(this.cedula));
-        
+        this.cliente =  await controlers.cargarcliente(this.cedula);
+
     }
 }
 

@@ -86,7 +86,7 @@
                 <p> Total: ${{this.total_venta - this.abono}}</p>
             </div>
             <div class="btn-registrar"> 
-                <button class="btn" @click="registrarSaldo">Registrar Saldo</button>
+                <button class="btn" @click="registrar()">Registrar Saldo</button>
             </div>
         </div>
     </div>
@@ -100,6 +100,7 @@ import Swal from "sweetalert2";
 import config from '../utils/utils';
 import saldo from '../models/model_saldo';
 import cliente from '../models/model_verCliente';
+import controlers from '../controllers/add_saldoCtlr';
 export default{
     name: 'AnadirSaldo',
     data(){
@@ -107,6 +108,7 @@ export default{
             showModal: false,
             clienteExiste: false,
             clienteExiste2: false,
+            respuesta: "",
             cliente,
             total_venta: Number(this.$route.query.total_venta) || 0,
             abono: "",
@@ -122,6 +124,10 @@ export default{
         }
     },
     methods: {
+
+         async registrar(){
+            this.respuesta  = await  controlers.registrarSaldo(this.clienteExiste, this.saldo , this.cliente, this.total_venta, this.abono);
+        },
         changeAbono(event){
             if(this.abono>this.total_venta){
                 this.abono = this.total_venta
@@ -148,41 +154,7 @@ export default{
             this.ClienteForm.cedula_cli = this.saldo.cedula_cli;
             this.showModal = true;
         },
-        registrarSaldo(){
-            if(this.clienteExiste){
-                this.saldo.cedula_cli = this.cliente.cedula_cli;
-                this.saldo.saldo = this.total_venta - (this.abono=="" ? 0 : this.abono)
-                if(this.saldo.saldo == 0){
-                    this.saldo.estado_saldo = "Pagado";
-                }
-                axios.post(config.server+"/saldo", this.saldo)
-                .then((result)=>{
-                    if (result.data.success) {
-                        Swal.fire({
-                            icon: "success",
-                            title: "Saldo creado exitosamente",
-                            showConfirmButton: false,
-                            timer: 1000,
-                        });
-                        this.$router.push({ path: '/RealizarVenta' });
-                    } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "No se ha podido crear el saldo",
-                            showConfirmButton: false,
-                            timer: 1200,
-                        });
-                    }
-                }).catch((err) => {
-                    Swal.fire({
-                        icon: "error",
-                        title: "No se ha podido crear el saldo",
-                        showConfirmButton: false,
-                        timer: 1200,
-                    });
-                })
-            }
-        },
+        
         registrarCliente(){
             axios.post(config.server+"/cliente", this.ClienteForm)
             .then((result) => {

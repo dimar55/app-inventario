@@ -26,9 +26,10 @@
 </template>
 
 <script>
-import axios from "axios";
-import config from '../utils/utils';
+
 import cliente from '../models/model_verCliente';
+import controlers from '../controllers/ver_clientesCtlr';
+
 export default{
     name: 'VerClientes',
     data(){
@@ -37,21 +38,8 @@ export default{
             clientes:[]
         }
     },
-    methods: { 
-
-        cargarClientes(){
-            axios.get(config.server+"/cliente")
-                .then((result) => {
-                    if (result.data.success) this.clientes = result.data.body;
-                }).catch((err) => {
-                    console.log(err)
-                })
-        },
-    },
-    mounted(){
-        this.cargarClientes();
+   async mounted(){
+    this.clientes =  await controlers.cargarClientes();
     }
- 
-
 }
 </script>

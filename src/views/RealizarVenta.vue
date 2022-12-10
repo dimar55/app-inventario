@@ -1,16 +1,16 @@
 <template>
     <Header></Header>
-    <Venta></Venta>
+    <Venta2></Venta2>
 </template>
 
 <script>
 import Header from '@/components/Header';
-import Venta from '@/components/Venta';
+import Venta2 from '@/components/Venta2';
 export default{
     name: 'RealizarVenta',
     components:{
         Header,
-        Venta,
+        Venta2,
     }
 }
 </script>
