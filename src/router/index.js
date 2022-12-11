@@ -18,6 +18,7 @@ import RealizarVenta from '../views/RealizarVenta.vue';
 import RegistrarSaldo from '../views/RegistrarSaldo.vue';
 import Abonar from '../views/Abonar.vue';
 
+
 const routes = [
   {
     path: '/',
@@ -106,7 +107,8 @@ const routes = [
     path: '/Abonar',
     name: 'Abonar',
     component: Abonar
-  }
+  },
+
 ]
 
 const router = createRouter({
@@ -117,7 +119,7 @@ const router = createRouter({
 router.beforeEach(async (to, from) => {
   if (
     !sessionStorage.getItem('jwt') &&
-    to.name !== 'Login'
+    to.name !== 'Login'  
   ) {
     return { name: 'Login' }
   }else{

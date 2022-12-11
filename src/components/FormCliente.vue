@@ -69,9 +69,8 @@ export default{
                 }).catch((err) => {
                     Swal.fire({
                         icon: "error",
-                        title: "No se ha podido crear el cliente",
-                        showConfirmButton: false,
-                        timer: 1200,
+                        title: "El Cliente ya esta registrado",
+                        showConfirmButton: true,
                     });
                 })
         }

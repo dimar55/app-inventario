@@ -4,7 +4,8 @@
             <div class="imagen-logo">
                 <img src="../assets/Yalmecris.png" alt="">
             </div>
-            <form class="ctn-campos" v-on:submit.prevent="login">
+            <div class="ctn-campos">
+            <form  v-on:submit.prevent="login">
                 <h1>INICIAR SESIÓN</h1>
                 <div class="campos">
                     <p>USUARIO:</p>
@@ -18,6 +19,11 @@
                     <button class="btn" type="submit">INICIAR SESIÓN</button>
                 </div>
             </form>
+                    <div class="recuperar">
+                        <a @click="go_recuperarUser()">Recuperar usuario</a>
+                        <a  @click="go_recuperarClave()">Recuperar contraseña</a>
+                    </div>
+            </div>
         </div>
     </div>
 </template>
@@ -44,7 +50,7 @@ export default{
                             icon: "success",
                             title: "Sesion iniciada",
                             showConfirmButton: false,
-                            timer: 1000,
+                            timer: 1500,
                         });
                         let token = result.data.body.token;
                         axios.post(config.server+"/usuario/verifyToken", { token })
@@ -60,22 +66,29 @@ export default{
                     } else {
                         Swal.fire({
                             icon: "error",
-                            title: "Usuario y/o contraseña incorrecta",
-                            showConfirmButton: false,
-                            timer: 1200,
+                            title: "Credenciales invalidas",
+                            showConfirmButton: true,
+
                         });
                     }
                 })
                 .catch((error) => {
                     Swal.fire({
                         icon: "error",
-                        title: "Usuario y/o contraseña incorrecta",
-                        showConfirmButton: false,
-                        timer: 1200,
+                        title: "Credenciales invalidas",
+                        showConfirmButton: true,
+
                     });
                 });
-        }
+        },
+        go_recuperarUser(){
+            this.$emit('recuperar-usuario');
+    },
+    go_recuperarClave(){
+            this.$emit('recuperar-clave');
     }
+    },
+    
 }
 </script>
 
@@ -111,7 +124,7 @@ export default{
 }
 
 .ctn-campos h1{
-    padding: 20px;
+    padding: 10px;
     font-weight: 400;
     font-size: 48px;
     color: #194F5D;
@@ -140,20 +153,30 @@ export default{
     margin-left: 30px;
 }
 .boton{
-    padding-top: 20px;
+    padding-top: 15px;
     text-align: center;
 }
 
 .btn{
-    font-size: 40px;
+    font-size: 35px;
     font-weight: 400;
     width: 245px;
-    height: 60px;
+    height: 50px;
     color: #FFFF;
     background: #F58649;
     border: none;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 30px;
+    cursor: pointer;
+}
+
+.recuperar a {
+    display: block;
+    font-size: 30px;
+    color: #194F5D;
+    font-weight: 400;
+    padding-top: 5px;
+    padding-left: 30px;
     cursor: pointer;
 }
 
