@@ -200,12 +200,12 @@ export default{
     },
     methods: {
         buscarProducto(){
-            axios.get(config.server+"/loteP/id/"+this.id_producto)
+            axios.get(config.server+"/producto/id/"+this.id_producto)
             .then((result)=>{
                 if(result.data.success && result.data.body.length>0){
                     const pd = this.prods_venta.find(ele => ele.id_product == result.data.body[0].id_product);
                     if(pd){
-                        if(pd.cant_venta<pd.cantidad_lote){
+                        if(pd.cant_venta<pd.cantidad_disp){
                             pd.cant_venta++;
                         }
                     }else{
@@ -233,7 +233,7 @@ export default{
         agregarProd(i){
             const pd = this.prods_venta.find(ele => ele.id_product == this.prods_filtro[i].id_product);
             if(pd){
-                if(pd.cant_venta<pd.cantidad_lote){
+                if(pd.cant_venta<pd.cantidad_disp){
                     pd.cant_venta++;
                 }
             }else{
@@ -248,7 +248,7 @@ export default{
             console.log(id);
             console.log(this.prods_venta);
             const pd = this.prods_venta.find(ele => ele.id_product == id);
-            if(pd.cant_venta<pd.cantidad_lote){
+            if(pd.cant_venta<pd.cantidad_disp){
                 pd.cant_venta++;
                 this.calcularTotal()
             }
@@ -277,13 +277,14 @@ export default{
                 let productos = [];
                 for (let index = 0; index < this.prods_venta.length; index++) {
                     const element = this.prods_venta[index];
-                    productos.push([element.id_lote, element.cant_venta, element.precio_venta]);
+                    productos.push([element.id_product, element.cant_venta, element.precio_venta]);
                 }
                 let ced = this.cliente.cedula_cli;
                 let form = {
                     productos,
                     cedula_cli: ced
                 }
+                console.log(form);
                 axios.post(config.server+"/venta", form)
                 .then((result)=>{
                     if (result.data.success) {
