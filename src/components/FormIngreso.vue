@@ -14,21 +14,16 @@
             <form  v-on:submit.prevent="registrarIngreso">
             <div class="campos_registrar">
                 <p>Precio Entrada:</p>
-                <input type="text" v-model="ingreso.precio_entrada" required>
+                <input type="text" v-model="prod.precio_entrada" required>
             </div>
             <div class="campos_registrar">
                 <p>Precio de Venta:</p>
-                <input type="text" v-model="ingreso.precio_venta" required>
+                <input type="text" v-model="prod.precio_venta" required>
             </div>
             <div class="campos_registrar">
                 <p>Cantidad:</p>
-                <input type="text" v-model="ingreso.cantidad_lote" required>
+                <input type="text" v-model="prod.cantidad_disp" required>
             </div>
-            <div class="campos_registrar">
-                <p>Fecha de Vencimiento:</p>
-                <input type="date" v-model="ingreso.fecha_vencimiento">
-            </div>
-
             <div class="campos_registrar">
                     <p>Codigo proveedor:</p>
                     <input type="number" v-model="ingreso.cedula_pro" required>
@@ -53,6 +48,11 @@ export default{
         return {
             prod_no_existe: false,
             producto: "",
+            prod: {
+                precio_entrada: "",
+                precio_venta: "",
+                cantidad_disp: ""
+            },
             ingreso,
         }
     },
@@ -65,6 +65,7 @@ export default{
             .then((result)=>{
                 if(result.data.success && result.data.body.length > 0){
                     this.prod_no_existe = false;
+                    this.prod = result.data.body[0];
                 }else{
                     this.prod_no_existe = true;
                 }
@@ -122,6 +123,9 @@ export default{
                 })
             }
         }
+    },
+    mounted(){
+        this.ingreso.cedula_usu = sessionStorage.getItem("Cedula");
     }
 }
 </script>

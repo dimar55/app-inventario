@@ -1,10 +1,8 @@
-const  ingreso= {
-    precio_entrada: "", 
-    precio_venta: "",
-    cantidad_lote: "", 
-    fecha_vencimiento: null,
+const ingreso= {
+    id_fact: "", 
+    empresa: "",
     cedula_pro: "", 
-    cedula_usu: Number(sessionStorage.getItem("Cedula"))
+    cedula_usu: ""
 }
 
 export default ingreso;
