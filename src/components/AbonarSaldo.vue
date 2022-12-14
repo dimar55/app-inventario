@@ -54,9 +54,7 @@ export default{
 
             updateAbono: {
                 id_saldo: "",
-                estado_saldo: "",
-                saldo: "",
-               
+                saldo: "", 
             },
 
             id:  "",
@@ -68,11 +66,15 @@ export default{
         }
     }, 
     methods:{
+        changeAbono(event){
+            if(this.abono>this.saldo){
+                this.abono = this.saldo
+            }
+        },
         update_abono(){
-            this.updateAbono.estado_saldo = (this.saldo - this.abono == 0 ) ? 'Pagado' : 'Pendiente';
-            this.updateAbono.saldo = Number (this.saldo - this.abono);
+            this.updateAbono.saldo = Number (this.abono);
             this.updateAbono.id_saldo = this.id;
-            axios.put(config.server+"/saldo", this.updateAbono) 
+            axios.post(config.server+"/saldo/abono", this.updateAbono) 
             .then((result)=>{
                 if(result.data.success){
                     Swal.fire({
