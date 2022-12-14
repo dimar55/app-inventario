@@ -74,13 +74,9 @@
 
                             <div>
                                 <label>Fecha de Venta: </label>
-                                <label>2022/12/09</label>
+                                <label>{{today.toLocaleDateString('en-US')}}</label>
                             </div>
 
-                            <div>
-                                <label>Hora: </label>
-                                <label>02:00 pm</label>
-                            </div>
                         </div>
                     </div>
 
@@ -159,10 +155,16 @@
                             </tr>
                         </tbody>
                     </table>
-                   <label>total: {{formatoMoneda(this.total)}}</label>
+                    <div class="labeltotal">
+                        <label>total: {{formatoMoneda(this.total)}}</label>
+                    </div>
+                 
                 </div>
-                <button class="btn" @click="registrarVenta(false)">REGISTRAR VENTA</button>
-                <button class="btn" @click="registrarVenta(true)">ABRIR SALDO</button>
+                <div class="botones">
+                    <button class="btn" @click="registrarVenta(false)">REGISTRAR VENTA</button>
+                    <button class="btn" @click="registrarVenta(true)">ABRIR SALDO</button>
+                </div>
+
             </div>
         </div>
     </div>  
@@ -185,6 +187,7 @@ export default{
             prods_venta: [],
             cedula_cli: '',
             clienteExiste: false,
+            today: new Date(),
             cliente: {
                 cedula_cli: '',
                 nombre_cli: ''
@@ -441,8 +444,25 @@ export default{
 </script>
 
 <style>
+
+.ctn-venta h1{
+    text-align: center;
+    color: #FFEAD1;
+    font-size: 70px;
+    font-weight: 400;
+}
+.botones{
+    display: flex;
+    justify-content: space-evenly;
+    margin: 30px;
+}
+
 .cursor{
     cursor: pointer;
+}
+.labeltotal{
+    text-align: end;
+    margin-top: 20px;
 }
     .factura{
         margin: auto;
