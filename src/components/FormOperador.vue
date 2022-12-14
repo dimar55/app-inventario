@@ -12,6 +12,10 @@
                 <input type="number" v-model="user.cedula_usu" required>
             </div>
             <div class="campos_registrar">
+                <p>Correo:</p>
+                <input type="email" v-model="user.correo_usu" required>
+            </div>
+            <div class="campos_registrar">
                 <p>Nick:</p>
                 <input type="text" v-model="user.nick_usu" required>
             </div>
