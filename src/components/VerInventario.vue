@@ -22,14 +22,14 @@
             <div class="ctn-resultados" >
                 <div class="resultado" v-for="producto in productos" :key="producto.nombre_product">
                     <div class="ctn-re">
-                        <p >{{producto.nombre_product}} {{producto.marca_product}} {{producto.cantidad_product}} {{producto.unidad_poduct}}</p>
+                        <p >{{producto.nombre_product}} {{producto.marca_product}} {{producto.cantidad_product}} {{producto.unidad_product}}</p>
                         <p style="color: #55B77E">{{producto.id_product}} </p>
                     </div>
-                    <p>Disponibles: {{producto.cantidad_lote}}</p>
+                    <p>Disponibles: {{producto.cantidad_disp}}</p>
                     <p>Precio Venta: $ {{producto.precio_venta}}</p>
                     <p>Precio de entrada: $ {{producto.precio_entrada}}</p>
-                    <div v-if="(producto.fecha_vencimiento !=null)">
-                        <p > Fecha de vencimiento: {{producto.fecha_vencimiento}}</p>
+                    <div v-if="(producto.cantidad_disp==0)">
+                        <p style="color: rgb(248, 40, 40);">AGOTADO</p>
                     </div>
                 </div>
             </div>
@@ -52,7 +52,7 @@ export default{
     },
     methods:{
         cargarProductos(){
-            axios.get(config.server+"/loteP")
+            axios.get(config.server+"/producto")
                 .then((result) => {
                     if (result.data.success) this.productos = result.data.body;
                 }).catch((err) => {
@@ -61,10 +61,10 @@ export default{
         },
         buscarProductos() {
             let url = "";
-            if (this.filtro == "") url = config.server+"/loteP";
-            else if (this.filtro == "NOMBRE") url =config.server+"/loteP/nombre/"+this.valor
-            else if (this.filtro == "CODIGO") url = config.server+"/loteP/id/"+this.valor
-            else if (this.filtro == "CANTIDAD") url = config.server+"/loteP/cantidad/"+this.valor
+            if (this.filtro == "") url = config.server+"/producto";
+            else if (this.filtro == "NOMBRE") url =config.server+"/producto/nombre/"+this.valor
+            else if (this.filtro == "CODIGO") url = config.server+"/producto/id/"+this.valor
+            else if (this.filtro == "CANTIDAD") url = config.server+"/producto/cantidad/"+this.valor
             axios.get(url)
                 .then((result) => {
                     if (result.data.success && result.data.body.length>0) {

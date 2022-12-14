@@ -69,7 +69,7 @@
                         <div class="cmp">
                             <div>
                                 <label>Numero de Venta: </label>
-                                <label>1</label>
+                                <label>{{this.id_venta}}</label>
                             </div>
 
                             <div>
@@ -108,17 +108,17 @@
                         <div class="cmp">
                             <div>
                                 <label>CC: </label>
-                                <label>1193235212</label>
+                                <label>{{this.vendedor.cedula}}</label>
                             </div>
 
                             <div>
                                 <label>Nombre: </label>
-                                <label>Dimar David Galvan Bayona</label>
+                                <label>{{this.vendedor.nombre}}</label>
                             </div>
 
                             <div>
                                 <label>Cargo: </label>
-                                <label>Operador</label>
+                                <label>{{this.vendedor.cargo}}</label>
                             </div>
                         </div>
                     </div>
@@ -176,6 +176,7 @@ export default{
     name: 'Venta2',
     data(){
         return {
+            id_venta: "",
             showModal: false,
             filtrado: false,
             id_producto: "",
@@ -194,26 +195,51 @@ export default{
                tipo_documento_cli: "",
                telefono_cli: "",
                direccion_cli: ""
+            },
+            vendedor: {
+                cedula: sessionStorage.getItem("Cedula"),
+                nombre: sessionStorage.getItem("Nombre"),
+                cargo: sessionStorage.getItem("Rol")
             }
 
         }
     },
     methods: {
+        obtenerIdVenta(){
+            axios.get(config.server+"/venta/last")
+            .then((result)=>{
+                if(result.data.success){
+                    this.id_venta = result.data.body[0].id_venta + 1;
+                }
+            }).catch((err)=>{
+                console.log(err)
+            })
+        },
         buscarProducto(){
-            axios.get(config.server+"/loteP/id/"+this.id_producto)
+            axios.get(config.server+"/producto/id/"+this.id_producto)
             .then((result)=>{
                 if(result.data.success && result.data.body.length>0){
-                    const pd = this.prods_venta.find(ele => ele.id_product == result.data.body[0].id_product);
-                    if(pd){
-                        if(pd.cant_venta<pd.cantidad_lote){
-                            pd.cant_venta++;
+                    if(result.data.body[0].cantidad_disp>0){
+                        const pd = this.prods_venta.find(ele => ele.id_product == result.data.body[0].id_product);
+                        if(pd){
+                            if(pd.cant_venta<pd.cantidad_disp){
+                                pd.cant_venta++;
+                            }
+                        }else{
+                            let prod = Object.assign({cant_venta: 1}, result.data.body[0]);
+                            this.prods_venta.push(prod);
                         }
+                        this.calcularTotal();
+                        this.id_producto = "";
                     }else{
-                        let prod = Object.assign({cant_venta: 1}, result.data.body[0]);
-                        this.prods_venta.push(prod);
+                        Swal.fire({
+                            icon: "info",
+                            title: "El producto esta agotado",
+                            showConfirmButton: true,
+                        });
+                        this.id_producto = "";
                     }
-                    this.calcularTotal();
-                    this.id_producto = "";
+                    
                 }else{
                     Swal.fire({
                         icon: "info",
@@ -233,7 +259,7 @@ export default{
         agregarProd(i){
             const pd = this.prods_venta.find(ele => ele.id_product == this.prods_filtro[i].id_product);
             if(pd){
-                if(pd.cant_venta<pd.cantidad_lote){
+                if(pd.cant_venta<pd.cantidad_disp){
                     pd.cant_venta++;
                 }
             }else{
@@ -248,7 +274,7 @@ export default{
             console.log(id);
             console.log(this.prods_venta);
             const pd = this.prods_venta.find(ele => ele.id_product == id);
-            if(pd.cant_venta<pd.cantidad_lote){
+            if(pd.cant_venta<pd.cantidad_disp){
                 pd.cant_venta++;
                 this.calcularTotal()
             }
@@ -277,18 +303,21 @@ export default{
                 let productos = [];
                 for (let index = 0; index < this.prods_venta.length; index++) {
                     const element = this.prods_venta[index];
-                    productos.push([element.id_lote, element.cant_venta, element.precio_venta]);
+                    productos.push([element.id_product, element.cant_venta, element.precio_venta]);
                 }
                 let ced = this.cliente.cedula_cli;
                 let form = {
                     productos,
                     cedula_cli: ced
                 }
+                console.log(form);
                 axios.post(config.server+"/venta", form)
                 .then((result)=>{
                     if (result.data.success) {
                         if(saldo){
-                            this.$router.push({ path: '/RegistrarSaldo', query: {id_venta: result.data.body.id_venta, total_venta: result.data.body.total_venta}});
+                            console.log(this.cliente);
+                            console.log({id_venta: result.data.body.id_venta, total_venta: result.data.body.total_venta, cedula_cli: this.cliente.cedula_cli})
+                            this.$router.push({ path: '/RegistrarSaldo', query: {id_venta: result.data.body.id_venta, total_venta: result.data.body.total_venta, cedula_cli: this.cliente.cedula_cli}});
                         }else{
                             Swal.fire({
                             icon: "success",
@@ -297,6 +326,16 @@ export default{
                             timer: 1000,
                         });
                         }
+                        this.prods_venta = [];
+                        this.filtrado = false;
+                        this.id_producto = ""; 
+                        this.cedula_cli = "";
+                        this.cliente = {
+                            cedula_cli: '',
+                            nombre_cli: ''
+                        }
+                        this.calcularTotal();
+                        this.obtenerIdVenta();
                     } else {
                         Swal.fire({
                             icon: "error",
@@ -313,10 +352,7 @@ export default{
                         timer: 1200,
                     });
                 })
-                this.prods_venta = [];
-                this.filtrado = false;
-                this.id_producto = ""; 
-                this.calcularTotal();
+                
             }else{
                 if(this.cliente.cedula_cli==''){
                     Swal.fire({
@@ -398,6 +434,9 @@ export default{
                 })
         }
     },
+    mounted(){
+        this.obtenerIdVenta();
+    }
 }
 </script>
 

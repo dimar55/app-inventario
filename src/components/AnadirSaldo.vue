@@ -1,63 +1,8 @@
 <template>
 <div>
-    <transition name="fade">
-        <div class="modal-overlay" v-if="showModal"></div>
-    </transition>
-    <transition name="fade">
-        <div class="container-registro modal" v-if="showModal">
-            <form class="ctn-registrar"  v-on:submit.prevent="registrarCliente">
-                <div class="container-flex">
-                    <div>
-                    </div>  
-                    <div>
-                        <img src="../assets/icon_X.png" alt="" @click="showModal = false">
-                    </div>    
-            </div>
-            <h1>Registrar cliente</h1>
-                <div class="campos_registrar">
-                    <img src="../assets/cliente.png" alt="">
-                    <p>Nombre</p>
-                    <input type="text" v-model="ClienteForm.nombre_cli" required>
-                </div>
-                <div class="campos_registrar">
-                    <p>Tipo de Documento</p>
-                    <select v-model="ClienteForm.tipo_documento_cli" required>
-                        <option>CC Cedula de Ciudadania</option>
-                        <option>TT Tarjeta de Identidad</option>
-                        <option>CE Cedula de Extranjeria</option>
-                    </select>
-                </div>
-                <div class="campos_registrar">
-                    <p>Numero de Documento:</p>
-                    <input type="number" v-model="ClienteForm.cedula_cli" required>
-                </div>
-                <div class="campos_registrar">
-                    <p>Telefono:</p>
-                    <input type="number" v-model="ClienteForm.telefono_cli" required>
-                </div>
-                <div class="campos_registrar">
-                    <p>Dirección:</p>
-                    <input type="text" v-model="ClienteForm.direccion_cli" required>
-                </div>  
-                <div class="boton">
-                    <button type="submit" class="btn">REGISTRAR</button>
-                </div>
-            </form>
-        </div>
-    </transition>
-
     <div class="ctn-saldo">
         <h1>Añadir Saldo</h1>
         <div class="ctn-registrar-saldo">
-            <form class="filtro" v-on:submit.prevent="buscarCliente">
-                <input type="number" placeholder="Cedula cliente" v-model="saldo.cedula_cli" required>
-                <button class="btn" type="submit">BUSCAR</button>
-            </form>
-            <br>
-            <div class="ctn-pro" v-show="clienteExiste2">
-                <p>Cliente no registrado</p>
-                <button class="btn" @click="goCliente()">REGISTRAR</button>
-            </div>
             <div class="ctn-tablita">
                 <table class="tablita">
                     <thead>
@@ -68,7 +13,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-if="clienteExiste">
+                        <tr>
                             <td>{{this.cliente.nombre_cli}}</td>
                             <td>{{this.cliente.cedula_cli}}</td>
                             <td>{{this.cliente.telefono_cli}}</td>
@@ -112,21 +57,16 @@ export default{
             cliente,
             total_venta: Number(this.$route.query.total_venta) || 0,
             abono: "",
-            saldo,
-            ClienteForm: {
-               cedula_cli: "",
-               nombre_cli: "",
-               tipo_documento_cli: "",
-               telefono_cli: "",
-               direccion_cli: ""
-            }
-            
+            saldo
         }
     },
     methods: {
 
-         async registrar(){
-            this.respuesta  = await  controlers.registrarSaldo(this.clienteExiste, this.saldo , this.cliente, this.total_venta, this.abono);
+        async registrar(){
+            let registro = await controlers.registrarSaldo(this.saldo , this.cliente, this.total_venta, this.abono);
+            if(registro){
+                this.$router.push({ path: '/RealizarVenta' });
+            }
         },
         changeAbono(event){
             if(this.abono>this.total_venta){
@@ -138,16 +78,9 @@ export default{
             .then((result)=>{
                 if(result.data.success && result.data.body.length > 0){
                     this.cliente = result.data.body[0];
-                    this.clienteExiste = true;
-                    this.clienteExiste2 = false;
-                }else{
-                    this.clienteExiste2 = true;
-                    this.clienteExiste = false;
                 }
             }).catch((err)=>{
                 console.log(err);
-                this.clienteExiste2 = true;
-                this.clienteExiste = false;
             })
         },
         goCliente(){
@@ -186,6 +119,8 @@ export default{
     },
     mounted(){
         this.saldo.id_venta = Number(this.$route.query.id_venta) || "";
+        this.saldo.cedula_cli = Number(this.$route.query.cedula_cli) || "";
+        this.buscarCliente();
     }
 }
 </script>

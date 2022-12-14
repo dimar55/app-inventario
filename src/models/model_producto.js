@@ -3,7 +3,9 @@
     nombre_product: "",
     marca_product: "",
     categoria_product: "",
-    unidad_poduct: "",
+    precio_entrada: "",
+    precio_venta: "",
+    unidad_product: "",
     cantidad_product: ""
 }
 

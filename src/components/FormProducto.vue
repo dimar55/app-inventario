@@ -28,12 +28,20 @@
             </div>
             <div class="campos_registrar">
                 <p>Unidad:</p>
-                <input type="text"  v-model="Producto.unidad_poduct" >
+                <input type="text"  v-model="Producto.unidad_product" >
             </div>
             <div class="campos_registrar">
                 <p>Cantidad:</p>
                 <input type="number"  v-model="Producto.cantidad_product">
             </div>  
+            <div class="campos_registrar">
+                <p>Precio entrada:</p>
+                <input type="number"  v-model="Producto.precio_entrada" >
+            </div>
+            <div class="campos_registrar">
+                <p>Precio venta:</p>
+                <input type="number"  v-model="Producto.precio_venta">
+            </div> 
             <div class="boton">
                 <button class="btn" type="submit">REGISTRAR</button>
             </div>
