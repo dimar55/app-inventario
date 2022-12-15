@@ -16,7 +16,7 @@
                 <h1 style="color:#194F5D">Lista de Saldos</h1>
             </div>
             <div class="ctn-resultados">
-                <div class="resultado" v-for="saldo in saldos" :key="saldo.cedula_cli">
+                <div class="resultado" v-for="saldo in saldos_pag" :key="saldo.cedula_cli">
                     <div class="ctn-re">
                         <p > {{saldo.cedula_cli}}</p>
                         <div v-if="saldo.estado_saldo == 'Pagado'">
@@ -35,6 +35,25 @@
                     </div>
                 </div> 
             </div>
+            <div class="ctn-pag">
+                <div class="paginacion">
+                <label for="select_pag">Limitar saldos</label>
+                <select v-model="limite" @change="paginar">
+                    <option value="0">Todo</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+                </div>
+                <div class="paginacion">
+                <ul>
+                    <li><a style="cursor: pointer;" @click="backpag">&lt</a></li>
+                    <li><a style="cursor: pointer;">{{pagina}}</a></li>
+                    <li><a style="cursor: pointer;" @click="nextpag">></a></li>
+                </ul>
+            </div>
+            </div>
         </div>
     </div>
 </template>
@@ -51,14 +70,20 @@ export default{
                 cedula_cli: "",
                 estado_saldo: ""
             },
-            saldos: []
+            saldos: [],
+            saldos_pag: [],
+            limite: 0,
+            pagina: 1
         }
     },
     methods:{
         cargarSaldos(){
             axios.get(config.server+"/saldo")
                 .then((result) => {
-                    if (result.data.success) this.saldos = result.data.body;
+                    if (result.data.success) {
+                        this.saldos = result.data.body;
+                        this.saldos_pag = result.data.body;
+                    };
                 }).catch((err) => {
                     console.log(err)
                 })
@@ -67,7 +92,12 @@ export default{
             if (this.filtro.cedula_cli == "" && this.filtro.estado_saldo ==""){
                 axios.get(config.server+"/saldo")
                 .then((result) => {
-                    if (result.data.success) this.saldos = result.data.body;
+                    if (result.data.success) {
+                        this.saldos = result.data.body;
+                        this.saldos_pag = result.data.body;
+                        this.pagina = 1;
+                        this.limite = 0;
+                    };
                 }).catch((err) => {
                     console.log(err)
                 })
@@ -76,6 +106,9 @@ export default{
             .then((result)=>{
                 if(result.data.success && result.data.body.length>0){
                     this.saldos = result.data.body;
+                    this.saldos_pag = result.data.body;
+                    this.pagina = 1;
+                    this.limite = 0;
                 }else{
                     Swal.fire({
                         icon: "error",
@@ -97,7 +130,36 @@ export default{
         },
         go_abonar(saldo){
             this.$router.push({ path: '/Abonar', query: { id: saldo.id_saldo ,saldo: saldo.saldo_actual , cedula: saldo.cedula_cli}});  
-        }
+        },
+        obtenerPaginas(offset){
+            this.saldos_pag = [];
+            for (let index = offset; index < this.saldos.length && index < Number(Number(this.limite) + Number(offset)); index++) {
+                const element = this.saldos[index];
+                this.saldos_pag.push(element)
+            }
+        },
+        paginar(){
+            if(this.limite!=0){
+                this.pagina = 1;
+                this.obtenerPaginas((this.pagina-1)*this.limite);
+            }else{
+                this.saldos_pag = this.saldos;
+            }
+        },
+        nextpag(){
+            if(this.limite!=0){
+            if(this.pagina!=Math.ceil(this.saldos.length/Number(this.limite))){
+                this.pagina++;
+                this.obtenerPaginas((this.pagina-1)*this.limite);
+            }
+            }
+        },
+        backpag(){
+            if(this.pagina!=1){
+            this.pagina--;
+            this.obtenerPaginas((this.pagina-1)*this.limite);
+            }
+    },
     },
     mounted(){
         this.cargarSaldos();
