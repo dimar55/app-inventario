@@ -23,7 +23,8 @@
                    
                 </div>
             </div>
-            <div>
+            <div class="ctn-pag">
+                <div class="paginacion">
                 <label for="select_pag">Limitar ventas</label>
                 <select v-model="limite" @change="paginar">
                     <option value="0">Todo</option>
@@ -33,13 +34,15 @@
                     <option value="100">100</option>
                 </select>
                 </div>
-                <div>
+                <div class="paginacion">
                 <ul>
                     <li><a style="cursor: pointer;" @click="backpag">&lt</a></li>
                     <li><a style="cursor: pointer;">{{pagina}}</a></li>
                     <li><a style="cursor: pointer;" @click="nextpag">></a></li>
                 </ul>
             </div>
+            </div>
+            
         </div>
     </div>
 </template>
@@ -226,6 +229,37 @@ export default{
     border-radius: 30px;
     cursor: pointer;
     margin: 10px;
+}
+
+.paginacion{
+    margin-top:20px;
+    font-size: 35px;
+    justify-content: center;
+}
+
+.paginacion select{
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 25px;
+    border: none;
+    font-size: 30px;
+    width: 100px;
+    text-align: center;
+    margin-left: 20px;
+}
+.paginacion ul{
+    display: flex;
+    justify-content: center;
+   
+}
+.paginacion li{
+    list-style: none;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.ctn-pag{
+    text-align: center;
+    justify-content: center;
 }
 
 </style>

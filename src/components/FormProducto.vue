@@ -5,12 +5,12 @@
                 <div class="campos_registrar" >
                     <img src="../assets/carrito-de-supermercado.png" alt="">
                     <p>Codigo *</p>
-                    <input type="number" v-model="Producto.id_product">
+                    <input type="number" v-model="Producto.id_product" required>
                 </div> 
                 <form v-on:submit.prevent="registrarProducto">
             <div class="campos_registrar">
                 <p> Categoria *</p>
-                <select  v-model="Producto.categoria_product">
+                <select  v-model="Producto.categoria_product" required>
                     <option>ASEO</option>
                     <option>ENLATADOS</option>
                     <option>CANASTA BASICA</option>

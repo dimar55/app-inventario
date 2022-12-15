@@ -17,11 +17,11 @@
             </div>
             <div class="campos_registrar">
                 <p>Numero de Documento *</p>
-                <input type="number"  min="100000" max="999999999999"  v-model="Proveedor.cedula_pro" required min="100000" max="999999999999">
+                <input type="number"  min="100000" max="9999999999"  v-model="Proveedor.cedula_pro" required >
             </div>
             <div class="campos_registrar">
                 <p>Telefono *</p>
-                <input type="number"  v-model="Proveedor.telefono_pro" required min="100000" max="999999999999">
+                <input type="number"  v-model="Proveedor.telefono_pro" required min="100000" max="9999999999">
             </div>
             <div class="campos_registrar">
                 <p>Correo *</p>
