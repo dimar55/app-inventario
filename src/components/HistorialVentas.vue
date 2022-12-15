@@ -18,12 +18,12 @@
                         <div class="cmp">
                             <div>
                                 <label>Numero de Venta: </label>
-                                <label>{{}}</label>
+                                <label>{{detalle.id_venta}}</label>
                             </div>
 
                             <div>
                                 <label>Fecha de Venta: </label>
-                                <label>{{}}</label>
+                                <label>{{detalle.fecha_venta}}</label>
                             </div>
 
                         </div>
@@ -53,11 +53,11 @@
                         <div class="cmp">
                             <div>
                                 <label>CC: </label>
-                                <label>{{}}</label>
+                                <label>{{detalle.cedula_cli}}</label>
                             </div>
                             <div>
                                 <label>Nombre: </label>
-                                <label>{{}}</label>
+                                <label>{{detalle.nombre_cli}}</label>
                             </div>
                         </div>
                     </div>
@@ -67,25 +67,21 @@
                             <tr>
                                 <th>PRODUCTO</th>
                                 <th>CODIGO</th>
-                                <th>CAN</th>
-                                <th>PRECIO UN</th>
+                                <th>CANTIDAD</th>
                                 <th>SUBTOTAL</th>
-                                <th>ACCIÓN</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(prod, index) in prods_venta" :key="prod.nombre_product">
+                            <tr v-for="(prod, index) in detalle.prods" :key="prod.nombre_product">
                                 <td>{{prod.nombre_product}} {{prod.marca_product}} {{prod.cantidad_product}} {{prod.unidad_product}}</td>
                                 <td>{{prod.id_product}}</td>
-                                <td><span class="cursor" @click="resCantidad(prod.id_product)">-</span> {{prod.cant_venta}} <span class="cursor" @click="sumCantidad(prod.id_product)">+</span></td>
-                                <td>{{prod.precio_venta}}</td>
-                                <td>{{prod.cant_venta*prod.precio_venta}}</td>
-                                <td><span class="cursor" @click="eliminarProd(index)">X</span></td>
+                                <td>{{prod.cantidad_venta}}</td>
+                                <td>{{prod.subtotal_venta}}</td>
                             </tr>
                         </tbody>
                     </table>
                     <div class="labeltotal">
-                        <label>total: {{}}</label>
+                        <label>total: {{detalle.total_venta}}</label>
                     </div>
                 </div>
             </form>
@@ -113,7 +109,7 @@
                     <p style="color:#55B77E">{{venta.fecha_venta}}</p>
                     <p style="color:#555555"> {{venta.prod_nombres}}</p>
                     <p>Total de la venta: {{venta.total_venta}}</p>
-                   
+                    <button class="btn" @click="detalles(venta)">Ver detalles</button>
                 </div>
             </div>
             <div class="ctn-pag">
@@ -148,7 +144,7 @@ export default{
     name: 'HistorialVentas',
     data(){
         return {
-            showModal: true,
+            showModal: false,
             today: new Date().toISOString().split('T')[0],
             filtro: {
                 fecha_ini: "",
@@ -158,8 +154,8 @@ export default{
             ventas: [],
             ventas_pag: [],
             limite: 0,
-            pagina: 1
-
+            pagina: 1,
+            detalle: {}
         }
     },
     methods:{
@@ -227,7 +223,11 @@ export default{
             this.pagina--;
             this.obtenerPaginas((this.pagina-1)*this.limite);
             }
-  }
+        },
+        detalles(venta){
+            this.detalle = venta;
+            this.showModal = true;
+        }
         
     },
     mounted(){
