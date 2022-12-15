@@ -173,7 +173,7 @@ export default{
                 })
         },
         buscarSaldos() {
-            if (this.filtro.cedula_cli == "" && this.filtro.estado_saldo ==""){
+            if (this.filtro.cedula_cli == "" || this.filtro.estado_saldo ==""){
                 axios.get(config.server+"/saldo")
                 .then((result) => {
                     if (result.data.success) {
