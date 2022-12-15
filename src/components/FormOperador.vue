@@ -43,8 +43,43 @@ export default{
         }
     },
     methods:{
-        registrarOperador(){
-            axios.post(config.server+"/usuario", this.user)
+        buscarOperador(){
+            return axios
+                .post(config.server + "/usuario/verificar" , {cedula_usu: this.user.cedula_usu, nick_usu: this.user.nick_usu, correo_usu: this.user.correo_usu })
+                .then((result) => {
+                    if(result.data.success){
+                        return result.data.body
+                    }
+                });
+        },
+
+         async registrarOperador(){
+            let result = await this.buscarOperador();
+            console.log(result);
+            if(result.cedula  || result.nick || result.correo){
+                if(result.cedula){
+                Swal.fire({
+                            icon: "info",
+                            title: "Cedula ya registrada",
+                            showConfirmButton: true,
+                        });
+                }
+                if(result.nick){
+                    Swal.fire({
+                                icon: "info",
+                                title: "Nick ya registrado",
+                                showConfirmButton: true,
+                            });
+                }
+                if(result.correo){
+                    Swal.fire({
+                                icon: "info",
+                                title: "Correo ya registrado",
+                                showConfirmButton: true,
+                            });
+                }
+            }else{
+                axios.post(config.server+"/usuario", this.user)
             .then((result) => {
                     if (result.data.success) {
                         Swal.fire({
@@ -56,21 +91,20 @@ export default{
                         this.$router.push({ path: '/Menu' });
                     } else {
                         Swal.fire({
-                            icon: "error",
+                            icon: "info",
                             title: "No se ha podido crear el operador",
-                            showConfirmButton: false,
-                            timer: 1200,
+                            showConfirmButton: true,
                         });
                     }
                 }).catch((err) => {
                     Swal.fire({
-                      
-                        icon: "error",
+                        icon: "info",
                         title: "No se ha podido crear el operador",
-                        showConfirmButton: false,
-                        timer: 1200,
+                        showConfirmButton: true,
+
                     });
                 })
+            }   
         }
     }
 }

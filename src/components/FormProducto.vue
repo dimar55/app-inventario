@@ -73,8 +73,24 @@ export default{
     }
     },
     methods:{
-        registrarProducto(){
-            axios.post(config.server+"/producto", this.Producto)
+
+        buscarProducto() {
+            return axios
+                .get(config.server + "/producto/id/" + this.Producto.id_product)
+                .then((result) => {
+                return (result.data.success && result.data.body.length > 0);
+                });
+        },
+
+         async registrarProducto(){
+            if( await this.buscarProducto()){
+                Swal.fire({
+                    icon: "info",
+                    title: "producto ya registrado",
+                    showConfirmButton: true
+                  });
+            }else{
+                axios.post(config.server+"/producto", this.Producto)
             .then((result) => {
                     if (result.data.success) {
                         Swal.fire({
@@ -105,6 +121,10 @@ export default{
                         timer: 1200,
                     });
                 })
+            }
+
+
+            
         }
     },
     mounted() {

@@ -21,7 +21,7 @@
             </div>
             <div class="campos_registrar">
                 <p>Telefono *</p>
-                <input type="number" v-model="Cliente.telefono_cli" required min="100000" max="9999999999">
+                <input type="number" v-model="Cliente.telefono_cli" required min="100000" max="999999999999">
             </div>
             <div class="campos_registrar">
                 <p>Dirección *</p>
