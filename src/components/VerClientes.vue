@@ -3,7 +3,7 @@
         <h1>Ver Clientes</h1>
         <div class="ctn-registrar-saldo">
             <form class="filtro" v-on:submit.prevent="buscarCliente">
-                    <input type="number" placeholder="Cedula cliente" v-model="cedula_cli" required min="100000" max="9999999999">
+                    <input type="number" placeholder="Cedula cliente" v-model="cedula_cli">
                     <button class="btn" type="submit">BUSCAR</button>
             </form>
             <div class="ctn-tablita">
@@ -68,12 +68,20 @@ export default{
         }
     },
     methods:{
-        buscarCliente(){
-            axios.get(config.server+"/cliente/cedula/"+this.cedula_cli)
+       async buscarCliente(){
+            if(this.cedula_cli == ""){
+                this.clientes =  await controlers.cargarClientes();
+                this.clientes_pag = await controlers.cargarClientes();
+                this.pagina = 1;
+                this.limite = 0;
+            }else{
+                axios.get(config.server+"/cliente/cedula/"+this.cedula_cli)
             .then((result)=>{
                 if(result.data.success && result.data.body.length > 0){
                     this.clientes = result.data.body;
                     this.clientes_pag = result.data.body;
+                    this.pagina = 1;
+                    this.limite = 0;
                     this.cedula_cli = "";
                 }else{
                     Swal.fire({
@@ -89,6 +97,8 @@ export default{
                             showConfirmButton: true,
                         });
             })
+            }
+            
         },
         obtenerPaginas(offset){
             this.clientes_pag = [];
