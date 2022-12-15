@@ -1,226 +1,452 @@
 <template>
-    <div>
-        <h1 class="titular">REGISTRO FACTURA INGRESO</h1>
-        <div class="ctn-registrarf">
-            <div>           
-                <div class="campos_registrarf">
-                    <p>Id de la factura:</p>
-                    <input type="text" required>
-                </div>
-                <div class="campos_registrarf">
-                    <p>Empresa:</p>
-                    <input type="text" required>
-                </div>
-                <div class="campos_registrarf">
-                    <p>Cedula del Proveedor:</p>
-                    <input type="number" min="100000" max="999999999999">
-                </div>
-                <div class="campos_registrarf">
-                    <p>Codigo del producto:</p>
-                    <input type="number" required min="0">  
-                </div>
-                <div class="campos_registrarf">
-                        <p>producto no registrado</p>
-                        <button class="btn">REGISTRAR</button>
-                    </div>
-                <div class="campos_registrarf" v-if="false">
-                    <p>Precio entrada:</p>
-                    <input type="number" required min="0">
-                </div>   
-                <div class="campos_registrarf"  v-if="false">
-                    <p>Precio de venta:</p>
-                    <input type="number" required min="0">
-                </div>
+  <div>
+    <h1 class="titular">REGISTRO FACTURA INGRESO</h1>
+    <div class="ctn-registrarf">
+      <div>
+        <div class="campos_registrarf">
+          <p>Id de la factura:</p>
+          <input type="text" required v-model="factura.id_fact"/>
+        </div>
+        <div class="campos_registrarf">
+          <p>Empresa:</p>
+          <input type="text" required v-model="factura.empresa"/>
+        </div>
+        <form class="campos_registrarf" v-on:submit.prevent="buscarProveedor">
+          <p>Cedula del Proveedor:</p>
+          <input type="number" min="100000" max="999999999999" v-model="id_prov"/>
+        </form>
+        <div class="campos_registrarf" v-show="prov_no_existe">
+          <p>Proveedor no registrado</p>
+          <button class="btn" @click="goProveedor">REGISTRAR</button>
+        </div>
+        <form class="campos_registrarf" v-on:submit.prevent="buscarProducto">
+          <p>Codigo del producto:</p>
+          <input type="number" required min="0" v-model="id_product" />
+        </form>
+        <div class="campos_registrarf" v-show="prod_no_existe">
+          <p>Producto no registrado</p>
+          <button class="btn" @click="goProducto">REGISTRAR</button>
+        </div>
+        <form v-if="add_prod" v-on:submit.prevent="añadirProd">
+        <div class="campos_registrarf" >
+          <p>Precio entrada:</p>
+          <input type="number" required min="100" v-model="prod.precio_entrada" />
+        </div>
+        <div class="campos_registrarf">
+          <p>Precio de venta:</p>
+          <input type="number" required min="100" v-model="prod.precio_venta" />
+        </div>
+        <div class="boton">
+          <button class="btn" type="submit">AÑADIR</button>
+        </div>
+      </form>
+      </div>
+      <div class="facturac">
+        <div>
+          <h2>FACTURA COMPRA</h2>
+          <div class="cmp">
+            <div>
+              <label>Numero de factura: </label>
+              <label>{{factura.id_fact}}</label>
+            </div>
+            <div>
+              <label>Empresa: </label>
+              <label>{{factura.empresa}}</label>
+            </div>
+            <div>
+              <label>Fecha de la factura: </label>
+              <label>{{ today.toLocaleDateString("en-US") }}</label>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h2>DATOS DEL NEGOCIO</h2>
+          <div class="cmp">
+            <div>
+              <label>Nombre: </label>
+              <label>Yalmecris</label>
+            </div>
+            <div>
+              <label>Telefono: </label>
+              <label>5782288</label>
+            </div>
+            <div>
+              <label>Dirección: </label>
+              <label>Av 12 entre 14 n an-08 villa nueva la isla</label>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h2>DATOS DEL PROVEEDOR</h2>
+          <div class="cmp">
+            <div>
+              <label>CC: </label>
+              <label>{{proveedor.cedula_pro}}</label>
+            </div>
+            <div>
+              <label>Nombre: </label>
+              <label>{{proveedor.nombre_pro}}</label>
+            </div>
+            <div>
+              <label>Telefono: </label>
+              <label>{{proveedor.telefono_pro}}</label>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h2>DATOS DEL USUARIO</h2>
+          <div class="cmp">
+            <div>
+              <label>CC: </label>
+              <label>{{ this.vendedor.cedula }}</label>
+            </div>
 
-               
-                <div class="boton" v-if="false">
-                    <button class="btn">AÑADIR</button>
-                </div>
+            <div>
+              <label>Nombre: </label>
+              <label>{{ this.vendedor.nombre }}</label>
             </div>
-            <div class="facturac">
-                <div>
-                    <h2>FACTURA COMPRA</h2>
-                    <div class="cmp">
-                        <div>
-                            <label>Numero de factura: </label>
-                            <label>{{}}</label>
-                        </div>
-                        <div>
-                            <label>Empresa: </label>
-                            <label>{{}}</label>
-                        </div>
-                        <div>
-                            <label>Fecha de  la factura: </label>
-                            <label>{{today.toLocaleDateString('en-US')}}</label>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <h2>DATOS DEL NEGOCIO</h2>
-                    <div class="cmp">
-                        <div>
-                            <label>Nombre: </label>
-                            <label>Yalmecris</label>
-                        </div>
-                        <div>
-                            <label>Telefono: </label>
-                            <label>5782288</label>
-                        </div>
-                        <div>
-                            <label>Dirección: </label>
-                            <label>Av 12 entre 14 n an-08 villa nueva la isla</label>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <h2>DATOS DEL PROVEEDOR</h2>
-                    <div class="cmp">
-                        <div>
-                            <label>CC: </label>
-                            <label>{{}}</label>
-                        </div>
-                        <div>
-                            <label>Nombre: </label>
-                            <label>{{}}</label>
-                        </div>
-                        <div>
-                            <label>Telefono: </label>
-                            <label>{{}}</label>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <h2>DATOS DEL USUARIO</h2>
-                    <div class="cmp">
-                        <div>
-                            <label>CC: </label>
-                            <label>{{}}</label>
-                        </div>
-                        <div>
-                            <label>Nombre: </label>
-                            <label>{{}}</label>
-                        </div>
-                        <div>
-                            <label>Rol: </label>
-                            <label>{{}}</label>
-                        </div>
-                    </div>
-                </div>
-                <table class="tabla_venta">
-                        <thead>
-                            <tr>
-                                <th>PRODUCTO</th>
-                                <th>CODIGO</th>
-                                <th>CAN</th>
-                                <th>PRECIO UN</th>
-                                <th>SUBTOTAL</th>
-                                <th>ACCIÓN</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr >
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="labeltotal">
-                        <label>total: </label>
-                    </div>
-                    <div class="boton">
-                        <button class="btn">REGISTRAR FACTURA</button>
-                    </div>
+
+            <div>
+              <label>Cargo: </label>
+              <label>{{ this.vendedor.cargo }}</label>
             </div>
-        </div> 
+          </div>
+        </div>
+        <table class="tabla_venta">
+          <thead>
+            <tr>
+              <th>PRODUCTO</th>
+              <th>CODIGO</th>
+              <th>CAN</th>
+              <th>PRECIO UN</th>
+              <th>SUBTOTAL</th>
+              <th>ACCIÓN</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(prod, index) in prods_compra"
+              :key="prod.nombre_product"
+            >
+              <td>
+                {{ prod.nombre_product }} {{ prod.marca_product }}
+                {{ prod.cantidad_product }} {{ prod.unidad_product }}
+              </td>
+              <td>{{ prod.id_product }}</td>
+              <td>
+                <span class="cursor" @click="resCantidad(prod.id_product)"
+                  >-</span
+                >
+                {{ prod.cantidad }}
+                <span class="cursor" @click="sumCantidad(prod.id_product)"
+                  >+</span
+                >
+              </td>
+              <td>{{ prod.precio_venta }}</td>
+              <td>{{ prod.cantidad * prod.precio_venta }}</td>
+              <td>
+                <span class="cursor" @click="eliminarProd(index)">X</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="labeltotal">
+          <label>Total: {{formatoMoneda(this.total)}}</label>
+        </div>
+        <div class="boton">
+          <button class="btn" @click="registrarFactura">REGISTRAR FACTURA</button>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
-
 <script>
-export default{
-    name: 'FacturaCompra',
-    data(){
-        return{
-            today: new Date(),
+import axios from "axios";
+import Swal from "sweetalert2";
+import config from "../utils/utils";
+export default {
+  name: "FacturaCompra",
+  data() {
+    return {
+      today: new Date(),
+      prod_no_existe: false,
+      prov_no_existe: false,
+      add_prod: false,
+      id_product: "",
+      prod: {
+        precio_entrada: "",
+        precio_venta: "",
+      },
+      prods_compra: [],
+      vendedor: {
+        cedula: sessionStorage.getItem("Cedula"),
+        nombre: sessionStorage.getItem("Nombre"),
+        cargo: sessionStorage.getItem("Rol"),
+      },
+      factura: {
+        id_fact: "",
+        empresa: "",
+        cedula_pro: "", 
+        cedula_usu: Number(sessionStorage.getItem("Cedula")),
+      },
+      total: 0,
+      id_prov: "",
+      proveedor:{
+        cedula_pro: "",
+        nombre_pro: "",
+        telefono_pro: ""
+      }
+    };
+  },
+  methods: {
+    goProducto(){
+      this.$router.push({ path: '/RegistrarProducto', query: {id: this.id_product}});
+    },
+    goProveedor(){
+      this.$router.push({ path: '/RegistrarProveedor', query: {id: this.factura.cedula_pro}});
+    },
+    buscarProducto() {
+      axios
+        .get(config.server + "/producto/id/" + this.id_product)
+        .then((result) => {
+          if (result.data.success && result.data.body.length > 0) {
+            this.prod_no_existe = false;
+            this.add_prod = true;
+            this.prod = result.data.body[0];
+          } else {
+            this.add_prod = false;
+            this.prod_no_existe = true;
+          }
+        });
+    },
+    buscarProveedor() {
+      axios
+        .get(config.server + "/proveedor/cedula/" + this.id_prov)
+        .then((result) => {
+          if (result.data.success && result.data.body.length > 0) {
+            this.proveedor = result.data.body[0];
+            this.factura.cedula_pro = this.proveedor.cedula_pro;
+            this.prov_no_existe = false;
+          } else {
+            this.prov_no_existe = true;
+          }
+        });
+    },
+    buscarFactura() {
+      return axios
+        .get(config.server + "/factura/id/" + this.factura.id_fact)
+        .then((result) => {
+          return (result.data.success && result.data.body.length > 0);
+        });
+    },
+    añadirProd() {
+      const pd = this.prods_compra.find(
+        (ele) => ele.id_product == this.prod.id_product
+      );
+      if (pd) {
+        if (pd.cantidad < pd.cantidad_disp) {
+          pd.cantidad++;
         }
-    }
-}
+      } else {
+        let prod = Object.assign({ cantidad: 1 }, this.prod);
+        this.prods_compra.push(prod);
+      }
+      this.calcularTotal();
+      this.add_prod = false;
+      this.prod_no_existe = false;
+      this.id_product = "";
+    },
+    sumCantidad(id) {
+      const pd = this.prods_compra.find((ele) => ele.id_product == id);
+      if (pd.cantidad < pd.cantidad_disp) {
+        pd.cantidad++;
+        this.calcularTotal();
+      }
+    },
+    resCantidad(id) {
+      const pd = this.prods_compra.find((ele) => ele.id_product == id);
+      if (pd.cantidad > 1) {
+        pd.cantidad--;
+        this.calcularTotal();
+      }
+    },
+    eliminarProd(id) {
+      this.prods_compra.splice(id, 1);
+      this.calcularTotal();
+    },
+    calcularTotal() {
+      let total = 0;
+      for (let index = 0; index < this.prods_compra.length; index++) {
+        const element = this.prods_compra[index];
+        total += element.precio_venta * element.cantidad;
+      }
+      this.total = total;
+    },
+    async registrarFactura(){
+        if(this.prods_compra.length>0 && this.factura.id_fact!='' && this.factura.empresa!='' && this.factura.cedula_pro!=''){
+                if(await this.buscarFactura()){
+                  Swal.fire({
+                    icon: "info",
+                    title: "Id de factura ya registrada",
+                    showConfirmButton: true
+                  });
+                }else{
+                  let productos = [];
+                for (let index = 0; index < this.prods_compra.length; index++) {
+                    const element = this.prods_compra[index];
+                    productos.push([element.id_product, element.precio_entrada, element.precio_venta, element.cantidad]);
+                }
+                this.factura.productos = productos;
+                axios.post(config.server+"/factura", this.factura)
+                .then((result)=>{
+                    if (result.data.success) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Factura registrada exitosamente",
+                            showConfirmButton: true,
+                        });
+                        this.prods_compra = [];
+                        this.id_producto = ""; 
+                        this.factura = {
+                            id_fact: "",
+                            empresa: "",
+                            cedula_pro: "", 
+                            cedula_usu: Number(sessionStorage.getItem("Cedula")),
+                        };
+                        this.proveedor = {
+                          cedula_pro: "",
+                          nombre_pro: "",
+                          telefono_pro: ""
+                        }
+                        this.id_prov = "";
+                        this.calcularTotal();
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "No se ha podido realizar la venta",
+                            showConfirmButton: false,
+                            timer: 1200,
+                        });
+                    }
+                }).catch((err) => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "No se ha podido realizar la venta",
+                        showConfirmButton: false,
+                        timer: 1200,
+                    });
+                })
+                
+                }
+            }else{
+               if(this.factura.id_fact==''){
+                    Swal.fire({
+                        icon: "info",
+                        title: "No ha agregado un id de factura",
+                        showConfirmButton: true,
+                    });
+                }
+                if(this.factura.empresa==''){
+                    Swal.fire({
+                        icon: "info",
+                        title: "No ha agregado un nombre de empresa",
+                        showConfirmButton: true,
+                    });
+                }
+                if(this.factura.cedula_pro==''){
+                    Swal.fire({
+                        icon: "info",
+                        title: "No ha agregado un proveedor",
+                        showConfirmButton: true,
+                    });
+                }
+                if(!(this.prods_compra.length>0)){
+                    Swal.fire({
+                        icon: "info",
+                        title: "No se han agregado productos",
+                        showConfirmButton: true,
+                    });
+                }
+            }
+    },
+    formatoMoneda(valor) {
+        const formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            minimumFractionDigits: 2,
+            currency: 'COP'
+        }) 
+        return formatter.format(valor)
+        },
+  },
+};
 </script>
 
-
 <style>
-.titular{
-    padding-top: 30px;
-    text-align: center;
-    color: #FFEAD1;
-    font-size: 70px;
-    font-weight: 400;
-
+.titular {
+  padding-top: 30px;
+  text-align: center;
+  color: #ffead1;
+  font-size: 70px;
+  font-weight: 400;
 }
 
-.ctn-registrarf{
-    margin: auto;
-    display: flex;
-    background-color: #92DAD4;
-    width: 1550px;
-    color: black;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 25px;
-    margin-top: 40px;
-    margin-bottom: 40px;
-    padding: 20px;
+.ctn-registrarf {
+  margin: auto;
+  display: flex;
+  background-color: #92dad4;
+  width: 1550px;
+  color: black;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 25px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  padding: 20px;
 }
 
-.ctn-registrarf h1{
-    font-size: 55px;
-    padding-top: 30px;
-    padding-bottom: 30px;
+.ctn-registrarf h1 {
+  font-size: 55px;
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 
-.ctn-registrarf p{
-    font-size: 48px;
+.ctn-registrarf p {
+  font-size: 48px;
 }
 
-.ctn-registrarf input{
-    width: 300px;
-    height: 46px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 25px;
-    border: none;
-    font-size: 30px;
-    padding-left: 20px;
-    margin-left: 20px;
-   
+.ctn-registrarf input {
+  width: 300px;
+  height: 46px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 25px;
+  border: none;
+  font-size: 30px;
+  padding-left: 20px;
+  margin-left: 20px;
 }
 
-.campos_registrarf{
-    display: flex;
-    text-align: center;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 0 20px 20px; 
+.campos_registrarf {
+  display: flex;
+  text-align: center;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0 20px 20px;
 }
 
-.facturac{
-        margin: auto;
-        background-color: #ffffff;
-        color: black;
-        border-radius: 25px;
+.facturac {
+  margin: auto;
+  background-color: #ffffff;
+  color: black;
+  border-radius: 25px;
 
-        padding: 20px; 
-        font-size: 25px;
-        width: 800px;
-    }
+  padding: 20px;
+  font-size: 25px;
+  width: 800px;
+}
 
-    .facturac h2 {
-        text-align: center;
-        padding-top: 20px;
-        padding-bottom: 20px;
-    }
-
+.facturac h2 {
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
 </style>
-

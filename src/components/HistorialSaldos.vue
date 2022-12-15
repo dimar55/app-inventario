@@ -27,7 +27,8 @@
                         </div>
                     </div>
                     <div  class="ctn-re">
-                        <p>total del saldo: ${{saldo.saldo}}</p>
+                        <p>Total del saldo ${{saldo.saldo_total}}</p>
+                        <p>Saldo actual ${{saldo.saldo_actual}}</p>
                         <div  v-if="saldo.estado_saldo == 'Pendiente'">
                             <button class="btnI" @click="go_abonar(saldo)">Abonar</button>
                         </div>
@@ -95,7 +96,7 @@ export default{
             }
         },
         go_abonar(saldo){
-            this.$router.push({ path: '/Abonar', query: { id: saldo.id_saldo ,saldo: saldo.saldo , cedula: saldo.cedula_cli}});  
+            this.$router.push({ path: '/Abonar', query: { id: saldo.id_saldo ,saldo: saldo.saldo_actual , cedula: saldo.cedula_cli}});  
         }
     },
     mounted(){

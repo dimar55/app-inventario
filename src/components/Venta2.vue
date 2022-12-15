@@ -146,7 +146,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="(prod, index) in prods_venta" :key="prod.nombre_product">
-                                <td>{{prod.nombre_product}} {{prod.marca_product}} {{prod.cantidad_product}}{{prod.unidad_poduct}}</td>
+                                <td>{{prod.nombre_product}} {{prod.marca_product}} {{prod.cantidad_product}} {{prod.unidad_product}}</td>
                                 <td>{{prod.id_product}}</td>
                                 <td><span class="cursor" @click="resCantidad(prod.id_product)">-</span> {{prod.cant_venta}} <span class="cursor" @click="sumCantidad(prod.id_product)">+</span></td>
                                 <td>{{prod.precio_venta}}</td>
