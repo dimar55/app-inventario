@@ -109,7 +109,7 @@
                     </div>
                     <div  class="ctn-re">
                         <p>Total del saldo ${{saldo.saldo_total}}</p>
-                        <p>Saldo actual ${{saldo.saldo_actual}}</p>
+                        <p v-if="saldo.estado_saldo == 'Pendiente'">Saldo actual ${{saldo.saldo_actual}}</p>
                         <div  v-if="saldo.estado_saldo == 'Pendiente'">
                             <button class="btnI" @click="go_abonar(saldo)">Abonar</button>
                         </div>
