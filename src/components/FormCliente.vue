@@ -17,7 +17,7 @@
             </div>
             <div class="campos_registrar">
                 <p>Numero de Documento:</p>
-                <input type="number" v-model="Cliente.cedula_cli" required>
+                <input type="number" v-model="Cliente.cedula_cli" min="100000" max="999999999999" required>
             </div>
             <div class="campos_registrar">
                 <p>Telefono:</p>
@@ -43,11 +43,25 @@ export default{
     name: 'FormCliente',
     data(){
         return {
-            Cliente,
+            Cliente: Object.assign({}, Cliente),
         }
     },
     methods:{
-        registrarCliente(){
+        buscarCliente() {
+            return axios
+                .get(config.server + "/cliente/cedula/" + this.Cliente.cedula_cli)
+                .then((result) => {
+                return (result.data.success && result.data.body.length > 0);
+                });
+        },
+        async registrarCliente(){
+            if(await this.buscarCliente()){
+                Swal.fire({
+                    icon: "info",
+                    title: "Cliente ya registrado",
+                    showConfirmButton: true
+                  });
+            }else{
             axios.post(config.server+"/cliente", this.Cliente)
             .then((result) => {
                     if (result.data.success) {
@@ -73,6 +87,7 @@ export default{
                         showConfirmButton: true,
                     });
                 })
+            }
         }
     }
 }

@@ -16,12 +16,29 @@
             </div>
             
             <div class="ctn-resultados">
-                <div class="resultado" v-for="venta in ventas" :key="venta.fecha_venta">
+                <div class="resultado" v-for="venta in ventas_pag" :key="venta.fecha_venta">
                     <p style="color:#55B77E">{{venta.fecha_venta}}</p>
-                    <p style="color:#555555"> {{venta.productos}}</p>
-                    <p>total de la venta: {{venta.total_venta}}</p>
+                    <p style="color:#555555"> {{venta.prod_nombres}}</p>
+                    <p>Total de la venta: {{venta.total_venta}}</p>
                    
                 </div>
+            </div>
+            <div>
+                <label for="select_pag">Limitar ventas</label>
+                <select v-model="limite" @change="paginar">
+                    <option value="0">Todo</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+                </div>
+                <div>
+                <ul>
+                    <li><a style="cursor: pointer;" @click="backpag">&lt</a></li>
+                    <li><a style="cursor: pointer;">{{pagina}}</a></li>
+                    <li><a style="cursor: pointer;" @click="nextpag">></a></li>
+                </ul>
             </div>
         </div>
     </div>
@@ -41,7 +58,10 @@ export default{
                 fecha_fin: ""
             },
             valor: "",
-            ventas: []
+            ventas: [],
+            ventas_pag: [],
+            limite: 0,
+            pagina: 1
 
         }
     },
@@ -51,13 +71,7 @@ export default{
                 .then((result) => {
                     if (result.data.success) {
                         this.ventas = result.data.body
-                        this.ventas.productos = "";
-                        for (let index = 0; index < this.ventas.length; index++) {
-                            this.ventas[index].productos = []; 
-                            for (let i = 0; i< this.ventas[index].prods.length; i++) {
-                                this.ventas[index].productos  = this.ventas[index].productos + " " + this.ventas[index].prods[i]; 
-                            }   
-                        } 
+                        this.ventas_pag = result.data.body;
                     }
                 }).catch((err) => {
                     console.log(err)
@@ -68,19 +82,14 @@ export default{
                 .then((result) => {
                     if (result.data.success && result.data.body.length>0) {
                         this.ventas = result.data.body
-                        this.ventas.productos = "";
-                        for (let index = 0; index < this.ventas.length; index++) {
-                            this.ventas[index].productos = []; 
-                            for (let i = 0; i< this.ventas[index].prods.length; i++) {
-                                this.ventas[index].productos  = this.ventas[index].productos + " " + this.ventas[index].prods[i]; 
-                            }   
-                        }
+                        this.ventas_pag = result.data.body;
+                        this.pagina = 1;
+                        this.limite = 0;
                     } else {
                         Swal.fire({
                             icon: "error",
                             title: "No se encontraron resultados",
-                            showConfirmButton: false,
-                            timer: 1200,
+                            showConfirmButton: true,
                         });
                     };
 
@@ -93,6 +102,35 @@ export default{
                     });
                 })
         },
+        obtenerPaginas(offset){
+            this.ventas_pag = [];
+            for (let index = offset; index < this.ventas.length && index < Number(Number(this.limite) + Number(offset)); index++) {
+                const element = this.ventas[index];
+                this.ventas_pag.push(element)
+            }
+        },
+        paginar(){
+            if(this.limite!=0){
+                this.pagina = 1;
+                this.obtenerPaginas((this.pagina-1)*this.limite);
+            }else{
+                this.ventas_pag = this.ventas;
+            }
+        },
+        nextpag(){
+            if(this.limite!=0){
+            if(this.pagina!=Math.ceil(this.ventas.length/Number(this.limite))){
+                this.pagina++;
+                this.obtenerPaginas((this.pagina-1)*this.limite);
+            }
+            }
+        },
+        backpag(){
+            if(this.pagina!=1){
+            this.pagina--;
+            this.obtenerPaginas((this.pagina-1)*this.limite);
+            }
+  }
         
     },
     mounted(){

@@ -17,7 +17,7 @@
             </div>
             <div class="campos_registrar">
                 <p>Numero de Documento:</p>
-                <input type="number"  v-model="Proveedor.cedula_pro" required>
+                <input type="number"  min="100000" max="999999999999"  v-model="Proveedor.cedula_pro" required>
             </div>
             <div class="campos_registrar">
                 <p>Telefono:</p>
@@ -43,12 +43,26 @@ import Proveedor from '../models/model_proveedor';
         name: 'FormProveedores',
         data(){
         return {
-            Proveedor,
+            Proveedor: Object.assign({}, Proveedor),
         }
     },
     methods:{
-        registrarProveedor(){
-            axios.post(config.server+"/proveedor", this.Proveedor)
+        buscarProveedor() {
+            return axios
+                .get(config.server + "/proveedor/cedula/" + this.Proveedor.cedula_pro)
+                .then((result) => {
+                return (result.data.success && result.data.body.length > 0);
+                });
+        },
+        async registrarProveedor(){
+            if(await this.buscarProveedor()){
+                Swal.fire({
+                    icon: "info",
+                    title: "Proveedor ya registrado",
+                    showConfirmButton: true
+                  });
+            }else{
+                axios.post(config.server+"/proveedor", this.Proveedor)
             .then((result) => {
                     if (result.data.success) {
                         Swal.fire({
@@ -62,6 +76,7 @@ import Proveedor from '../models/model_proveedor';
                         }else{
                             this.$router.push({ path: '/Menu' });
                         }
+                        this.Proveedor = Object.assign({}, Proveedor);
                     } else {
                         Swal.fire({
                             icon: "error",
@@ -79,7 +94,12 @@ import Proveedor from '../models/model_proveedor';
                         timer: 1200,
                     });
                 })
+            }
+            
         }
+    },
+    mounted() {
+        this.Proveedor.cedula_pro = Number(this.$route.query.id) || "";
     }
     }
 </script>

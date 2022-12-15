@@ -11,9 +11,13 @@
           <p>Empresa:</p>
           <input type="text" required v-model="factura.empresa"/>
         </div>
-        <div class="campos_registrarf">
+        <form class="campos_registrarf" v-on:submit.prevent="buscarProveedor">
           <p>Cedula del Proveedor:</p>
-          <input type="number" min="100000" max="999999999999" v-model="factura.cedula_pro"/>
+          <input type="number" min="100000" max="999999999999" v-model="id_prov"/>
+        </form>
+        <div class="campos_registrarf" v-show="prov_no_existe">
+          <p>Proveedor no registrado</p>
+          <button class="btn" @click="goProveedor">REGISTRAR</button>
         </div>
         <form class="campos_registrarf" v-on:submit.prevent="buscarProducto">
           <p>Codigo del producto:</p>
@@ -23,18 +27,19 @@
           <p>Producto no registrado</p>
           <button class="btn" @click="goProducto">REGISTRAR</button>
         </div>
-        <div class="campos_registrarf" v-if="add_prod">
+        <form v-if="add_prod" v-on:submit.prevent="añadirProd">
+        <div class="campos_registrarf" >
           <p>Precio entrada:</p>
-          <input type="number" required min="0" v-model="prod.precio_entrada" />
+          <input type="number" required min="100" v-model="prod.precio_entrada" />
         </div>
-        <div class="campos_registrarf" v-if="add_prod">
+        <div class="campos_registrarf">
           <p>Precio de venta:</p>
-          <input type="number" required min="0" v-model="prod.precio_venta" />
+          <input type="number" required min="100" v-model="prod.precio_venta" />
         </div>
-
-        <div class="boton" v-if="add_prod">
-          <button class="btn" @click="añadirProd">AÑADIR</button>
+        <div class="boton">
+          <button class="btn" type="submit">AÑADIR</button>
         </div>
+      </form>
       </div>
       <div class="facturac">
         <div>
@@ -76,15 +81,15 @@
           <div class="cmp">
             <div>
               <label>CC: </label>
-              <label>{{}}</label>
+              <label>{{proveedor.cedula_pro}}</label>
             </div>
             <div>
               <label>Nombre: </label>
-              <label>{{}}</label>
+              <label>{{proveedor.nombre_pro}}</label>
             </div>
             <div>
               <label>Telefono: </label>
-              <label>{{}}</label>
+              <label>{{proveedor.telefono_pro}}</label>
             </div>
           </div>
         </div>
@@ -166,6 +171,7 @@ export default {
     return {
       today: new Date(),
       prod_no_existe: false,
+      prov_no_existe: false,
       add_prod: false,
       id_product: "",
       prod: {
@@ -184,10 +190,22 @@ export default {
         cedula_pro: "", 
         cedula_usu: Number(sessionStorage.getItem("Cedula")),
       },
-      total: 0
+      total: 0,
+      id_prov: "",
+      proveedor:{
+        cedula_pro: "",
+        nombre_pro: "",
+        telefono_pro: ""
+      }
     };
   },
   methods: {
+    goProducto(){
+      this.$router.push({ path: '/RegistrarProducto', query: {id: this.id_product}});
+    },
+    goProveedor(){
+      this.$router.push({ path: '/RegistrarProveedor', query: {id: this.factura.cedula_pro}});
+    },
     buscarProducto() {
       axios
         .get(config.server + "/producto/id/" + this.id_product)
@@ -200,6 +218,26 @@ export default {
             this.add_prod = false;
             this.prod_no_existe = true;
           }
+        });
+    },
+    buscarProveedor() {
+      axios
+        .get(config.server + "/proveedor/cedula/" + this.id_prov)
+        .then((result) => {
+          if (result.data.success && result.data.body.length > 0) {
+            this.proveedor = result.data.body[0];
+            this.factura.cedula_pro = this.proveedor.cedula_pro;
+            this.prov_no_existe = false;
+          } else {
+            this.prov_no_existe = true;
+          }
+        });
+    },
+    buscarFactura() {
+      return axios
+        .get(config.server + "/factura/id/" + this.factura.id_fact)
+        .then((result) => {
+          return (result.data.success && result.data.body.length > 0);
         });
     },
     añadirProd() {
@@ -245,9 +283,16 @@ export default {
       }
       this.total = total;
     },
-    registrarFactura(){
+    async registrarFactura(){
         if(this.prods_compra.length>0 && this.factura.id_fact!='' && this.factura.empresa!='' && this.factura.cedula_pro!=''){
-                let productos = [];
+                if(await this.buscarFactura()){
+                  Swal.fire({
+                    icon: "info",
+                    title: "Id de factura ya registrada",
+                    showConfirmButton: true
+                  });
+                }else{
+                  let productos = [];
                 for (let index = 0; index < this.prods_compra.length; index++) {
                     const element = this.prods_compra[index];
                     productos.push([element.id_product, element.precio_entrada, element.precio_venta, element.cantidad]);
@@ -268,7 +313,13 @@ export default {
                             empresa: "",
                             cedula_pro: "", 
                             cedula_usu: Number(sessionStorage.getItem("Cedula")),
+                        };
+                        this.proveedor = {
+                          cedula_pro: "",
+                          nombre_pro: "",
+                          telefono_pro: ""
                         }
+                        this.id_prov = "";
                         this.calcularTotal();
                     } else {
                         Swal.fire({
@@ -287,6 +338,7 @@ export default {
                     });
                 })
                 
+                }
             }else{
                if(this.factura.id_fact==''){
                     Swal.fire({
