@@ -4,11 +4,11 @@
             <h1>REGISTRAR CLIENTE</h1>
             <div class="campos_registrar">
                 <img src="../assets/cliente.png" alt="">
-                <p>Nombre</p>
-                <input type="text" v-model="Cliente.nombre_cli" required>
+                <p>Nombre *</p>
+                <input type="text" v-model="Cliente.nombre_cli" required minlength="5">
             </div>
             <div class="campos_registrar">
-                <p>Tipo de Documento</p>
+                <p>Tipo de Documento *</p>
                 <select v-model="Cliente.tipo_documento_cli" required>
                     <option>CC Cedula de Ciudadania</option>
                     <option>TT Tarjeta de Identidad</option>
@@ -16,16 +16,16 @@
                 </select>
             </div>
             <div class="campos_registrar">
-                <p>Numero de Documento:</p>
-                <input type="number" v-model="Cliente.cedula_cli" required>
+                <p>Numero de Documento *</p>
+                <input type="number" v-model="Cliente.cedula_cli" required min="100000" max="999999999999">
             </div>
             <div class="campos_registrar">
-                <p>Telefono:</p>
-                <input type="number" v-model="Cliente.telefono_cli" required>
+                <p>Telefono *</p>
+                <input type="number" v-model="Cliente.telefono_cli" required min="100000" max="999999999999">
             </div>
             <div class="campos_registrar">
-                <p>Dirección:</p>
-                <input type="text" v-model="Cliente.direccion_cli" required>
+                <p>Dirección *</p>
+                <input type="text" v-model="Cliente.direccion_cli" required minlength="5">
             </div>  
             <div class="boton">
                 <button type="submit" class="btn">REGISTRAR</button>

@@ -4,23 +4,23 @@
             <h1>REGISTRAR OPERADOR</h1>
             <div class="campos_registrar">
                 <img src="../assets/operador.png" alt="">
-                <p>Nombre</p>
+                <p>Nombre *</p>
                 <input type="text" v-model="user.nombre_usu" required>
             </div>
             <div class="campos_registrar">
-                <p>Cedula:</p>
-                <input type="number" v-model="user.cedula_usu" required>
+                <p>Cedula *</p>
+                <input type="number" v-model="user.cedula_usu" required min="100000" max="999999999999">
             </div>
             <div class="campos_registrar">
-                <p>Correo:</p>
+                <p>Correo *</p>
                 <input type="email" v-model="user.correo_usu" required>
             </div>
             <div class="campos_registrar">
-                <p>Nick:</p>
-                <input type="text" v-model="user.nick_usu" required>
+                <p>Nick *</p>
+                <input type="text" v-model="user.nick_usu" required minlength= "5">
             </div>
             <div class="campos_registrar">
-                <p>Contraseña:</p>
+                <p>Contraseña *</p>
                 <input type="password" v-model="user.contra_usu" required>
             </div>
             <div class="boton">
