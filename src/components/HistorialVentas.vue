@@ -1,4 +1,97 @@
 <template>
+<transition name="fade">
+        <div class="modal-overlay" v-if="showModal"></div>
+    </transition>
+    <transition name="fade">
+        <div class="container-registro modal" v-if="showModal">
+            <form class="ctn-registrar"  v-on:submit.prevent="">
+                <div class="container-flex">
+                    <div>
+                    </div>  
+                    <div>
+                        <img src="../assets/icon_X.png" alt="" @click="showModal = false">
+                    </div>    
+                </div>
+                <div class="factura">
+                    <div>
+                        <h2>FACTURA VENTA</h2>
+                        <div class="cmp">
+                            <div>
+                                <label>Numero de Venta: </label>
+                                <label>{{}}</label>
+                            </div>
+
+                            <div>
+                                <label>Fecha de Venta: </label>
+                                <label>{{}}</label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div>
+                        <h2>DATOS DEL NEGOCIO</h2>
+                        <div class="cmp">
+                            <div>
+                                <label>Nombre: </label>
+                                <label>Yalmecris</label>
+                            </div>
+
+                            <div>
+                                <label>Telefono: </label>
+                                <label>5782288</label>
+                            </div>
+
+                            <div>
+                                <label>Dirección: </label>
+                                <label>Av 12 entre 14 n an-08 villa nueva la isla</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h2>DATOS DEL CLIENTE</h2>
+                        <div class="cmp">
+                            <div>
+                                <label>CC: </label>
+                                <label>{{}}</label>
+                            </div>
+                            <div>
+                                <label>Nombre: </label>
+                                <label>{{}}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="tabla_venta">
+                        <thead>
+                            <tr>
+                                <th>PRODUCTO</th>
+                                <th>CODIGO</th>
+                                <th>CAN</th>
+                                <th>PRECIO UN</th>
+                                <th>SUBTOTAL</th>
+                                <th>ACCIÓN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(prod, index) in prods_venta" :key="prod.nombre_product">
+                                <td>{{prod.nombre_product}} {{prod.marca_product}} {{prod.cantidad_product}} {{prod.unidad_product}}</td>
+                                <td>{{prod.id_product}}</td>
+                                <td><span class="cursor" @click="resCantidad(prod.id_product)">-</span> {{prod.cant_venta}} <span class="cursor" @click="sumCantidad(prod.id_product)">+</span></td>
+                                <td>{{prod.precio_venta}}</td>
+                                <td>{{prod.cant_venta*prod.precio_venta}}</td>
+                                <td><span class="cursor" @click="eliminarProd(index)">X</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="labeltotal">
+                        <label>total: {{}}</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </transition>
+
     <div class="container-historial">
         <h1>HISTORIAL DE VENTAS</h1>
         <div class="ctn-ventas">
@@ -55,6 +148,7 @@ export default{
     name: 'HistorialVentas',
     data(){
         return {
+            showModal: true,
             today: new Date().toISOString().split('T')[0],
             filtro: {
                 fecha_ini: "",
