@@ -18,12 +18,12 @@
                         <div class="cmp">
                             <div>
                                 <label>Numero de Venta: </label>
-                                <label>{{}}</label>
+                                <label>{{detalle.id_venta}}</label>
                             </div>
 
                             <div>
                                 <label>Fecha de Venta: </label>
-                                <label>{{}}</label>
+                                <label>{{detalle.fecha_venta}}</label>
                             </div>
 
                         </div>
@@ -53,11 +53,11 @@
                         <div class="cmp">
                             <div>
                                 <label>CC: </label>
-                                <label>{{}}</label>
+                                <label>{{detalle.cedula_cli}}</label>
                             </div>
                             <div>
                                 <label>Nombre: </label>
-                                <label>{{}}</label>
+                                <label>{{detalle.nombre_cli}}</label>
                             </div>
                         </diV>
                     </div>
@@ -70,9 +70,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
+                            <tr v-for="abono in detalle.abonos">
+                                <td>{{abono.saldo}}</td>
+                                <td>{{abono.fecha_abono}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -113,6 +113,7 @@
                         <div  v-if="saldo.estado_saldo == 'Pendiente'">
                             <button class="btnI" @click="go_abonar(saldo)">Abonar</button>
                         </div>
+                        <button class="btn" @click="detalles(saldo)">Ver detalles</button>
                     </div>
                 </div> 
             </div>
@@ -147,6 +148,7 @@ export default{
     name: 'HistorialSaldos',
     data(){
         return{
+            showModal: false,
             filtro:{
                 cedula_cli: "",
                 estado_saldo: ""
@@ -154,7 +156,8 @@ export default{
             saldos: [],
             saldos_pag: [],
             limite: 0,
-            pagina: 1
+            pagina: 1,
+            detalle: {}
         }
     },
     methods:{
@@ -240,7 +243,21 @@ export default{
             this.pagina--;
             this.obtenerPaginas((this.pagina-1)*this.limite);
             }
-    },
+        },
+        detalles(saldo){
+            axios.get(config.server + "/saldo/abono/" + saldo.id_saldo)
+            .then((result)=>{
+                if(result.data.success){
+                    saldo.abonos = result.data.body;
+                    this.detalle = saldo;
+                    this.showModal = true;
+                }else{
+                    console.log(result)
+                }
+            }).catch((err)=>{
+                console.log(err);
+            })
+        }
     },
     mounted(){
         this.cargarSaldos();
