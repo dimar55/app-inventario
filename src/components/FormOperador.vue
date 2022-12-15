@@ -9,7 +9,7 @@
             </div>
             <div class="campos_registrar">
                 <p>Cedula *</p>
-                <input type="number" v-model="user.cedula_usu" required min="100000" max="999999999999">
+                <input type="number" v-model="user.cedula_usu" required min="100000" max="9999999999">
             </div>
             <div class="campos_registrar">
                 <p>Correo *</p>
