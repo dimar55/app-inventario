@@ -1,4 +1,85 @@
 <template>
+    <transition name="fade">
+        <div class="modal-overlay" v-if="showModal"></div>
+    </transition>
+    <transition name="fade">
+        <div class="container-registro modal" v-if="showModal">
+            <form class="ctn-registrar"  v-on:submit.prevent="">
+                <div class="container-flex">
+                    <div>
+                    </div>  
+                    <div>
+                        <img src="../assets/icon_X.png" alt="" @click="showModal = false">
+                    </div>    
+                </div>
+                <div class="factura">
+                    <div>
+                        <h2>DETALLES</h2>
+                        <div class="cmp">
+                            <div>
+                                <label>Numero de Venta: </label>
+                                <label>{{}}</label>
+                            </div>
+
+                            <div>
+                                <label>Fecha de Venta: </label>
+                                <label>{{}}</label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div>
+                        <h2>DATOS DEL NEGOCIO</h2>
+                        <div class="cmp">
+                            <div>
+                                <label>Nombre: </label>
+                                <label>Yalmecris</label>
+                            </div>
+
+                            <div>
+                                <label>Telefono: </label>
+                                <label>5782288</label>
+                            </div>
+
+                            <div>
+                                <label>Dirección: </label>
+                                <label>Av 12 entre 14 n an-08 villa nueva la isla</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h2>DATOS DEL CLIENTE</h2>
+                        <div class="cmp">
+                            <div>
+                                <label>CC: </label>
+                                <label>{{}}</label>
+                            </div>
+                            <div>
+                                <label>Nombre: </label>
+                                <label>{{}}</label>
+                            </div>
+                        </diV>
+                    </div>
+
+                    <table class="tabla_venta">
+                        <thead>
+                            <tr>
+                                <th>ABONO</th>
+                                <th>FECHA ABONO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </transition>
     <div class="container-historial">
         <h1>HISTORIAL DE SALDOS</h1>
         <div class="ctn-ventas">
