@@ -1,4 +1,7 @@
 <template>
+    <div>
+
+   
     <transition name="fade">
         <div class="modal-overlay" v-if="showModal"></div>
     </transition>
@@ -110,11 +113,12 @@
                     <div  class="ctn-re">
                         <p>Total del saldo ${{saldo.saldo_total}}</p>
                         <p v-if="saldo.estado_saldo == 'Pendiente'">Saldo actual ${{saldo.saldo_actual}}</p>
-                        <div  v-if="saldo.estado_saldo == 'Pendiente'">
-                            <button class="btnI" @click="go_abonar(saldo)">Abonar</button>
-                        </div>
-                        <button class="btn" @click="detalles(saldo)">Ver detalles</button>
                     </div>
+                    <div  v-if="saldo.estado_saldo == 'Pendiente'">
+                            <button class="btnI" @click="go_abonar(saldo)">Abonar</button>
+                            <button class="btn" @click="detalles(saldo)">Ver detalles</button>
+                        </div>
+                       
                 </div> 
             </div>
             <div class="ctn-pag">
@@ -138,6 +142,7 @@
             </div>
         </div>
     </div>
+</div>
 </template>
 
 <script>

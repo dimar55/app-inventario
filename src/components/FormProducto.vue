@@ -41,7 +41,7 @@
             </div>
             <div class="campos_registrar">
                 <p>Cantidad de medida </p>
-                <input type="number"  v-model="Producto.cantidad_product" min="1" max="100">
+                <input type="number"  v-model="Producto.cantidad_product" min="1" max="10000">
             </div>  
             <div class="campos_registrar">
                 <p>Precio entrada *</p>
@@ -99,6 +99,13 @@ export default{
                             showConfirmButton: false,
                             timer: 1000,
                         });
+                        this.Producto.nombre_product ="";
+                        this.Producto.categoria_product ="";
+                        this.Producto.marca_product ="";
+                        this.Producto.unidad_product ="";
+                        this.Producto.cantidad_product ="";
+                        this.Producto.precio_entrada ="";
+                        this.Producto.precio_venta ="";
                         if(sessionStorage.getItem("Rol") == "Operador"){
                             this.$router.push({ path: '/MenuOp' });
                         }else{

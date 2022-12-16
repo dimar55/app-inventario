@@ -177,7 +177,7 @@ export default{
 .ctn-registrar-saldo{
     margin: auto;
     background-color: #92DAD4;
-    width: 800px;
+    width: 850px;
     color: black;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 25px;
@@ -187,20 +187,22 @@ export default{
 }
 
 table.tablita {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   width: 350px;
   text-align: center;
   border-collapse: collapse;
+  margin: 10px;
+ 
 }
 table.tablita td, table.tablita th {
- 
   border: 1px solid #000000;
-  padding: 5px 2px;
+  padding: 10px 10px;
 }
 table.tablita tbody td {
   font-size: 40px;
   font-weight: 400;
   color: #000000;
+  white-space: pre;
 }
 table.tablita thead {
   background: #55B77E;

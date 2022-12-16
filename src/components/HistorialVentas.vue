@@ -1,4 +1,5 @@
 <template>
+    <div>
 <transition name="fade">
         <div class="modal-overlay" v-if="showModal"></div>
     </transition>
@@ -109,7 +110,9 @@
                     <p style="color:#55B77E">{{venta.fecha_venta}}</p>
                     <p style="color:#555555"> {{venta.prod_nombres}}</p>
                     <p>Total de la venta: {{venta.total_venta}}</p>
-                    <button class="btn" @click="detalles(venta)">Ver detalles</button>
+                    <div class="boton">
+                        <button class="btn" @click="detalles(venta)">Ver detalles</button>
+                    </div>
                 </div>
             </div>
             <div class="ctn-pag">
@@ -134,6 +137,7 @@
             
         </div>
     </div>
+</div>
 </template>
 
 <script>

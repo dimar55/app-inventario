@@ -1,4 +1,5 @@
 <template>
+    <div>
      <transition name="fade">
         <div class="modal-overlay" v-if="showModal"></div>
     </transition>
@@ -44,6 +45,7 @@
             </form>
         </div>
     </transition>
+    
     <div class="ctn-venta">
         <div class="titulo">
             <h1> VENTA</h1>
@@ -164,10 +166,10 @@
                     <button class="btn" @click="registrarVenta(false)">REGISTRAR VENTA</button>
                     <button class="btn" @click="registrarVenta(true)">ABRIR SALDO</button>
                 </div>
-
             </div>
         </div>
-    </div>  
+    </div>
+</div>  
 </template>
 
 <script>
