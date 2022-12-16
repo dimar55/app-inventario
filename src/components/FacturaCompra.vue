@@ -142,8 +142,8 @@
                   >+</span
                 >
               </td>
-              <td>{{ prod.precio_venta }}</td>
-              <td>{{ prod.cantidad * prod.precio_venta }}</td>
+              <td>{{ prod.precio_entrada }}</td>
+              <td>{{ prod.cantidad * prod.precio_entrada }}</td>
               <td>
                 <span class="cursor" @click="eliminarProd(index)">X</span>
               </td>
@@ -245,9 +245,7 @@ export default {
         (ele) => ele.id_product == this.prod.id_product
       );
       if (pd) {
-        if (pd.cantidad < pd.cantidad_disp) {
-          pd.cantidad++;
-        }
+        pd.cantidad++;
       } else {
         let prod = Object.assign({ cantidad: 1 }, this.prod);
         this.prods_compra.push(prod);
@@ -259,10 +257,8 @@ export default {
     },
     sumCantidad(id) {
       const pd = this.prods_compra.find((ele) => ele.id_product == id);
-      if (pd.cantidad < pd.cantidad_disp) {
-        pd.cantidad++;
-        this.calcularTotal();
-      }
+      pd.cantidad++;
+      this.calcularTotal();
     },
     resCantidad(id) {
       const pd = this.prods_compra.find((ele) => ele.id_product == id);
@@ -279,7 +275,7 @@ export default {
       let total = 0;
       for (let index = 0; index < this.prods_compra.length; index++) {
         const element = this.prods_compra[index];
-        total += element.precio_venta * element.cantidad;
+        total += element.precio_entrada * element.cantidad;
       }
       this.total = total;
     },
