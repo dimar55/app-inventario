@@ -33,6 +33,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import config from '../utils/utils';
 import user from "../models/model_usuario";
+import controlers from '../controllers/loginCltr';
 export default{
     name: 'FormLogin',
     data(){
@@ -42,44 +43,7 @@ export default{
     },
     methods: {
         login(){
-            axios.post(config.server+"/usuario/auth", this.user)
-                .then((result) => {
-                    if (result.data.success) {
-                        sessionStorage.setItem("jwt", result.data.body.token);
-                        Swal.fire({
-                            icon: "success",
-                            title: "Sesion iniciada",
-                            showConfirmButton: false,
-                            timer: 1500,
-                        });
-                        let token = result.data.body.token;
-                        axios.post(config.server+"/usuario/verifyToken", { token })
-                            .then((result) => {
-                                if(result.data.body.decoded.user.rol_usu == "Administrador"){
-                                    this.$router.push({ path: '/Menu' });
-                                }else{
-                                    this.$router.push({ path: '/MenuOp' });
-                                }
-                            }).catch((err) => {
-                                console.log("Error al verificar token: " + err)
-                            });
-                    } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Credenciales invalidas",
-                            showConfirmButton: true,
-
-                        });
-                    }
-                })
-                .catch((error) => {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Credenciales invalidas",
-                        showConfirmButton: true,
-
-                    });
-                });
+           controlers.login(this);
         },
         go_recuperarUser(){
             this.$emit('recuperar-usuario');

@@ -39,10 +39,6 @@
 </template>
 
 <script>
-import { tsThisType } from "@babel/types";
-import axios from "axios";
-import Swal from "sweetalert2";
-import config from '../utils/utils';
 import saldo from '../models/model_saldo';
 import cliente from '../models/model_verCliente';
 import controlers from '../controllers/add_saldoCtlr';
@@ -50,9 +46,6 @@ export default{
     name: 'AnadirSaldo',
     data(){
         return {
-            showModal: false,
-            clienteExiste: false,
-            clienteExiste2: false,
             respuesta: "",
             cliente,
             total_venta: Number(this.$route.query.total_venta) || 0,
@@ -61,7 +54,6 @@ export default{
         }
     },
     methods: {
-
         async registrar(){
             let registro = await controlers.registrarSaldo(this.saldo , this.cliente, this.total_venta, this.abono);
             if(registro){
@@ -73,49 +65,9 @@ export default{
                 this.abono = this.total_venta
             }
         },
-        buscarCliente(){
-            axios.get(config.server+"/cliente/cedula/"+this.saldo.cedula_cli)
-            .then((result)=>{
-                if(result.data.success && result.data.body.length > 0){
-                    this.cliente = result.data.body[0];
-                }
-            }).catch((err)=>{
-                console.log(err);
-            })
+        async buscarCliente(){
+            this.cliente = await controlers.buscarCliente(this.saldo.cedula_cli);
         },
-        goCliente(){
-            this.ClienteForm.cedula_cli = this.saldo.cedula_cli;
-            this.showModal = true;
-        },
-        
-        registrarCliente(){
-            axios.post(config.server+"/cliente", this.ClienteForm)
-            .then((result) => {
-                    if (result.data.success) {
-                        Swal.fire({
-                            icon: "success",
-                            title: "Cliente creado exitosamente",
-                            showConfirmButton: false,
-                            timer: 1000,
-                        });
-                        this.showModal = false;
-                    } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "No se ha podido crear el cliente",
-                            showConfirmButton: false,
-                            timer: 1200,
-                        });
-                    }
-                }).catch((err) => {
-                    Swal.fire({
-                        icon: "error",
-                        title: "No se ha podido crear el cliente",
-                        showConfirmButton: false,
-                        timer: 1200,
-                    });
-                })
-        }
     },
     mounted(){
         this.saldo.id_venta = Number(this.$route.query.id_venta) || "";

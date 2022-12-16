@@ -35,10 +35,9 @@
 </template>
 
 <script>
-import axios from "axios";
-import Swal from "sweetalert2";
-import config from '../utils/utils';
 import Cliente from '../models/model_cliente';
+import controlers from '../controllers/add_clienteCtlr';
+
 export default{
     name: 'FormCliente',
     data(){
@@ -47,47 +46,11 @@ export default{
         }
     },
     methods:{
-        buscarCliente() {
-            return axios
-                .get(config.server + "/cliente/cedula/" + this.Cliente.cedula_cli)
-                .then((result) => {
-                return (result.data.success && result.data.body.length > 0);
-                });
+        async buscarCliente() {
+            return await controlers.buscarCliente(this);
         },
         async registrarCliente(){
-            if(await this.buscarCliente()){
-                Swal.fire({
-                    icon: "info",
-                    title: "Cliente ya registrado",
-                    showConfirmButton: true
-                  });
-            }else{
-            axios.post(config.server+"/cliente", this.Cliente)
-            .then((result) => {
-                    if (result.data.success) {
-                        Swal.fire({
-                            icon: "success",
-                            title: "Cliente creado exitosamente",
-                            showConfirmButton: false,
-                            timer: 1000,
-                        });
-                        this.$router.push({ path: '/Menu' });
-                    } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "No se ha podido crear el cliente",
-                            showConfirmButton: false,
-                            timer: 1200,
-                        });
-                    }
-                }).catch((err) => {
-                    Swal.fire({
-                        icon: "error",
-                        title: "El Cliente ya esta registrado",
-                        showConfirmButton: true,
-                    });
-                })
-            }
+            controlers.registrarCliente(this);
         }
     }
 }

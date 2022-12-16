@@ -40,9 +40,6 @@
 </template>
 
 <script>
-import axios from "axios";
-import Swal from "sweetalert2";
-import config from '../utils/utils';
 import controlers from '../controllers/abonar_saldoCtlr';
 import cliente from '../models/model_verCliente';
 
@@ -51,12 +48,6 @@ export default{
     data() {
         return {
             cliente,
-
-            updateAbono: {
-                id_saldo: "",
-                saldo: "", 
-            },
-
             id:  "",
             saldo: "",
             cedula:"",
@@ -71,41 +62,15 @@ export default{
                 this.abono = this.saldo
             }
         },
-        update_abono(){
-            this.updateAbono.saldo = Number (this.abono);
-            this.updateAbono.id_saldo = this.id;
-            axios.post(config.server+"/saldo/abono", this.updateAbono) 
-            .then((result)=>{
-                if(result.data.success){
-                    Swal.fire({
-                            icon: "success",
-                            title: "Abono realizado exitosamente",
-                            showConfirmButton: false,
-                            timer: 1000,
-                        });
-                        this.$router.push({ path: '/Saldos' });
-                }else{
-                    console.log(result);
-                    Swal.fire({
-                            icon: "error",
-                            title: "No se ha realizado el abono",
-                            showConfirmButton: false,
-                            timer: 1200,
-                        });
-                }
-            }).catch((err)=>{
-                console.log(err);
-            })
+        async update_abono(){
+            let abono = await controlers.update_abono(this.abono, this.id);
+            if(abono){
+                this.$router.push({ path: '/Saldos' });
+            }
         },
-
         formatoMoneda(valor) {
-            const formatter = new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                minimumFractionDigits: 2,
-                currency: 'COP'
-            }) 
-                return formatter.format(valor)
-            }  
+            return controlers.formatoMoneda(valor);
+        }  
     },
    async mounted(){
         this.saldo = Number(this.$route.query.saldo);

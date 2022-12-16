@@ -31,10 +31,9 @@
 </template>
 
 <script>
-import axios from "axios";
-import Swal from "sweetalert2";
-import config from '../utils/utils';
 import user from '../models/model_operador';
+import controlers from '../controllers/add_operadorCtlr';
+
 export default{
     name: 'FormOperador',
     data(){
@@ -43,69 +42,14 @@ export default{
         }
     },
     methods:{
-        buscarOperador(){
-            return axios
-                .post(config.server + "/usuario/verificar" , {cedula_usu: this.user.cedula_usu, nick_usu: this.user.nick_usu, correo_usu: this.user.correo_usu })
-                .then((result) => {
-                    if(result.data.success){
-                        return result.data.body
-                    }
-                });
+        async buscarOperador(){
+            return await controlers.buscarOperador(this);
         },
 
-         async registrarOperador(){
-            let result = await this.buscarOperador();
-            console.log(result);
-            if(result.cedula  || result.nick || result.correo){
-                if(result.cedula){
-                Swal.fire({
-                            icon: "info",
-                            title: "Cedula ya registrada",
-                            showConfirmButton: true,
-                        });
-                }
-                if(result.nick){
-                    Swal.fire({
-                                icon: "info",
-                                title: "Nick ya registrado",
-                                showConfirmButton: true,
-                            });
-                }
-                if(result.correo){
-                    Swal.fire({
-                                icon: "info",
-                                title: "Correo ya registrado",
-                                showConfirmButton: true,
-                            });
-                }
-            }else{
-                axios.post(config.server+"/usuario", this.user)
-            .then((result) => {
-                    if (result.data.success) {
-                        Swal.fire({
-                            icon: "success",
-                            title: "Operador creado exitosamente",
-                            showConfirmButton: false,
-                            timer: 1000,
-                        });
-                        this.$router.push({ path: '/Menu' });
-                    } else {
-                        Swal.fire({
-                            icon: "info",
-                            title: "No se ha podido crear el operador",
-                            showConfirmButton: true,
-                        });
-                    }
-                }).catch((err) => {
-                    Swal.fire({
-                        icon: "info",
-                        title: "No se ha podido crear el operador",
-                        showConfirmButton: true,
-
-                    });
-                })
-            }   
-        }
+        registrarOperador(){
+            controlers.registrarOperador(this);
+        }   
     }
 }
+
 </script>

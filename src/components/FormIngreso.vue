@@ -42,6 +42,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import config from '../utils/utils';
 import ingreso from '../models/model_ingreso';
+import controlers from '../controllers/ingresoCtrl';
 export default{
     name: 'FormIngreso',
     data(){
@@ -61,15 +62,7 @@ export default{
             this.$router.push({ path: '/RegistrarProducto', query: {id: this.producto}});
         },
         buscarProducto(){
-            axios.get(config.server+"/producto/id/"+this.producto)
-            .then((result)=>{
-                if(result.data.success && result.data.body.length > 0){
-                    this.prod_no_existe = false;
-                    this.prod = result.data.body[0];
-                }else{
-                    this.prod_no_existe = true;
-                }
-            })
+            controlers.buscarProducto(this);
         },
         async registrarIngreso(){
             let res = await axios.post(config.server+"/lote", this.ingreso)

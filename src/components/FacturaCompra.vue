@@ -162,9 +162,7 @@
 </template>
 
 <script>
-import axios from "axios";
-import Swal from "sweetalert2";
-import config from "../utils/utils";
+import controlers from '../controllers/facturaCtrl';
 export default {
   name: "FacturaCompra",
   data() {
@@ -206,39 +204,29 @@ export default {
     goProveedor(){
       this.$router.push({ path: '/RegistrarProveedor', query: {id: this.factura.cedula_pro}});
     },
-    buscarProducto() {
-      axios
-        .get(config.server + "/producto/id/" + this.id_product)
-        .then((result) => {
-          if (result.data.success && result.data.body.length > 0) {
-            this.prod_no_existe = false;
-            this.add_prod = true;
-            this.prod = result.data.body[0];
-          } else {
-            this.add_prod = false;
-            this.prod_no_existe = true;
-          }
-        });
+    async buscarProducto() {
+      const response = await controlers.buscarProducto(this.id_product);
+      if(response.success){
+        this.prod_no_existe = response.prod_no_existe;
+        this.add_prod = response.add_prod;
+        this.prod = response.prod;
+      }else{
+        this.prod_no_existe = response.prod_no_existe;
+        this.add_prod = response.add_prod;
+      }
     },
-    buscarProveedor() {
-      axios
-        .get(config.server + "/proveedor/cedula/" + this.id_prov)
-        .then((result) => {
-          if (result.data.success && result.data.body.length > 0) {
-            this.proveedor = result.data.body[0];
-            this.factura.cedula_pro = this.proveedor.cedula_pro;
-            this.prov_no_existe = false;
-          } else {
-            this.prov_no_existe = true;
-          }
-        });
+    async buscarProveedor() {
+      const response = await controlers.buscarProveedor(this.id_prov);
+      if(response.success){
+        this.proveedor = response.proveedor;
+        this.factura.cedula_pro = this.proveedor.cedula_pro;
+        this.prov_no_existe = response.prov_no_existe;
+      } else {
+        this.prov_no_existe = response.prov_no_existe;
+      }
     },
-    buscarFactura() {
-      return axios
-        .get(config.server + "/factura/id/" + this.factura.id_fact)
-        .then((result) => {
-          return (result.data.success && result.data.body.length > 0);
-        });
+    async buscarFactura() {
+      return await controlers.buscarFactura(this.factura.id_fact);
     },
     añadirProd() {
       const pd = this.prods_compra.find(
@@ -279,101 +267,12 @@ export default {
       }
       this.total = total;
     },
-    async registrarFactura(){
-        if(this.prods_compra.length>0 && this.factura.id_fact!='' && this.factura.empresa!='' && this.factura.cedula_pro!=''){
-                if(await this.buscarFactura()){
-                  Swal.fire({
-                    icon: "info",
-                    title: "Id de factura ya registrada",
-                    showConfirmButton: true
-                  });
-                }else{
-                  let productos = [];
-                for (let index = 0; index < this.prods_compra.length; index++) {
-                    const element = this.prods_compra[index];
-                    productos.push([element.id_product, element.precio_entrada, element.precio_venta, element.cantidad]);
-                }
-                this.factura.productos = productos;
-                axios.post(config.server+"/factura", this.factura)
-                .then((result)=>{
-                    if (result.data.success) {
-                        Swal.fire({
-                            icon: "success",
-                            title: "Factura registrada exitosamente",
-                            showConfirmButton: true,
-                        });
-                        this.prods_compra = [];
-                        this.id_producto = ""; 
-                        this.factura = {
-                            id_fact: "",
-                            empresa: "",
-                            cedula_pro: "", 
-                            cedula_usu: Number(sessionStorage.getItem("Cedula")),
-                        };
-                        this.proveedor = {
-                          cedula_pro: "",
-                          nombre_pro: "",
-                          telefono_pro: ""
-                        }
-                        this.id_prov = "";
-                        this.calcularTotal();
-                    } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "No se ha podido realizar la venta",
-                            showConfirmButton: false,
-                            timer: 1200,
-                        });
-                    }
-                }).catch((err) => {
-                    Swal.fire({
-                        icon: "error",
-                        title: "No se ha podido realizar la venta",
-                        showConfirmButton: false,
-                        timer: 1200,
-                    });
-                })
-                
-                }
-            }else{
-               if(this.factura.id_fact==''){
-                    Swal.fire({
-                        icon: "info",
-                        title: "No ha agregado un id de factura",
-                        showConfirmButton: true,
-                    });
-                }
-                if(this.factura.empresa==''){
-                    Swal.fire({
-                        icon: "info",
-                        title: "No ha agregado un nombre de empresa",
-                        showConfirmButton: true,
-                    });
-                }
-                if(this.factura.cedula_pro==''){
-                    Swal.fire({
-                        icon: "info",
-                        title: "No ha agregado un proveedor",
-                        showConfirmButton: true,
-                    });
-                }
-                if(!(this.prods_compra.length>0)){
-                    Swal.fire({
-                        icon: "info",
-                        title: "No se han agregado productos",
-                        showConfirmButton: true,
-                    });
-                }
-            }
+    registrarFactura(){
+        controlers.registrarFactura(this);
     },
     formatoMoneda(valor) {
-        const formatter = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            minimumFractionDigits: 2,
-            currency: 'COP'
-        }) 
-        return formatter.format(valor)
-        },
+      return controlers.formatoMoneda(valor);
+    }  
   },
 };
 </script>

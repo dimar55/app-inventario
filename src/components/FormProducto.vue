@@ -61,10 +61,9 @@
 </template>
 
 <script>
-import axios from "axios";
-import Swal from "sweetalert2";
-import config from '../utils/utils';
 import Producto from '../models/model_producto';
+import controlers from '../controllers/add_productoCtrl';
+
 export default{
     name: 'FormProducto',
     data(){
@@ -73,65 +72,12 @@ export default{
     }
     },
     methods:{
-
-        buscarProducto() {
-            return axios
-                .get(config.server + "/producto/id/" + this.Producto.id_product)
-                .then((result) => {
-                return (result.data.success && result.data.body.length > 0);
-                });
+        async buscarProducto() {
+            return await controlers.buscarProducto(this);
         },
 
-         async registrarProducto(){
-            if( await this.buscarProducto()){
-                Swal.fire({
-                    icon: "info",
-                    title: "producto ya registrado",
-                    showConfirmButton: true
-                  });
-            }else{
-                axios.post(config.server+"/producto", this.Producto)
-            .then((result) => {
-                    if (result.data.success) {
-                        Swal.fire({
-                            icon: "success",
-                            title: "producto creado exitosamente",
-                            showConfirmButton: false,
-                            timer: 1000,
-                        });
-                        this.Producto.nombre_product ="";
-                        this.Producto.categoria_product ="";
-                        this.Producto.marca_product ="";
-                        this.Producto.unidad_product ="";
-                        this.Producto.cantidad_product ="";
-                        this.Producto.precio_entrada ="";
-                        this.Producto.precio_venta ="";
-                        if(sessionStorage.getItem("Rol") == "Operador"){
-                            this.$router.push({ path: '/MenuOp' });
-                        }else{
-                            this.$router.push({ path: '/Menu' });
-                        }
-                    } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "No se ha podido crear el producto",
-                            showConfirmButton: false,
-                            timer: 1200,
-                        });
-                    }
-                }).catch((err) => {
-                    //console.log(err);
-                    Swal.fire({
-                        icon: "error",
-                        title: "No se ha podido crear el producto",
-                        showConfirmButton: false,
-                        timer: 1200,
-                    });
-                })
-            }
-
-
-            
+        registrarProducto(){
+            controlers.registrarProducto(this);
         }
     },
     mounted() {

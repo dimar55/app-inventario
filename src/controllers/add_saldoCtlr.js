@@ -40,5 +40,19 @@ const registrarSaldo = async (saldo, cliente, total_venta, abono )=> {
     })
 }
 
+const buscarCliente = (cedula_cli)=>{
+    return axios.get(config.server+"/cliente/cedula/"+cedula_cli)
+    .then((result)=>{
+        if(result.data.success && result.data.body.length > 0){
+            return result.data.body[0];
+        }
+    }).catch((err)=>{
+        console.log(err);
+    })
+}
 
-export default {registrarSaldo}
+
+export default {
+    registrarSaldo,
+    buscarCliente
+}
