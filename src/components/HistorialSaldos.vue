@@ -149,6 +149,8 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import config from '../utils/utils';
+import controlers from '../controllers/saldosCtrl';
+
 export default{
     name: 'HistorialSaldos',
     data(){
@@ -167,55 +169,10 @@ export default{
     },
     methods:{
         cargarSaldos(){
-            axios.get(config.server+"/saldo")
-                .then((result) => {
-                    if (result.data.success) {
-                        this.saldos = result.data.body;
-                        this.saldos_pag = result.data.body;
-                    };
-                }).catch((err) => {
-                    console.log(err)
-                })
+            controlers.cargarSaldos(this);
         },
         buscarSaldos() {
-            if (this.filtro.cedula_cli == "" || this.filtro.estado_saldo ==""){
-                axios.get(config.server+"/saldo")
-                .then((result) => {
-                    if (result.data.success) {
-                        this.saldos = result.data.body;
-                        this.saldos_pag = result.data.body;
-                        this.pagina = 1;
-                        this.limite = 0;
-                    };
-                }).catch((err) => {
-                    console.log(err)
-                })
-            }else {
-                axios.post(config.server+"/saldo/filter", this.filtro)
-            .then((result)=>{
-                if(result.data.success && result.data.body.length>0){
-                    this.saldos = result.data.body;
-                    this.saldos_pag = result.data.body;
-                    this.pagina = 1;
-                    this.limite = 0;
-                }else{
-                    Swal.fire({
-                        icon: "error",
-                        title: "No se encontraron resultados",
-                        showConfirmButton: false,
-                        timer: 1200,
-                    });
-                }
-            }).catch((err)=>{
-                console.log(err);
-                    Swal.fire({
-                        icon: "error",
-                        title: "No se encontraron resultados",
-                        showConfirmButton: false,
-                        timer: 1200,
-                    });
-            })
-            }
+            controlers.buscarSaldos(this);
         },
         go_abonar(saldo){
             this.$router.push({ path: '/Abonar', query: { id: saldo.id_saldo ,saldo: saldo.saldo_actual , cedula: saldo.cedula_cli}});  
@@ -250,18 +207,7 @@ export default{
             }
         },
         detalles(saldo){
-            axios.get(config.server + "/saldo/abono/" + saldo.id_saldo)
-            .then((result)=>{
-                if(result.data.success){
-                    saldo.abonos = result.data.body;
-                    this.detalle = saldo;
-                    this.showModal = true;
-                }else{
-                    console.log(result)
-                }
-            }).catch((err)=>{
-                console.log(err);
-            })
+            controlers.detalles(this, saldo);
         }
     },
     mounted(){

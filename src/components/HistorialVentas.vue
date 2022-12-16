@@ -144,6 +144,8 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import config from '../utils/utils';
+import controlers from '../controllers/ventasCtrl';
+
 export default{
     name: 'HistorialVentas',
     data(){
@@ -164,40 +166,10 @@ export default{
     },
     methods:{
         cargarVentas(){
-            axios.get(config.server+"/venta")
-                .then((result) => {
-                    if (result.data.success) {
-                        this.ventas = result.data.body
-                        this.ventas_pag = result.data.body;
-                    }
-                }).catch((err) => {
-                    console.log(err)
-                })
+            controlers.cargarVentas(this);
         },
         buscarVentas() {
-            axios.post(config.server +"/venta/filtro", this.filtro)
-                .then((result) => {
-                    if (result.data.success && result.data.body.length>0) {
-                        this.ventas = result.data.body
-                        this.ventas_pag = result.data.body;
-                        this.pagina = 1;
-                        this.limite = 0;
-                    } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "No se encontraron resultados",
-                            showConfirmButton: true,
-                        });
-                    };
-
-                }).catch((err) => {
-                    console.log(err);
-                    Swal.fire({
-                        icon: "info",
-                        title: "No se encontraron resultados",
-                        showConfirmButton: true,
-                    });
-                })
+            controlers.buscarVentas(this);
         },
         obtenerPaginas(offset){
             this.ventas_pag = [];

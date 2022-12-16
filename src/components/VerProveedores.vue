@@ -55,6 +55,7 @@
 import axios from "axios";
 import config from '../utils/utils';
 import Swal from "sweetalert2";
+import controlers from '../controllers/proveedorCtrl';
 export default{
     name: 'VerProveedores',
     data(){
@@ -67,54 +68,12 @@ export default{
         }
     },
     methods: { 
-
         cargarProveedores(){
-            axios.get(config.server+"/proveedor")
-                .then((result) => {
-                    if (result.data.success) {
-                        this.proveedores = result.data.body;
-                        this.proveedores_pag =result.data.body;
-                        this.pagina = 1;
-                        this.limite = 0;
-                    }
-                    
-                }).catch((err) => {
-                    console.log(err)
-                })
+            controlers.cargarProveedores(this);
         },
-
         buscarProveedor(){
-            if(this.cedula_pro ==""){
-                this.cargarProveedores();
-            }else{
-                axios.get(config.server + "/proveedor/cedula/" + this.cedula_pro)
-            .then((result) => {
-                    if (result.data.success && result.data.body.length> 0 ) {
-                        this.proveedores = result.data.body;
-                        this.proveedores_pag = result.data.body;
-                        this.pagina = 1;
-                        this.limite = 0;
-                        this.cedula_pro = "";
-                    }else{
-                        Swal.fire({
-                        icon: "info",
-                        title: "No se encontro un proveedor",
-                        showConfirmButton: true,
-                    });  
-                    }
-                    
-                }).catch((err) => {
-                    console.log(err);
-                    Swal.fire({
-                        icon: "info",
-                        title: "No se encontraron resultados",
-                        showConfirmButton: true,
-                    }); 
-                })
-
-            }
+            controlers.buscarProveedor(this);
         },
-
         obtenerPaginas(offset){
             this.proveedores_pag = [];
             for (let index = offset; index < this.proveedores.length && index < Number(Number(this.limite) + Number(offset)); index++) {

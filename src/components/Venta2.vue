@@ -173,9 +173,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import Swal from "sweetalert2";
-import config from '../utils/utils';
+import controlers from '../controllers/add_ventaCtrl';
+
 export default{
     name: 'Venta2',
     data(){
@@ -211,55 +210,10 @@ export default{
     },
     methods: {
         obtenerIdVenta(){
-            axios.get(config.server+"/venta/last")
-            .then((result)=>{
-                if(result.data.success){
-                    this.id_venta = result.data.body[0].id_venta + 1;
-                }
-            }).catch((err)=>{
-                console.log(err)
-            })
+            controlers.obtenerIdVenta(this);
         },
         buscarProducto(){
-            axios.get(config.server+"/producto/id/"+this.id_producto)
-            .then((result)=>{
-                if(result.data.success && result.data.body.length>0){
-                    if(result.data.body[0].cantidad_disp>0){
-                        const pd = this.prods_venta.find(ele => ele.id_product == result.data.body[0].id_product);
-                        if(pd){
-                            if(pd.cant_venta<pd.cantidad_disp){
-                                pd.cant_venta++;
-                            }
-                        }else{
-                            let prod = Object.assign({cant_venta: 1}, result.data.body[0]);
-                            this.prods_venta.push(prod);
-                        }
-                        this.calcularTotal();
-                        this.id_producto = "";
-                    }else{
-                        Swal.fire({
-                            icon: "info",
-                            title: "El producto esta agotado",
-                            showConfirmButton: true,
-                        });
-                        this.id_producto = "";
-                    }
-                    
-                }else{
-                    Swal.fire({
-                        icon: "info",
-                        title: "Producto no encontrado",
-                        showConfirmButton: true,
-                    });
-                }
-            }).catch((err)=>{
-                console.log(err);
-                Swal.fire({
-                    icon: "info",
-                    title: "Producto no encontrado",
-                    showConfirmButton: true,
-                });
-            })
+            controlers.buscarProducto(this);
         },
         agregarProd(i){
             const pd = this.prods_venta.find(ele => ele.id_product == this.prods_filtro[i].id_product);
@@ -276,8 +230,6 @@ export default{
             this.filtrado = false;
         },
         sumCantidad(id){
-            console.log(id);
-            console.log(this.prods_venta);
             const pd = this.prods_venta.find(ele => ele.id_product == id);
             if(pd.cant_venta<pd.cantidad_disp){
                 pd.cant_venta++;
@@ -304,139 +256,20 @@ export default{
             this.total = total;
         },
         registrarVenta(saldo){
-            if(this.prods_venta.length>0 && this.cliente.cedula_cli != ''){
-                let productos = [];
-                for (let index = 0; index < this.prods_venta.length; index++) {
-                    const element = this.prods_venta[index];
-                    productos.push([element.id_product, element.cant_venta, element.precio_venta]);
-                }
-                let ced = this.cliente.cedula_cli;
-                let form = {
-                    productos,
-                    cedula_cli: ced
-                }
-                console.log(form);
-                axios.post(config.server+"/venta", form)
-                .then((result)=>{
-                    if (result.data.success) {
-                        if(saldo){
-                            console.log(this.cliente);
-                            console.log({id_venta: result.data.body.id_venta, total_venta: result.data.body.total_venta, cedula_cli: this.cliente.cedula_cli})
-                            this.$router.push({ path: '/RegistrarSaldo', query: {id_venta: result.data.body.id_venta, total_venta: result.data.body.total_venta, cedula_cli: this.cliente.cedula_cli}});
-                        }else{
-                            Swal.fire({
-                            icon: "success",
-                            title: "Venta realizada exitosamente",
-                            showConfirmButton: false,
-                            timer: 1000,
-                        });
-                        }
-                        this.prods_venta = [];
-                        this.filtrado = false;
-                        this.id_producto = ""; 
-                        this.cedula_cli = "";
-                        this.cliente = {
-                            cedula_cli: '',
-                            nombre_cli: ''
-                        }
-                        this.calcularTotal();
-                        this.obtenerIdVenta();
-                    } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "No se ha podido realizar la venta",
-                            showConfirmButton: false,
-                            timer: 1200,
-                        });
-                    }
-                }).catch((err) => {
-                    Swal.fire({
-                        icon: "error",
-                        title: "No se ha podido realizar la venta",
-                        showConfirmButton: false,
-                        timer: 1200,
-                    });
-                })
-                
-            }else{
-                if(this.cliente.cedula_cli==''){
-                    Swal.fire({
-                        icon: "info",
-                        title: "No se ha agregado un cliente",
-                        showConfirmButton: true,
-                    });
-                }
-                if(!(this.prods_venta.length>0)){
-                    Swal.fire({
-                        icon: "info",
-                        title: "No se han agregado productos",
-                        showConfirmButton: true,
-                    });
-                }
-            }
+            controlers.registrarVenta(this, saldo);
         },
         formatoMoneda(valor) {
-        const formatter = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            minimumFractionDigits: 2,
-            currency: 'COP'
-        }) 
-        return formatter.format(valor)
-        },
+            return controlers.formatoMoneda(valor);
+        }, 
         buscarCliente(){
-            axios.get(config.server+"/cliente/cedula/"+this.cedula_cli)
-            .then((result)=>{
-                if(result.data.success && result.data.body.length > 0){
-                    this.cliente = result.data.body[0];
-                    this.clienteExiste = false;
-                }else{
-                    this.cliente = {
-                        cedula_cli: '',
-                        nombre_cli: ''
-                    }
-                    this.clienteExiste = true;
-                }
-            }).catch((err)=>{
-                console.log(err);
-                this.cliente = {
-                        cedula_cli: '',
-                        nombre_cli: ''
-                    }
-                this.clienteExiste = true;
-            })
+            controlers.buscarCliente(this);
         },
         goCliente(){
             this.ClienteForm.cedula_cli = this.cedula_cli;
             this.showModal = true;
         },
-        
         registrarCliente(){
-            axios.post(config.server+"/cliente", this.ClienteForm)
-            .then((result) => {
-                    if (result.data.success) {
-                        Swal.fire({
-                            icon: "success",
-                            title: "Cliente creado exitosamente",
-                            showConfirmButton: false,
-                            timer: 1000,
-                        });
-                        this.showModal = false;
-                    } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "No se ha podido crear el cliente",
-                            showConfirmButton: false,
-                            timer: 1200,
-                        });
-                    }
-                }).catch((err) => {
-                    Swal.fire({
-                        icon: "error",
-                        title: "No se ha podido crear el cliente",
-                        showConfirmButton: false,
-                        timer: 1200,
-                    });
-                })
+            controlers.registrarCliente(this);
         }
     },
     mounted(){

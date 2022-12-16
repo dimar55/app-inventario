@@ -57,9 +57,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import Swal from "sweetalert2";
-import config from '../utils/utils';
+import controlers from '../controllers/inventarioCtrl';
+
 export default{
     name: 'VerInventario',
     data(){
@@ -74,47 +73,10 @@ export default{
     },
     methods:{
         cargarProductos(){
-            axios.get(config.server+"/producto")
-                .then((result) => {
-                    if (result.data.success) {
-                        this.productos = result.data.body;
-                        this.prods_pag = result.data.body;
-                    };
-                }).catch((err) => {
-                    console.log(err)
-                })
+            controlers.cargarProductos(this);
         },
         buscarProductos() {
-            let url = "";
-            if (this.filtro == "") url = config.server+"/producto";
-            else if (this.filtro == "NOMBRE") url =config.server+"/producto/nombre/"+this.valor
-            else if (this.filtro == "CODIGO") url = config.server+"/producto/id/"+this.valor
-            else if (this.filtro == "CANTIDAD") url = config.server+"/producto/cantidad/"+this.valor
-            axios.get(url)
-                .then((result) => {
-                    if (result.data.success && result.data.body.length>0) {
-                        this.productos = result.data.body;
-                        this.prods_pag = result.data.body;
-                        this.pagina = 1;
-                        this.limite = 0;
-                    } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "No se encontraron resultados",
-                            showConfirmButton: false,
-                            timer: 1200,
-                        });
-                    };
-
-                }).catch((err) => {
-                    console.log(err);
-                    Swal.fire({
-                        icon: "error",
-                        title: "No se encontraron resultados",
-                        showConfirmButton: false,
-                        timer: 1200,
-                    });
-                })
+            controlers.buscarProductos(this);
         },
         obtenerPaginas(offset){
             this.prods_pag = [];
