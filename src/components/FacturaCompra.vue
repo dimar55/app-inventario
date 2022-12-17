@@ -5,11 +5,11 @@
       <div>
         <div class="campos_registrarf">
           <p>Id de la factura:</p>
-          <input type="text" required v-model="factura.id_fact"/>
+          <input type="text" maxlength="50" required v-model="factura.id_fact"/>
         </div>
         <div class="campos_registrarf">
           <p>Empresa:</p>
-          <input type="text" required v-model="factura.empresa"/>
+          <input type="text" maxlength="50" required v-model="factura.empresa"/>
         </div>
         <form class="campos_registrarf" v-on:submit.prevent="buscarProveedor">
           <p>Cedula del Proveedor:</p>

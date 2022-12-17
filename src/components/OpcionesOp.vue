@@ -17,7 +17,7 @@
             </div>
 
             <div class="ctn_opciones">
-                <h1>REGISTRAR ENTRADA</h1>
+                <h1>REGISTRAR FACTURA INGRESO</h1>
                 <img src="../assets/entrada.png" alt="">
                 <button class="boton-opciones" @click="go_RegistrarEntrada">REGISTRAR</button>
             </div>

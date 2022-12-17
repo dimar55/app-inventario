@@ -5,7 +5,7 @@
             <div class="campos_registrar">
                 <img src="../assets/cliente.png" alt="">
                 <p>Nombre *</p>
-                <input type="text" v-model="Cliente.nombre_cli" required minlength="5">
+                <input type="text"  v-model="Cliente.nombre_cli" required minlength="5">
             </div>
             <div class="campos_registrar">
                 <p>Tipo de Documento *</p>

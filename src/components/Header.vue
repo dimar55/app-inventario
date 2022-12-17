@@ -25,7 +25,7 @@
                     <a @click="go_RegistrarCliente">Registrar Cliente</a>
                     <a @click="go_RegistrarOperador" v-if="this.rol =='Administrador'">Registrar Operador</a>
                     <a @click="go_RegistrarProducto">Registrar Producto</a>
-                    <a @click="go_RegistrarEntrada">Registrar Entrada</a>
+                    <a @click="go_RegistrarEntrada">Registrar Ingreso</a>
                     <a @click="go_RegistrarVenta">Registrar Venta</a>
                     <a @click="go_Inventario">Ver Inventario</a>
                     <a @click="go_Clientes">Ver Clientes</a>
