@@ -15,25 +15,24 @@ const login = async (thisL)=>{
             return result.data.body[0].cambiocontra;
         }
     })
-    if(resp || resp2){
-        if(resp){
-            Swal.fire({
-                icon: "info",
-                title: "La sesion ya se encuentra iniciada",
-                showConfirmButton: true,
-            });
-        }else if(resp2){
-            Swal.fire({
-                icon: "info",
-                title: "Debe cambiar la contraseña",
-                showConfirmButton: true,
-            });
-        }
-        
-    }else{
-        axios.post(config.server+"/usuario/auth", thisL.user)
-        .then((result) => {
-            if (result.data.success) {
+    axios.post(config.server+"/usuario/auth", thisL.user)
+    .then((result) => {
+        if (result.data.success) {
+            if(resp || resp2){
+                if(resp){
+                    Swal.fire({
+                        icon: "info",
+                        title: "La sesion ya se encuentra iniciada",
+                        showConfirmButton: true,
+                    });
+                }else if(resp2){
+                    Swal.fire({
+                        icon: "info",
+                        title: "Debe cambiar la contraseña",
+                        showConfirmButton: true,
+                    });
+                }
+            }else{
                 localStorage.setItem("jwt", result.data.body.token);
                 Swal.fire({
                     icon: "success",
@@ -53,24 +52,24 @@ const login = async (thisL)=>{
                     }).catch((err) => {
                         console.log("Error al verificar token: " + err)
                     });
-            } else {
-                Swal.fire({
-                    icon: "error",
-                    title: "Credenciales invalidas",
-                    showConfirmButton: true,
-
-                });
             }
-        })
-        .catch((error) => {
+        } else {
             Swal.fire({
                 icon: "error",
                 title: "Credenciales invalidas",
                 showConfirmButton: true,
 
             });
+        }
+    })
+    .catch((error) => {
+        Swal.fire({
+            icon: "error",
+            title: "Credenciales invalidas",
+            showConfirmButton: true,
+
         });
-    }
+    });
     
 }
 
