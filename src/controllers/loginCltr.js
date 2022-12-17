@@ -3,21 +3,21 @@ import config from '../utils/utils';
 import Swal from "sweetalert2";
 
 const login = async (thisL)=>{
-    let resp = await axios.get(config.server + "/usuario/comprobar/" + thisL.user.nick_usu)
-    .then((result)=>{
-        if(result.data.success){
-            return result.data.body[0].estado;
-        }
-    })
-    let resp2 = await axios.get(config.server + "/usuario/codigo/" + thisL.user.nick_usu)
-    .then((result)=>{
-        if(result.data.success){
-            return result.data.body[0].cambiocontra;
-        }
-    })
     axios.post(config.server+"/usuario/auth", thisL.user)
-    .then((result) => {
+    .then(async (result) => {
         if (result.data.success) {
+            let resp = await axios.get(config.server + "/usuario/comprobar/" + thisL.user.nick_usu)
+            .then((result)=>{
+                if(result.data.success){
+                    return result.data.body[0].estado;
+                }
+            })
+            let resp2 = await axios.get(config.server + "/usuario/codigo/" + thisL.user.nick_usu)
+            .then((result)=>{
+                if(result.data.success){
+                    return result.data.body[0].cambiocontra;
+                }
+            })
             if(resp || resp2){
                 if(resp){
                     Swal.fire({
