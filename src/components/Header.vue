@@ -41,17 +41,22 @@
 </template>
 
 <script>
+import axios from "axios";
+import config from '../utils/utils';
+import Swal from "sweetalert2";
 export default{
     name: 'Header',
     data(){
         return{
             show_barra: false,
-            nombre: sessionStorage.getItem('Nombre'),
-            rol: sessionStorage.getItem('Rol')
+            nombre: localStorage.getItem('Nombre'),
+            rol: localStorage.getItem('Rol')
         }
 }, methods: {
     logout(){
-        sessionStorage.clear();
+        let token = localStorage.getItem("jwt")
+        axios.post(config.server+"/usuario/cerrar", {token});
+        localStorage.clear();
         this.$router.push({ path: '/' });
     },
   

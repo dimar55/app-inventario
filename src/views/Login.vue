@@ -41,8 +41,7 @@ export default{
             this.recUsuario = false;
         }
 
-    }
-
+    },
 }
 
 </script>

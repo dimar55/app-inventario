@@ -76,7 +76,7 @@ const registrarFactura = async (thisF)=>{
                         id_fact: "",
                         empresa: "",
                         cedula_pro: "", 
-                        cedula_usu: Number(sessionStorage.getItem("Cedula")),
+                        cedula_usu: Number(localStorage.getItem("Cedula")),
                     };
                     thisF.proveedor = {
                       cedula_pro: "",

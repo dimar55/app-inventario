@@ -28,7 +28,7 @@ const registrarProveedor = async (thisP)=>{
                     showConfirmButton: false,
                     timer: 1000,
                 });
-                if(sessionStorage.getItem("Rol") == "Operador"){
+                if(localStorage.getItem("Rol") == "Operador"){
                     thisP.$router.push({ path: '/MenuOp' });
                 }else{
                     thisP.$router.push({ path: '/Menu' });

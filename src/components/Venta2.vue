@@ -201,9 +201,9 @@ export default{
                direccion_cli: ""
             },
             vendedor: {
-                cedula: sessionStorage.getItem("Cedula"),
-                nombre: sessionStorage.getItem("Nombre"),
-                cargo: sessionStorage.getItem("Rol")
+                cedula: localStorage.getItem("Cedula"),
+                nombre: localStorage.getItem("Nombre"),
+                cargo: localStorage.getItem("Rol")
             }
 
         }

@@ -7,8 +7,21 @@
 
 
 <script>
+import axios from "axios";
+import config from './utils/utils';
 export default {
-  name: "App"
+  name: "App",
+  methods: {
+    cerrarSesion(){
+      let token = sessionStorage.getItem("jwt")
+      axios.post(config.server+"/usuario/cerrar", {token});
+      sessionStorage.clear();
+      return null; 
+    }
+  },
+  mounted(){
+    localStorage.setItem('test', 'hola');
+  },
 };
 </script>
 

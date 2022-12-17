@@ -108,6 +108,13 @@ const routes = [
     name: 'Abonar',
     component: Abonar
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    redirect: {
+      name: 'Login'
+    }
+  }
 
 ]
 
@@ -116,19 +123,20 @@ const router = createRouter({
   routes
 })
 
+
 router.beforeEach(async (to, from) => {
   if (
-    !sessionStorage.getItem('jwt') &&
+    !localStorage.getItem('jwt') &&
     to.name !== 'Login'  
   ) {
     return { name: 'Login' }
   }else{
-    let token = sessionStorage.getItem('jwt');
+    let token = localStorage.getItem('jwt');
     let res = await axios.post(config.server+"/usuario/verifyToken", {token})
     .then((result)=>{
-      sessionStorage.setItem("Nombre", result.data.body.decoded.user.nombre_usu);
-      sessionStorage.setItem("Cedula", result.data.body.decoded.user.cedula_usu);
-      sessionStorage.setItem("Rol", result.data.body.decoded.user.rol_usu);
+      localStorage.setItem("Nombre", result.data.body.decoded.user.nombre_usu);
+      localStorage.setItem("Cedula", result.data.body.decoded.user.cedula_usu);
+      localStorage.setItem("Rol", result.data.body.decoded.user.rol_usu);
       return result.data.success
     }).catch((err)=>{
       return false;
@@ -142,22 +150,22 @@ router.beforeEach(async (to, from) => {
 
 router.beforeEach(async (to, from) => {
   if (
-    sessionStorage.getItem('jwt') &&
+    localStorage.getItem('jwt') &&
     to.name == 'Login'
   ) {
    // return { name: 'Menu' }
-    let token = sessionStorage.getItem('jwt');
+    let token = localStorage.getItem('jwt');
     let res = await axios.post(config.server+"/usuario/verifyToken", {token})
     .then((result)=>{
-      sessionStorage.setItem("Nombre", result.data.body.decoded.user.nombre_usu);
-      sessionStorage.setItem("Cedula", result.data.body.decoded.user.cedula_usu);
-      sessionStorage.setItem("Rol", result.data.body.decoded.user.rol_usu);
+      localStorage.setItem("Nombre", result.data.body.decoded.user.nombre_usu);
+      localStorage.setItem("Cedula", result.data.body.decoded.user.cedula_usu);
+      localStorage.setItem("Rol", result.data.body.decoded.user.rol_usu);
       return result.data.success
     }).catch((err)=>{
       return false;
     });
     if(res){
-      if(sessionStorage.getItem("Rol")=="Administrador"){
+      if(localStorage.getItem("Rol")=="Administrador"){
         return { name: 'Menu' }
       }else{
         return { name: 'MenuOp' }

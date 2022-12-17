@@ -33,7 +33,7 @@ const registrarProducto = async (thisP)=>{
                 thisP.Producto.cantidad_product ="";
                 thisP.Producto.precio_entrada ="";
                 thisP.Producto.precio_venta ="";
-                if(sessionStorage.getItem("Rol") == "Operador"){
+                if(localStorage.getItem("Rol") == "Operador"){
                     thisP.$router.push({ path: '/MenuOp' });
                 }else{
                     thisP.$router.push({ path: '/Menu' });
